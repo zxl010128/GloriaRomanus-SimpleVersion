@@ -499,7 +499,7 @@ For example, a unit of peasants with 3 morale would have a base chance of breaki
 
 Note that the morale value in the above formula should be morale after applying all campaign/battle morale adjustments (such as morale loss due to very high tax in the province, fighting an enemy unit with fire arrows, morale loss due to scary units in the enemy army).
 
-The chance of fleeing the battle is increased by (a scalar addition):
+The chance of breaking is increased by (a scalar addition):
 
 *(casualties suffered by the unit during the engagement/number of troops in the unit at the start of the engagement)/(casualties suffered by the opposing unit during the engagement/number of troops in the opposing unit at the start of the engagement) x 10%*
 
