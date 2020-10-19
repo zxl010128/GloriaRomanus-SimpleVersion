@@ -503,7 +503,7 @@ The chance of breaking is increased by (a scalar addition):
 
 *(casualties suffered by the unit during the engagement/number of troops in the unit at the start of the engagement)/(casualties suffered by the opposing unit during the engagement/number of troops in the opposing unit at the start of the engagement) x 10%*
 
-For example, if our above unit of peasants suffered casualties equal to half of the units size at the start of the engagement, and the opposing unit suffered casualties equal to a quarter of its size at the start of the engagement, then the chance of fleeing the battle is increased by:
+For example, if our above unit of peasants suffered casualties equal to half of the units size at the start of the engagement, and the opposing unit suffered casualties equal to a quarter of its size at the start of the engagement, then the chance of breaking is increased by:
 (1/2) / (1/4) x 10% = 2 x 10% = 20%
 And thus the unit of peasants would have a 70% + 20% = 90% chance of breaking.
 
