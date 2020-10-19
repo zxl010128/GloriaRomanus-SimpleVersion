@@ -172,7 +172,7 @@ The following are requirements for different grades in completeness in milestone
     * Player must be able to build troop production buildings
     * Player must be able to recruit soldiers of any category (not necessary to consider money in pass-level)
     * Trivial but sensible implementation of battle resolver and campaign AI. For example (you may implement another sensible implementation, but you must be able to explain why it is suitable during your iteration demos):
-        * Battle resolver: army strength calculated as the weighted sum of *attack x defense* for all units in the army, weighted by the number of soldiers in the unit. Each army then has a uniformly random chance of winning calculated as: *army strength/(army strength + enemy army strength)*. The winning army eliminates a uniformly random proportion of the losing army from:
+        * Battle resolver: army strength calculated as the sum of *number of soldiers in unit x attack x defense* for all units in the army. Each army then has a uniformly random chance of winning calculated as: *army strength/(army strength + enemy army strength)*. The winning army eliminates a uniformly random proportion of the losing army from:
         *((winning army strength)/(winning army strength+losing army strength) x 100%)* to 100% of the losing army.
         The losing army eliminates a uniformly random proportion of the winning army from:
         0% to *((losing army strength)/(winning army strength+losing army strength) x 100%)* to 100% of the winning army.
