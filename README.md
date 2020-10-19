@@ -185,7 +185,7 @@ The following are requirements for different grades in completeness in milestone
     * All requirements for a pass, and
     * Player is able to move between multiple provinces at a time. All rules regarding movement of troops implemented (e.g. not being able to move units moved into a province conquered in the current turn), except implementing roads
     * Player is able to build (and thus obtain the effects of) troop production buildings, farms, ports, markets, mines, basic walls (do not need ballista or archer towers for this iteration)
-    * Costs for buildings/soldiers and money (gold) are implemented
+    * Costs for buildings/soldiers are implemented, and money (gold) are implemented
     * Wealth and taxes mechanic is implemented
     * Can win the game by conquering all provinces, or lose the game by losing all provinces, and see an appropriate victory/defeat message
 
