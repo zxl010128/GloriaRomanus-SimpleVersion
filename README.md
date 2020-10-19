@@ -182,7 +182,7 @@ The following are requirements for different grades in completeness in milestone
     * Player is able to end the turn, progressing to the next player turn after the Campaign AI implements all enemy moves for their turn
 
 * Credit (>=65%)
-    * All requirements for a pass, and
+    * All requirements for a pass, and all of the following:
     * Player is able to move troops between multiple provinces at a time. All rules regarding movement of troops implemented (e.g. not being able to move units moved into a province conquered in the current turn), except implementing roads
     * Player is able to build (and thus obtain the effects of) troop production buildings, farms, ports, markets, mines, basic walls (do not need ballista or archer towers for a credit)
     * Costs for buildings/soldiers are implemented, and money (gold) is implemented
@@ -190,14 +190,14 @@ The following are requirements for different grades in completeness in milestone
     * Can win the game by conquering all provinces, or lose the game by losing all provinces, and see an appropriate victory/defeat message
 
 * Distinction (>=75%)
-    * All requirements for a credit, and
+    * All requirements for a credit, and all of the following:
     * Campaign victory and loss implemented fully, including conjunction/disjunctions of subgoals, and random selection of a campaign goal when starting a campaign
     * Added all types of roads (including effects on movement points of roads), archery/ballista towers (and some upgrade to defense for towers)
     * Implement main menu, including ability to choose a faction from the main menu
     * Mercenaries implemented correctly
 
 * High Distinction (>=85%)
-    * All requirements for a distinction, and
+    * All requirements for a distinction, and all of the following:
     * Smiths, and effects of smith buildings implemented
     * Soldier special abilities implemented
     * Full implementation of battle resolver and campaign AI (including all aspects within these such as inflicting of casualties, routing, etc...)
