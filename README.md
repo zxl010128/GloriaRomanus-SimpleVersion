@@ -162,6 +162,57 @@ If the steps in the above instructions worked, you should be able to run the sta
 
 **IMPORTANT**: Please do not push the contents of the *lib*, *bin*, *resources*, *jniLibs* or *build* folders to your Gitlab repository. This is very likely to push you over the memory limits for the milestone 2 and 3 submissions.
 
+## Requirements for grading levels
+
+The following are requirements for different grades in completeness in milestones 2 and 3 (for milestone 2, the appropriate functionality must be modelled in the backend classes):
+
+* Pass (>=50%)
+    * Player must be able to invade (attempting to conquer) enemy provinces
+    * Player must be able to move troops between adjacent regions 1 turn at a time (do not need to implement movement of troops across multiple provinces for a pass)
+    * Player must be able to build troop production buildings (should take the appropriate number of turns)
+    * Player must be able to recruit soldiers of any category (not necessary to consider money in pass-level, but it should take the appropriate number of turns)
+    * Trivial but sensible implementation of battle resolver and campaign AI. For example (you may implement another sensible implementation, but you must be able to explain why it is suitable during your iteration demos):
+        * Battle resolver: army strength calculated as the sum of *number of soldiers in unit x attack x defense* for all units in the army. Each army then has a uniformly random chance of winning calculated as: *army strength/(army strength + enemy army strength)*. The winning army eliminates a uniformly random proportion of the losing army from:
+        *((winning army strength)/(winning army strength+losing army strength) x 100%)* to 100% of the losing army.
+        The losing army eliminates a uniformly random proportion of the winning army from:
+        0% to *((losing army strength)/(winning army strength+losing army strength) x 100%)* to 100% of the winning army.
+        A successful invading army should destroy the enemy army as per the spec, and move its soldiers into the captured province.
+        * Campaign AI: random enemy choice of building construction, random enemy choice of unit recruitment, random invasions/movement of units by enemy
+    * Player is able to save/load games
+    * Player is able to end the turn, progressing to the next player turn after the Campaign AI implements all enemy moves for their turn
+
+* Credit (>=65%)
+    * All requirements for a pass, and all of the following:
+    * Player is able to move troops between multiple provinces at a time. All rules regarding movement of troops implemented (e.g. not being able to move units moved into a province conquered in the current turn), except implementing roads
+    * Player is able to build (and thus obtain the effects of) troop production buildings, farms, ports, markets, mines, basic walls (do not need ballista or archer towers for a credit)
+    * Costs for buildings/soldiers are implemented, and money (gold) is implemented
+    * Wealth and taxes mechanic is implemented
+    * Can win the game by conquering all provinces, or lose the game by losing all provinces, and see an appropriate victory/defeat message
+
+* Distinction (>=75%)
+    * All requirements for a credit, and all of the following:
+    * Campaign victory and loss implemented fully, including conjunction/disjunctions of subgoals, and random selection of a campaign goal when starting a campaign
+    * Added all types of roads (including effects on movement points of roads), archery/ballista towers (and some upgrade to defense for towers)
+    * Implement main menu, including ability to choose a faction from the main menu
+    * Mercenaries implemented correctly
+
+* High Distinction (>=85%)
+    * All requirements for a distinction, and all of the following:
+    * Smiths, and effects of smith buildings implemented
+    * Soldier special abilities implemented
+    * Full implementation of battle resolver and campaign AI (including all aspects within these such as inflicting of casualties, routing, etc...)
+
+* Full marks
+    * All functionality in the "preliminary client requirements" implemented correctly
+
+If you exceed the requirements of a grading level in regards to some mechanics, but fall short on other mechanics, the marker will make a judgement regarding the degree to which the functionality is completed and assign a mark appropriate to this (i.e. doing well in some functionality can compensate for poorer implementation in other functionality).
+
+Note that functionality already implemented in the starter code will not receive marks for completion, however marks may be deducted if end-user functionality already in the starter code does not work in milestone 3 (note this does not apply to milestone 2, because the only backend class is a *Unit* class).
+
+Marks may be subtracted from completeness where the appropriate rules were not adhered to from the spec, even when not directly specified in the above requirements, where applicable to the requirements for that grade level (e.g. failing to implement the rounding of calculations for implementations of any grade, or failing to implement that only the Romans can build highways for a Distinction grade).
+
+Milestone 2 requires that the relevant functionality is implemented in the backend classes. It is important that all logic regarding the game mechanics is contained inside these backend classes. Developing the frontend in milestone 3 should only involve "adding a UI" on top of the backend implementation (failure to design around this from milestone 2 implies a failure to decouple the View and Model... you should be preparing to adhere to Model-View-Controller architecture). Thus, failure to model functionality in the milestone 2 backend (model) classes, and implementing it instead in view/controller code, may result in a loss of marks.
+
 ## Preliminary client requirements
 
 The client desires a grand-strategy game, set in the time of Ancient Rome (around 200 BC), where the player can play as a faction of the time (such as the Romans, Carthaginians, Gauls, Celtic Britons, Spanish, Numidians, Egyptians, Seleucid Empire, Pontus, Amenians, Parthians, Germanics, Greek City States, Macedonians, Thracians, Dacians), with the overall goal of conquering all provinces in the game map (or succeeding at another grand victory objective).
@@ -448,17 +499,17 @@ For example, a unit of peasants with 3 morale would have a base chance of breaki
 
 Note that the morale value in the above formula should be morale after applying all campaign/battle morale adjustments (such as morale loss due to very high tax in the province, fighting an enemy unit with fire arrows, morale loss due to scary units in the enemy army).
 
-The chance of fleeing the battle is increased by (a scalar addition):
+The chance of breaking is increased by (a scalar addition):
 
 *(casualties suffered by the unit during the engagement/number of troops in the unit at the start of the engagement)/(casualties suffered by the opposing unit during the engagement/number of troops in the opposing unit at the start of the engagement) x 10%*
 
-For example, if our above unit of peasants suffered casualties equal to half of the units size at the start of the engagement, and the opposing unit suffered casualties equal to a quarter of its size at the start of the engagement, then the chance of fleeing the battle is increased by:
+For example, if our above unit of peasants suffered casualties equal to half of the units size at the start of the engagement, and the opposing unit suffered casualties equal to a quarter of its size at the start of the engagement, then the chance of breaking is increased by:
 (1/2) / (1/4) x 10% = 2 x 10% = 20%
 And thus the unit of peasants would have a 70% + 20% = 90% chance of breaking.
 
 i.e. if your unit loses a larger proportion of it's soldiers than the opposing unit in an engagement, the chance of your unit to break is increased by a larger value than than the enemy unit from the base fleeing chance.
 
-However, for any engagement, the minimum chance of fleeing the battle is 5%, and the maximum chance of fleeing the battle is 100%, after these calculations/adjustments.
+However, for any engagement, the minimum chance of breaking is 5%, and the maximum chance of breaking is 100%, after these calculations/adjustments.
 
 If both units break, they both successfully flee the battle without inflicting further casualties upon each other.
 
