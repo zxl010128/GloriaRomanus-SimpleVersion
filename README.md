@@ -169,8 +169,8 @@ The following are requirements for different grades in completeness in milestone
 * Pass (>=50%)
     * Player must be able to invade (attempting to conquer) enemy provinces
     * Player must be able to move troops between adjacent regions 1 turn at a time (do not need to implement movement of troops across multiple provinces for a pass)
-    * Player must be able to build troop production buildings
-    * Player must be able to recruit soldiers of any category (not necessary to consider money in pass-level)
+    * Player must be able to build troop production buildings (should take the appropriate number of turns)
+    * Player must be able to recruit soldiers of any category (not necessary to consider money in pass-level, but it should take the appropriate number of turns)
     * Trivial but sensible implementation of battle resolver and campaign AI. For example (you may implement another sensible implementation, but you must be able to explain why it is suitable during your iteration demos):
         * Battle resolver: army strength calculated as the sum of *number of soldiers in unit x attack x defense* for all units in the army. Each army then has a uniformly random chance of winning calculated as: *army strength/(army strength + enemy army strength)*. The winning army eliminates a uniformly random proportion of the losing army from:
         *((winning army strength)/(winning army strength+losing army strength) x 100%)* to 100% of the losing army.
