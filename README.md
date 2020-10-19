@@ -167,7 +167,7 @@ If the steps in the above instructions worked, you should be able to run the sta
 The following are requirements for different grades in completeness in milestones 2 and 3 (for milestone 2, the appropriate functionality must be modelled in the backend classes):
 
 * Pass (>=50%)
-    * Player must be able to invade and conquer enemy provinces
+    * Player must be able to invade (attempting to conquer) enemy provinces
     * Player must be able to move troops between adjacent regions 1 turn at a time (do not need to implement movement of troops across multiple provinces for a pass)
     * Player must be able to build troop production buildings
     * Player must be able to recruit soldiers of any category (not necessary to consider money in pass-level)
