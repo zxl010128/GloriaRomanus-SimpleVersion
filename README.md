@@ -162,6 +162,57 @@ If the steps in the above instructions worked, you should be able to run the sta
 
 **IMPORTANT**: Please do not push the contents of the *lib*, *bin*, *resources*, *jniLibs* or *build* folders to your Gitlab repository. This is very likely to push you over the memory limits for the milestone 2 and 3 submissions.
 
+## Requirements for grading levels
+
+The following are requirements for different grades in completeness in milestones 2 and 3 (for milestone 2, the appropriate functionality must be modelled in the backend classes):
+
+* Pass (>=50%)
+    * Player must be able to invade and conquer enemy provinces
+    * Player must be able to move troops between adjacent regions 1 turn at a time (do not need to implement movement of troops across multiple provinces for a pass)
+    * Player must be able to build troop production buildings
+    * Player must be able to recruit soldiers of any category (not necessary to consider money in pass-level)
+    * Trivial but sensible implementation of battle resolver and campaign AI. For example (you may implement another sensible implementation, but you must be able to explain why it is suitable during your iteration demos):
+        * Battle resolver: armies strength calculated as the weighted sum of *attack x defense* for all units in the army, weighted by the number of soldiers in the unit. Each army then has a uniformly random chance of winning calculated as: *army strength/(army strength + enemy army strength)*. The winning army eliminates a uniformly random proportion of the losing army from:
+        *(winning army strength)/(winning army strength+losing army strength) x 100%* to 100% of the losing army.
+        The losing army eliminates a uniformly random proportion of the winning army from:
+        0% to *(losing army strength)/(winning army strength+losing army strength) x 100%* to 100% of the winning army.
+        A successful invading army should destroy the enemy army as per the spec, and move its soldiers into the captured province.
+        * Campaign AI: random enemy choice of building construction, random enemy choice of unit recruitment, random invasions/movement of units by enemy
+    * Player is able to save/load games
+    * Player is able to end the turn
+
+* Credit (>=65%)
+    * All requirements for a pass, and
+    * Player is able to move between multiple provinces at a time. All rules regarding movement of troops implemented (e.g. not being able to move units moved into a province conquered in the current turn), except implementing roads
+    * Player is able to build (and thus obtain the effects of) troop production buildings, farms, ports, markets, mines, basic walls (do not need ballista or archer towers for this iteration)
+    * Costs for buildings/soldiers and money (gold) are implemented
+    * Wealth and taxes mechanic is implemented
+    * Can win the game by conquering all provinces, or lose the game by losing all provinces, and see an appropriate victory/defeat message
+
+* Distinction (>=75%)
+    * All requirements for a credit, and
+    * Campaign victory and loss implemented fully, including conjunction/disjunctions of subgoals, and random selection of a campaign goal when starting a campaign
+    * Added all types of roads (including effects on movement points of roads), archery/ballista towers (and some upgrade to defense for towers)
+    * Implement main menu, including ability to choose a faction from the main menu
+    * Mercenaries implemented correctly
+
+* High Distinction (>=85%)
+    * All requirements for a distinction, and
+    * Smiths, and effects of smith buildings implemented
+    * Soldier special abilities implemented
+    * Full implementation of battle resolver and campaign AI (including all aspects within these such as inflicting of casualties, routing, etc...)
+
+* Full marks
+    * All functionality in the "preliminary client requirements" implemented correctly
+
+If you exceed the requirements of a grading level in regards to some mechanics, but fall short on other mechanics, the marker will make a judgement regarding the degree to which the functionality is completed and assign a mark appropriate to this (i.e. doing well in some functionality can compensate for poorer implementation in other functionality).
+
+Note that functionality already implemented in the starter code will not receive marks for completion, however marks may be deducted if end-user functionality already in the starter code does not work in milestone 3 (note this does not apply to milestone 2, because the only backend class is a *Unit* class).
+
+Marks may be subtracted from completeness where the appropriate rules were not adhered to from the spec, even when not directly specified in the above requirements, where applicable to the requirements for that grade level (e.g. failing to implement the rounding of calculations for implementatios of any grade, ).
+
+Milestone 2 requires that the relevant functionality is implemented in the backend classes. It is important that all logic regarding the game mechanics is contained inside these backend classes. The frontend in milestone 3 should only involve "adding a UI" on top of the backend implementation (failure to design around this from milestone 2 implies a failure to decouple the View and Model... you should be preparing to adhere to Model-View-Controller architecture). Thus, failure to model functionality in the milestone 2 backend (model) classes, and implementing it instead in view/controller code, may result in a loss of marks.
+
 ## Preliminary client requirements
 
 The client desires a grand-strategy game, set in the time of Ancient Rome (around 200 BC), where the player can play as a faction of the time (such as the Romans, Carthaginians, Gauls, Celtic Britons, Spanish, Numidians, Egyptians, Seleucid Empire, Pontus, Amenians, Parthians, Germanics, Greek City States, Macedonians, Thracians, Dacians), with the overall goal of conquering all provinces in the game map (or succeeding at another grand victory objective).
