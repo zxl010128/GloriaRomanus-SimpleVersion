@@ -183,7 +183,7 @@ The following are requirements for different grades in completeness in milestone
 
 * Credit (>=65%)
     * All requirements for a pass, and
-    * Player is able to move between multiple provinces at a time. All rules regarding movement of troops implemented (e.g. not being able to move units moved into a province conquered in the current turn), except implementing roads
+    * Player is able to move troops between multiple provinces at a time. All rules regarding movement of troops implemented (e.g. not being able to move units moved into a province conquered in the current turn), except implementing roads
     * Player is able to build (and thus obtain the effects of) troop production buildings, farms, ports, markets, mines, basic walls (do not need ballista or archer towers for a credit)
     * Costs for buildings/soldiers are implemented, and money (gold) is implemented
     * Wealth and taxes mechanic is implemented
