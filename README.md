@@ -179,7 +179,7 @@ The following are requirements for different grades in completeness in milestone
         A successful invading army should destroy the enemy army as per the spec, and move its soldiers into the captured province.
         * Campaign AI: random enemy choice of building construction, random enemy choice of unit recruitment, random invasions/movement of units by enemy
     * Player is able to save/load games
-    * Player is able to end the turn
+    * Player is able to end the turn, progressing to the next player turn after the Campaign AI implements all enemy moves for their turn
 
 * Credit (>=65%)
     * All requirements for a pass, and
