@@ -509,7 +509,7 @@ And thus the unit of peasants would have a 70% + 20% = 90% chance of breaking.
 
 i.e. if your unit loses a larger proportion of it's soldiers than the opposing unit in an engagement, the chance of your unit to break is increased by a larger value than than the enemy unit from the base fleeing chance.
 
-However, for any engagement, the minimum chance of fleeing the battle is 5%, and the maximum chance of fleeing the battle is 100%, after these calculations/adjustments.
+However, for any engagement, the minimum chance of breaking is 5%, and the maximum chance of breaking is 100%, after these calculations/adjustments.
 
 If both units break, they both successfully flee the battle without inflicting further casualties upon each other.
 
