@@ -24,6 +24,12 @@ Final milestone: 5PM Sunday Week 9 (Demonstration: Week 10 Lab)
 
 ---
 
+## Simplified Project Spec
+
+After considering the student feedback, we have now simplified the project specification. Please note that there are no new requirements in the revised specification. However, we have removed some features, in order to simplify the tasks. Importantly, whatever work you have done so far will be awarded marks accordingly. In case you have already implemented features that are not part of the Simplified Project Specification, please consult your tutor for trading them against the rest of the work required for the project.
+
+The simplified project spec is available in the file [*SPEC_v2.md*](SPEC_v2.md)
+
 ## Overview
 
 You have received a request from a client for an application to play a "Risk" style video game. With a partner from your lab class, you will follow an agile development process to design and implement a desktop Java application that satisfies the requirements of the client (see below). The final piece of software you deliver is expected to be of professional quality, user-friendly, and demonstrate the knowledge and skills you have acquired in this course.
@@ -263,9 +269,9 @@ Factions should be able to develop infrastructure in the following categories:
 * Troop production buildings - factions should be able to recruit heavy infantry, spearmen, missile infantry, melee cavalry, horse archers, elephants, chariots, and artillery. Different categories of soldiers will require different "chains" of buildings.
 * Wealth generation buildings - factions should be able to construct markets, farms, ports (if on a region bordering the sea), and mines. Each building adds a scalar value to the wealth of the region, and adds a scalar value to the before-tax rate of town-wealth growth of the region each turn, at different rates. In addition, the following additional effects occur:
     * More advanced farms increase the rate at which troops can be produced each turn in the province
-    * Each port increases the before-tax rate of town-wealth growth for all sea regions owned by a province by an additional scalar value
+    * Each port increases the before-tax rate of town-wealth growth for all sea regions owned by a faction by an additional scalar value
     * Each market reduces the construction cost of all buildings across the faction in a multiplicative fashion - i.e. if one market reduces construction costs by 2%, and another by 3%, and the current construction cost of buildings in the faction this turn is *C*, then the new construction cost of buildings in the faction this turn will be *C x (100%-2%) x (100%-3%)* = *C x 95.06%*
-    * Each mine reduces the initial cost of all soldiers in the province in a multiplicative fashion (similar calculation to markets). The highest level of mine will reduce the time taken to construct all buildings across the faction by 1 turn (the minimum time to build a building, even after applying this affect several times, is 1 turn). This bonus can be applied multiple times - e.g. building the most advanced mines in 2 settlements will reduce the number of turns taken to build all buildings across the faction by 2 turns, down to a minimum of 1 turn).
+    * Each mine reduces the initial cost of all soldiers recruited in the province in a multiplicative fashion (similar calculation to markets). The highest level of mine will reduce the time taken to construct all buildings across the faction by 1 turn (the minimum time to build a building, even after applying this affect several times, is 1 turn). This bonus can be applied multiple times - e.g. building the most advanced mines in 2 settlements will reduce the number of turns taken to build all buildings across the faction by 2 turns, down to a minimum of 1 turn).
 * Walls - these provide buffers to all troops defending a province. They have a random chance of causing damage to attacking troops if upgraded to have archer towers or ballista towers. Towers have infinite morale, and can only be damaged by artillery (but are instantly repaired without cost after the battle).
 * Smiths - these provide battle bonuses to troops produced in the region. Where both scalar addition bonuses (e.g. +1 attack damage) and multiplicative bonuses (e.g. 20% loss in speed) apply due to receiving multiple armour upgrades, the scalar addition bonuses are applied first. Smith bonuses can include 1 or more of the following (these bonuses stack):
     * Upgraded helmets - enemy unit attack damage reduced by 1 (to a minimum of 1 attack damage)
@@ -455,7 +461,7 @@ Against infantry or cavalry, towers inflict damage against the enemy unit in the
 
 Units fighting towers do not route, and have a chance of escaping from each engagement (returning to the army for another skirmish) of:
 
-* minimum(50% + (speed x 10%), 100%) *
+* minimum(50% + (speed x 10%), 100%)
 
 #### Inflicting of casualties in an engagement
 
@@ -463,7 +469,7 @@ Melee units cannot inflict damage in a ranged engagement.
 
 Ranged units in a ranged engagement inflict casualties against the opposing unit equal to (up to a maximum of the entire enemy unit, with a minimum of none of the enemy unit):
 
-* (size of enemy unit at start of engagement x 10%) x (Missile attack damage of unit/(effective armor of enemy unit + effective shield of enemy unit)) x (N+1) *
+* (size of enemy unit at start of engagement x 10%) x (Missile attack damage of unit/(effective armor of enemy unit + effective shield of enemy unit)) x (N+1)
 
 Where *N* is a normally distributed random variable with mean 0 and standard deviation 1 (standard normal distribution).
 
@@ -478,7 +484,7 @@ Cavalry/chariots/elephants attacking a province with walls do not receive any me
 
 Units in a melee engagement inflict casualties against the opposing unit equal to (up to a maximum of the entire enemy unit, with a minimum of none of the enemy unit):
 
-* (size of enemy unit at start of engagement x 10%) x (Effective melee attack damage of unit/(effective armor of enemy unit + effective shield of enemy unit + effective defense skill of enemy unit)) x (N+1) *
+* (size of enemy unit at start of engagement x 10%) x (Effective melee attack damage of unit/(effective armor of enemy unit + effective shield of enemy unit + effective defense skill of enemy unit)) x (N+1)
 
 Where *N* is a normally distributed random variable with mean 0 and standard deviation 1 (standard normal distribution).
 
@@ -507,7 +513,7 @@ For example, if our above unit of peasants suffered casualties equal to half of 
 (1/2) / (1/4) x 10% = 2 x 10% = 20%
 And thus the unit of peasants would have a 70% + 20% = 90% chance of breaking.
 
-i.e. if your unit loses a larger proportion of it's soldiers than the opposing unit in an engagement, the chance of your unit to break is increased by a larger value than than the enemy unit from the base fleeing chance.
+i.e. if your unit loses a larger proportion of it's soldiers than the opposing unit in an engagement, the chance of your unit to break is increased by a larger value than the enemy unit from the base fleeing chance.
 
 However, for any engagement, the minimum chance of breaking is 5%, and the maximum chance of breaking is 100%, after these calculations/adjustments.
 
