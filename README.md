@@ -24,6 +24,12 @@ Final milestone: 5PM Sunday Week 9 (Demonstration: Week 10 Lab)
 
 ---
 
+## Simplified Project Spec
+
+After considering the student feedback, we have now simplified the project specification. Please note that there are no new requirements in the revised specification. However, we have removed some features, in order to simplify the tasks. Importantly, whatever work you have done so far will be awarded marks accordingly. In case you have already implemented features that are not part of the Simplified Project Specification, please consult your tutor for trading them against the rest of the work required for the project.
+
+The simplified project spec is available in the file [*SPEC_v2.md*](SPEC_v2.md)
+
 ## Overview
 
 You have received a request from a client for an application to play a "Risk" style video game. With a partner from your lab class, you will follow an agile development process to design and implement a desktop Java application that satisfies the requirements of the client (see below). The final piece of software you deliver is expected to be of professional quality, user-friendly, and demonstrate the knowledge and skills you have acquired in this course.
