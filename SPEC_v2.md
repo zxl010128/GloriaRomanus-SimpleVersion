@@ -216,7 +216,7 @@ Melee units cannot inflict damage in a ranged engagement.
 
 Ranged units in a ranged engagement inflict casualties against the opposing unit equal to (up to a maximum of the entire enemy unit, with a minimum of none of the enemy unit):
 
-* (size of enemy unit at start of engagement x 10%) x (Missile attack damage of unit/(effective armor of enemy unit + effective shield of enemy unit)) x (N+1) *
+* (size of enemy unit at start of engagement x 10%) x (Missile attack damage of unit/(effective armor of enemy unit + effective shield of enemy unit)) x (N+1)
 
 Where *N* is a normally distributed random variable with mean 0 and standard deviation 1 (standard normal distribution).
 
@@ -231,7 +231,7 @@ Melee cavalry/chariots/elephants will have an attack damage value in all engagem
 
 Units in a melee engagement inflict casualties against the opposing unit equal to (up to a maximum of the entire enemy unit, with a minimum of none of the enemy unit):
 
-* (size of enemy unit at start of engagement x 10%) x (Effective melee attack damage of unit/(effective armor of enemy unit + effective shield of enemy unit + effective defense skill of enemy unit)) x (N+1) *
+* (size of enemy unit at start of engagement x 10%) x (Effective melee attack damage of unit/(effective armor of enemy unit + effective shield of enemy unit + effective defense skill of enemy unit)) x (N+1)
 
 Where *N* is a normally distributed random variable with mean 0 and standard deviation 1 (standard normal distribution).
 
