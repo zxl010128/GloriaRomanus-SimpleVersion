@@ -513,7 +513,7 @@ For example, if our above unit of peasants suffered casualties equal to half of 
 (1/2) / (1/4) x 10% = 2 x 10% = 20%
 And thus the unit of peasants would have a 70% + 20% = 90% chance of breaking.
 
-i.e. if your unit loses a larger proportion of it's soldiers than the opposing unit in an engagement, the chance of your unit to break is increased by a larger value than than the enemy unit from the base fleeing chance.
+i.e. if your unit loses a larger proportion of it's soldiers than the opposing unit in an engagement, the chance of your unit to break is increased by a larger value than the enemy unit from the base fleeing chance.
 
 However, for any engagement, the minimum chance of breaking is 5%, and the maximum chance of breaking is 100%, after these calculations/adjustments.
 
