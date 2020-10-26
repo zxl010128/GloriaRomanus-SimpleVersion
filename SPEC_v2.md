@@ -39,6 +39,7 @@ The following are requirements for different grades for completeness in mileston
         0% to *((losing army strength)/(winning army strength+losing army strength) x 100%)* to 100% of the winning army.
         A successful invading army should destroy the enemy army as per the spec, and move its soldiers into the captured province.
     * Offline multiplayer implemented - ending the turn should transfer control to the next faction of a human player
+    * Player is able to save/load games
 
 * Credit (>=65%)
     * All requirements for a pass, and all of the following:
