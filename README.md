@@ -479,6 +479,9 @@ https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Random.ht
 
 You should ensure the ranged attack damage above incorporates the effect of any bonuses/penalties (e.g. the 10% loss of missile attack damage from fire arrows).
 
+NOTE: in the above formula, the Berserker special ability will result in a Zero Division Error. Handle this by capping the following to 10 (rather than the infinity implied by zero division error):
+Missile attack damage of unit/(effective armor of enemy unit + effective shield of enemy unit)
+
 
 Cavalry/chariots/elephants attacking a province with walls do not receive any melee bonus from their charge statistic. Melee cavalry/chariots/elephants defending a province with walls, or attacking a province without walls, will have an attack damage value in all engagements equal to their *melee attack damage + charge value*. Infantry and artillery do not receive a charge statistic (only cavalry/chariots/elephants do).
 
