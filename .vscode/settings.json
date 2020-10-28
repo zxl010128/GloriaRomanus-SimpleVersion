@@ -1,4 +1,4 @@
 {
     "java.import.gradle.enabled": false,
-    "java.import.gradle.wrapper.enabled": false
+    "java.import.gradle.wrapper.enabled": false,
 }
