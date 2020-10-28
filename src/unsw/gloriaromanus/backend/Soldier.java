@@ -1,7 +1,7 @@
 package unsw.gloriaromanus.backend;
 
-public abstract class Soldier {
-    private String name;
+public class Soldier {
+    private String type;
     private int trainingCost;
     private int trainingTurns;
     private boolean trainingFinished;
@@ -15,4 +15,8 @@ public abstract class Soldier {
     public int getMovementPoints() {
         return movementPoints;
     };
+
+    public String getType() {
+        return type;
+    }
 }
