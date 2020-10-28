@@ -19,4 +19,8 @@ public class Troop {
     public String getType() {
         return type;
     }
+
+    public int getSpeed() {
+        return speed;
+    }
 }
