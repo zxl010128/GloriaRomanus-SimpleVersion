@@ -8,7 +8,7 @@ public class Province {
     private int wealth;
     private double taxRate;
     // private Fraction fraction;
-    private List<Soldier> soldiers;
+    private List<Troop> troops;
 
     public Province(String name) {
         this.name = name;
@@ -17,7 +17,7 @@ public class Province {
         // assume the default tax is normal tax (0.15)
         this.taxRate = 0.15;
 
-        this.soldiers = new ArrayList<Soldier>();
+        this.troops = new ArrayList<Troop>();
     }
 
     public Province(String name, int wealth) {
@@ -27,7 +27,7 @@ public class Province {
         // assume the default tax is normal tax (0.15)
         this.taxRate = 0.15;
 
-        this.soldiers = new ArrayList<>();
+        this.troops = new ArrayList<>();
     }
 
     public void recruit(String type) {
@@ -39,19 +39,19 @@ public class Province {
         }
     }
 
-    public Troop generateTroop(List<Soldier> soldiers) {
-        // assume all soldiers in param is located at current province for now
-        return new Troop(soldiers, this);
+    public Unit generateTroop(List<Troop> troops) {
+        // assume all troops in param is located at current province for now
+        return new Unit(troops, this);
     }
 
-    public void removeSoldier(Soldier s) {
-        if (this.soldiers.contains(s)) {
-            this.soldiers.remove(s);
+    public void removeTroop(Troop s) {
+        if (this.troops.contains(s)) {
+            this.troops.remove(s);
         }
     }
 
-    public void addSoldier(Soldier s) {
-        this.soldiers.add(s);
+    public void addTroop(Troop s) {
+        this.troops.add(s);
     }
 
 
