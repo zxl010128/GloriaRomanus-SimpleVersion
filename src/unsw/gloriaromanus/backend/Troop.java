@@ -1,64 +1,22 @@
 package unsw.gloriaromanus.backend;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Troop {
-    private List<Soldier> soldiers;
+    private String type;
+    private int trainingCost;
+    private int trainingTurns;
+    private boolean trainingFinished;
+    // private SpecialAbility specialAbility;
+    private int morale;
+    private int attackDamage;
+    private int defense;
+    private int speed;
     private int movementPoints;
-    private Province province;
 
-    /**
-     *
-     * @param soldiers
-     * @param province
-     */
-    public Troop(List<Soldier> soldiers, Province province) {
-        this.soldiers = new ArrayList<Soldier>();
-        int minMovementPoints = soldiers.get(0).getMovementPoints();
+    public int getMovementPoints() {
+        return movementPoints;
+    };
 
-        for (Soldier s : soldiers) {
-            this.soldiers.add(s);
-            if (s.getMovementPoints() < minMovementPoints) {
-                minMovementPoints = s.getMovementPoints();
-            }
-        }
-
-        this.movementPoints = minMovementPoints;
-        this.province = province;
+    public String getType() {
+        return type;
     }
- 
-    /**
-     * assign a troop to an occupied province
-     * 
-     * @param destination player's occupied province
-     */
-    public void moveTo(Province destination) {
-        // move
-
-        // after arriving
-        Province oldProvince = this.province;
-        for (Soldier s : this.soldiers) {
-            oldProvince.removeSoldier(s);
-            destination.addSoldier(s);
-        }
-
-    }
-
-    /**
-     * assign a troop to invade a unoccupied province
-     */
-    public void invade(Province destination) {
-        // move
-
-        // after arrivingm, start battle
-        // Implement later
-    
-
-    }
-
-    public Province getProvince() {
-        return province;
-    }
-
 }
