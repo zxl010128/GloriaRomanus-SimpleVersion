@@ -7,6 +7,8 @@ public class Unit {
     private List<Troop> troops;
     private int movementPoints;
     private Province province;
+    private int speed;
+    private String type;
 
     /**
      *
@@ -15,50 +17,24 @@ public class Unit {
      */
     public Unit(List<Troop> troops, Province province) {
         this.troops = new ArrayList<Troop>();
-        int minMovementPoints = troops.get(0).getMovementPoints();
 
-        for (Troop s : troops) {
-            this.troops.add(s);
-            if (s.getMovementPoints() < minMovementPoints) {
-                minMovementPoints = s.getMovementPoints();
-            }
-        }
+        // A unit is a bunch of troops of the same type
+        this.movementPoints = troops.get(0).getMovementPoints();
+        this.speed = troops.get(0).getSpeed();
+        this.type = troops.get(0).getType();
 
-        this.movementPoints = minMovementPoints;
         this.province = province;
     }
- 
-    /**
-     * assign a troop to an occupied province
-     * 
-     * @param destination player's occupied province
-     */
-    public void moveTo(Province destination) {
-        // move
 
-        // after arriving
-        Province oldProvince = this.province;
-        for (Troop t : this.troops) {
-            oldProvince.removeTroop(t);
-            destination.addTroop(t);
-        }
-
+    public int getMovementPoints() {
+        return movementPoints;
     }
 
-    /**
-     * assign a troop to invade a unoccupied province
-     */
-    public void invade(Province destination) {
-        // move
-
-        // after arrivingm, start battle
-        // Implement later
-    
-
+    public int getSpeed() {
+        return speed;
     }
 
-    public Province getProvince() {
-        return province;
+    public String getType() {
+        return type;
     }
-
 }
