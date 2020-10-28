@@ -39,6 +39,7 @@ The following are requirements for different grades for completeness in mileston
         0% to *((losing army strength)/(winning army strength+losing army strength) x 100%)* to 100% of the winning army.
         A successful invading army should destroy the enemy army as per the spec, and move its soldiers into the captured province.
     * Offline multiplayer implemented - ending the turn should transfer control to the next faction of a human player
+    * Player is able to save/load games
 
 * Credit (>=65%)
     * All requirements for a pass, and all of the following:
@@ -127,7 +128,7 @@ The following special abilities should be available and implemented automaticall
 * For all melee cavalry: "Heroic charge" - where the army has fewer than half the number of units as the enemy, this cavalry unit will double its charge attack damage, and have 50% higher morale
 * For all pikemen or hoplite units: "Phalanx" - these hoplites or pikemen have double the melee defence, but half of the speed, as they are otherwise configured to have
 * For all javelin-skirmisher units: "skirmisher anti-armour" - in ranged engagements, troops fighting these skirmishers only receive half the protection from armour they would receive otherwise
-* For all elephant units: "Elephants running amok" - during any engagement with elephants, there is a 10% chance that the casualties inflicted by a unit of elephants will instead be directed at a random allied unit (as if the elephants were battling the allied unit directly)
+* For all elephant units: "Elephants running amok" - during any engagement with elephants, there is a 10% chance that the damage/casualties inflicted by a unit of elephants will instead be directed at a random allied unit which is still participating in the battle (as if the elephants were battling the allied unit directly)
 * For all horse-archer units: "Cantabrian circle" - when enemy missile units engage this unit of horse archers, the enemy missile units will suffer a 50% loss to missile attack damage
 * For all druid units: "Druidic fervour" - allied units in an army with druids enjoy a 10% bonus to morale, and enemy units suffer a 5% penalty to morale, whilst the druids haven't routed. The effect of this ability is amplified by scalar addition, and can be amplified up to 5 times (e.g. 2 druids results in allies receiving 20% bonus to morale and enemy units suffering 10% penalty, however 6 druids provides 50% bonus and 25% penalty respectively)
 * For all melee infantry: "Shield charge" - for every 4th engagement by this unit of melee infantry per battle, the value of shield defense is added to this unit's attack damage value
@@ -225,6 +226,9 @@ Where *N* is a normally distributed random variable with mean 0 and standard dev
 https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Random.html#nextGaussian()
 
 You should ensure the ranged attack damage above incorporates the effect of any bonuses/penalties (e.g. the 10% loss of missile attack damage from fire arrows).
+
+NOTE: in the above formula, the Berserker special ability will result in a Zero Division Error. Handle this by capping the following to 10 (rather than the infinity implied by zero division error):
+Missile attack damage of unit/(effective armor of enemy unit + effective shield of enemy unit)
 
 
 Melee cavalry/chariots/elephants will have an attack damage value in all engagements equal to their *melee attack damage + charge value*. Infantry and artillery do not receive a charge statistic (only cavalry/chariots/elephants do).
