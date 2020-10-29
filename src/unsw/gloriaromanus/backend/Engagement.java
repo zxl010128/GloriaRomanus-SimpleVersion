@@ -49,9 +49,17 @@ public class Engagement {
 
     private void startBattle(Unit attacker, Unit defender) {
         // assume attacker attacks first
+        Province defendProvince = defender.getProvince();
         // First, calculate the damage
         int damage = calculateDamage(attacker, defender);
         attacker.attack(defender, damage);
+
+        // defender will be removed if defeated
+        // check if it has been defeated
+        if (defender.getHealth() > 0) {
+            damage = calculateDamage(defender, attacker);
+            defender.attack(attacker, damage);
+        }
 
         
     }

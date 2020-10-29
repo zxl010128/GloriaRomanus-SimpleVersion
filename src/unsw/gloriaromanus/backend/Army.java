@@ -89,7 +89,7 @@ public class Army {
 
     public boolean containAvalUnits(){
         for (Unit u : units) {
-            if (u.getAval()) {
+            if (u.getHealth() > 0) {
                 return true;
             }
         }
