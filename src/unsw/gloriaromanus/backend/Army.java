@@ -43,5 +43,24 @@ public class Army {
     
     }
 
+    public List<Unit> getUnits() {
+        return units;
+    }
+
+    public Faction getFaction() {
+        return units.get(0).getFaction();
+    }
+
+    public Province getProvince() {
+        return units.get(0).getProvince();
+    }
+
+    public int getNumOfUnits() {
+        return units.size();
+    }
+    
+    public void updateAfterDraw() {
+        moveTo(getProvince());
+    }
 
 }
