@@ -9,6 +9,7 @@ public class Province {
     private double taxRate;
     // private Fraction fraction;
     private List<Unit> units;
+    private int SoldierNum;
 
     public Province(String name) {
         this.name = name;
@@ -18,6 +19,7 @@ public class Province {
         this.taxRate = 0.15;
 
         this.units = new ArrayList<Unit>();
+        this.SoldierNum = 0;
     }
 
     

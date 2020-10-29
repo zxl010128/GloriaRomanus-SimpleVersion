@@ -1,19 +1,87 @@
-[ 
-    "Romans", 
-    "Carthaginians", 
-    "Gauls", 
-    "Celtic Britons", 
-    "Spanish", 
-    "Numidians", 
-    "Egyptians", 
-    "Seleucid Empire", 
-    "Pontus", 
-    "Amenians", 
-    "Parthians", 
-    "Germanics", 
-    "Greek City States", 
-    "Macedonians", 
-    "Thracians", 
-    "Dacians"
-]
+{
+    "Romans":[
+        "Aegyptus",
+        "Arabia",
+        "Iudaea"
+    ], 
+    "Carthaginians":[
+        "Africa Proconsularis",
+        "Creta et Cyrene",
+        "Numidia"
+    ], 
+    "Gauls":[
+        "Mauretania Tingitana",
+        "Mauretania Caesariensis",
+        "Baetica"
+    ], 
+    "Celtic Britons":[
+        "Lusitania",
+        "Tarraconensis",
+        "Narbonensis"
+    ], 
+    "Spanish":[
+        "Aquitania",
+        "Lugdunensis",
+        "Germania Superior"
+    ], 
+    "Numidians":[
+        "Germania Inferior",
+        "Belgica",
+        "Britannia"
+    ], 
+    "Egyptians":[
+        "Alpes Cottiae",
+        "Alpes Graiae et Poeninae",
+        "Alpes Maritimae",
+        "IX"
+    ], 
+    "Seleucid Empire":[
+        "Sicilia",
+        "I",
+        "II",
+        "III"
+    ], 
+    "Pontus":[
+        "IV",
+        "V",
+        "VI",
+        "VII"
+    ], 
+    "Amenians":[   
+        "VIII",
+        "X",
+        "XI",
+        "Raetia"
+    ], 
+    "Parthians":[
+        "Noricum",
+        "Pannonia Inferior",
+        "Pannonia Superior"
+    ], 
+    "Germanics":[
+        "Dalmatia",
+        "Macedonia",
+        "Achaia"
+    ], 
+    "Greek City States":[
+        "Moesia Inferior",
+        "Moesia Superior",
+        "Dacia"
+    ], 
+    "Macedonians":[
+        "Thracia",
+        "Asia",
+        "Bithynia et Pontus"
+    ], 
+    "Thracians":[
+        "Armenia Mesopotamia",
+        "Galatia et Cappadocia",
+        "Lycia et Pamphylia"
+    ], 
+    "Dacians":[
+        "Syria",
+        "Sicilia",
+        "Cyprus"
+    ]
+}
   
