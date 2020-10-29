@@ -4,6 +4,7 @@ public class Engagement {
     private Unit attacker;
     private Unit defender;
     private String type;
+    private Unit winner;
 
     public Engagement(Unit attacker, Unit defender) {
         this.attacker = attacker;
@@ -20,15 +21,14 @@ public class Engagement {
             // assume there are only two kinds of unit
             // 1. melee 2. missile
             double meleeProb = 0.5;
-            int meleeSpeed = (attackerType.equals("melee")) ? attacker.getSpeed() : defender.getSpeed();
-            int missileSpeed = (defenderType.equals("missile")) ? defender.getSpeed() : attacker.getSpeed();
+            int meleeSpeed = (attackerType.equals("melee")) ? attacker.getMovementPoints() : defender.getMovementPoints();
+            int missileSpeed = (defenderType.equals("missile")) ? defender.getMovementPoints() : attacker.getMovementPoints();
 
             meleeProb += 0.1 * (meleeSpeed - missileSpeed);
             // the maximum chance for an engagement to be either a ranged or melee engagement is 95% in either case.
             if (meleeProb > 0.95) {
                 meleeProb = 0.95;
             }
-
             if (meleeProb < 0.05) {
                 meleeProb = 0.05;
             }
@@ -39,8 +39,18 @@ public class Engagement {
             } else {
                 this.type = "missile";
             }
-
         }
 
+        this.winner = startBattle(attacker, defender);
+
+    }
+
+    private Unit startBattle(Unit attacker, Unit defender) {
+        // assume attacker attacks first
+        return null;
+    }
+
+    public Faction getWinnerFaction() {
+        return winner.getFaction();
     }
 }
