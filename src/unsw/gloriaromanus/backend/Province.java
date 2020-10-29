@@ -20,6 +20,10 @@ public class Province {
         this.troops = new ArrayList<Troop>();
     }
 
+    
+    /** 
+     * @param type the type of the soldier recruiting
+     */
     public void recruit(String type) {
         // parameter may be changed later
         switch (type) {
@@ -29,17 +33,31 @@ public class Province {
         }
     }
 
+    
+    /** 
+     * form a Unit from the given troops
+     * @param troops 
+     * @return Unit
+     */
     public Unit generateTroop(List<Troop> troops) {
         // assume all troops in param is located at current province for now
         return new Unit(troops, this);
     }
 
+    
+    /** 
+     * @param s the troop wanna remove
+     */
     public void removeTroop(Troop s) {
         if (this.troops.contains(s)) {
             this.troops.remove(s);
         }
     }
 
+    
+    /** 
+     * @param s the troop wanna add
+     */
     public void addTroop(Troop s) {
         this.troops.add(s);
     }
