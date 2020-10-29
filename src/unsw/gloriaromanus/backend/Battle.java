@@ -1,15 +1,18 @@
 package unsw.gloriaromanus.backend;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class Battle {
     private Army attackerArmy;
     private Army defenderArmy;
     private Army winner;
+    private List<Skirmish> skirmishes;
 
     public Battle(Army attackerArmy, Army defenderArmy) {
         this.attackerArmy = attackerArmy;
         this.defenderArmy = defenderArmy;
+        this.skirmishes = new ArrayList<Skirmish>();
 
         startBattle(attackerArmy, defenderArmy);
     }
@@ -19,37 +22,28 @@ public class Battle {
         List<Unit> defenderUnits = defenderArmy.getUnits();
         Faction attackFaction = attackerArmy.getFaction();
 
-        // Finish this after implement attack function!!!!!!!!!
-
         // counter for number of engagements
         int engCounter = 0;
-        int i = 0;
-        int j = 0;
 
-        outerloop:
-        while (i < attackerArmy.getNumOfUnits() && j < defenderArmy.getNumOfUnits()) {
-            Unit attackUnit = attackerUnits.get(i);
-            for (; j < defenderArmy.getNumOfUnits(); j++) {
-                Unit defendUnit = defenderUnits.get(j);
-                Engagement e = new Engagement(attackUnit, defendUnit);
-                if (e.getWinnerFaction().equals(attackFaction)) {
-                    // attackerArmy faction win -> battle with next defenderArmy unit
-                    j++;
-                } else {
-                    // defenderArmy faction win -> move to next attackerArmy unit
-                    i++;
-                }
-                engCounter++;
-                if (engCounter == 200) {
-                    // Draw: The invading army in a draw should return to the province it invaded from.
-                    break outerloop;
-                }
+        // Finish this after implement attack function!!!!!!!!!
+        while (attackerArmy.containAvalUnits() && defenderArmy.containAvalUnits()) {
+            Unit attackerUnit = unitRandomPicker(attackerArmy);
+            Unit defenderUnit = unitRandomPicker(defenderArmy);
+
+            Skirmish s = new Skirmish(attackerUnit, defenderUnit);
+            skirmishes.add(s);
+            engCounter += s.getNumOfEngagements();
+
+            if (engCounter >= 200) {
+                break;
             }
+
+
         }
 
-        if (engCounter == 200) {
+        if (engCounter >= 200) {
             winner = null;
-        } else if (j == defenderArmy.getNumOfUnits() && i < attackerArmy.getNumOfUnits()) {
+        } else if (attackerArmy.containAvalUnits()) {
             winner = attackerArmy;
         } else {
             winner = defenderArmy;
@@ -57,6 +51,9 @@ public class Battle {
 
     }
 
+    private Unit unitRandomPicker(Army a) {
+        return null;
+    }
     public Army getWinner() {
         return winner;
     }
