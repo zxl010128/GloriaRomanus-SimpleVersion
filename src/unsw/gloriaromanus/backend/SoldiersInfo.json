@@ -1,0 +1,214 @@
+{
+    "Roman legionary": {
+        "type": "Cavalry",
+        "AttackType": "melee",
+        "movement point": 15,
+        "health": 100,
+        "trainingCost": 30,
+        "trainingTurns": 3,
+        "specialAbility":"Legionary eagle",
+        "morale": 10,
+        "attackDamage": 50,
+        "defense": 15,
+        "charge": 60
+    },
+
+    "Gallic berserker": {
+        "type": "Infantry",
+        "AttackType": "melee",
+        "movement point": 10,
+        "health": 70,
+        "trainingCost": 20,
+        "trainingTurns": 2,
+        "specialAbility":"Berserker rage",
+        "morale": 6,
+        "attackDamage": 15,
+        "defense": 15,
+        "charge": 40
+    },
+
+    "Celtic Briton berserker": {
+        "type" : "Infantry",
+        "AttackType": "melee",
+        "movement point": 10,
+        "health": 50,
+        "trainingCost": 20,
+        "trainingTurns": 2,
+        "specialAbility":"Berserker rage",
+        "morale": 6,
+        "attackDamage": 20,
+        "defense": 10,
+        "charge": 40
+    },
+
+    "Germanic berserker": {
+        "type" : "Infantry",
+        "AttackType": "melee",
+        "movement point": 10,
+        "health": 30,
+        "trainingCost": 20,
+        "trainingTurns": 2,
+        "specialAbility":"Berserker rage",
+        "morale": 6,
+        "attackDamage": 25,
+        "defense": 5,
+        "charge": 40
+    },
+
+    "melee cavalry": {
+        "type" : "Cavalry",
+        "AttackType": "melee",
+        "movement point": 15,
+        "health": 90,
+        "trainingCost": 10,
+        "trainingTurns": 1,
+        "specialAbility":"Heroic charge",
+        "morale": 3,
+        "attackDamage": 10,
+        "defense": 20,
+        "charge": 20
+    },
+
+    "pikemen": {
+        "type" : "Infantry",
+        "AttackType": "melee",
+        "movement point": 10,
+        "health": 50,
+        "trainingCost": 10,
+        "trainingTurns": 1,
+        "specialAbility":"Heroic charge",
+        "morale": 4,
+        "attackDamage": 15,
+        "defense": 20,
+        "charge": 25
+    },
+
+    "hoplite": {
+        "type" : "Infantry",
+        "AttackType": "melee",
+        "movement point": 10,
+        "health": 70,
+        "trainingCost": 10,
+        "trainingTurns": 1,
+        "specialAbility":"Heroic charge",
+        "morale": 4,
+        "attackDamage": 20,
+        "defense": 10,
+        "charge": 25
+    },
+
+    "javelin-skirmisher": {
+        "type" : "Infantry",
+        "AttackType": "melee",
+        "movement point": 10,
+        "health": 40,
+        "trainingCost": 15,
+        "trainingTurns": 1,
+        "specialAbility":"Heroic charge",
+        "morale": 7,
+        "attackDamage": 30,
+        "defense": 5,
+        "charge": 30
+    },
+
+    "elephant": {
+        "type" : "Infantry",
+        "AttackType": "melee",
+        "movement point": 10,
+        "health": 150,
+        "trainingCost": 40,
+        "trainingTurns": 3,
+        "specialAbility":"Elephants running amok",
+        "morale": 2,
+        "attackDamage": 10,
+        "defense": 30,
+        "charge": 80
+    },
+
+    "horse-archer": {
+        "type" : "Cavalry",
+        "AttackType": "missile",
+        "movement point": 15,
+        "health": 50,
+        "trainingCost": 10,
+        "trainingTurns": 1,
+        "specialAbility":"Cantabrian circle",
+        "morale": 7,
+        "attackDamage": 25,
+        "defense": 5,
+        "charge": 20
+    },
+
+    "druid": {
+        "type" : "Infantry",
+        "AttackType": "missile",
+        "movement point": 10,
+        "health": 100,
+        "trainingCost": 20,
+        "trainingTurns": 2,
+        "specialAbility":"Druidic fervour",
+        "morale": 5,
+        "attackDamage": 20,
+        "defense": 15,
+        "charge": 40
+    },
+
+    "melee infantry": {
+        "type" : "Infantry",
+        "AttackType": "melee",
+        "movement point": 10,
+        "health": 70,
+        "trainingCost": 10,
+        "trainingTurns": 1,
+        "specialAbility":"Shield charge",
+        "morale": 6,
+        "attackDamage": 30,
+        "defense": 15,
+        "charge": 20
+    },
+
+    "heavy infantry": {
+        "type": "Infantry",
+        "AttackType": "melee",
+        "movement point": 10,
+        "health": 50,
+        "trainingCost": 5,
+        "trainingTurns": 1,
+        "specialAbility":"none",
+        "morale":3,
+        "attackDamage": 25,
+        "defense": 10,
+        "charge": 15
+    },
+
+    "missile infantry": {
+        "type": "Infantry",
+        "AttackType": "missile",
+        "movement point": 10,
+        "health": 40,
+        "trainingCost": 5,
+        "trainingTurns": 1,
+        "specialAbility":"none",
+        "morale":3,
+        "attackDamage": 30,
+        "defense": 5,
+        "charge": 15
+    },
+
+    "chariots": {
+        "type": "Artillery",
+        "AttackType": "missile",
+        "movement point": 4,
+        "health": 60,
+        "trainingCost": 25,
+        "trainingTurns": 2,
+        "specialAbility":"none",
+        "morale": 4,
+        "attackDamage": 50,
+        "defense": 10,
+        "charge": 50
+    },
+}
+
+
+
