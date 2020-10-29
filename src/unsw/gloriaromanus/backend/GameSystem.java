@@ -21,7 +21,6 @@ public class GameSystem {
         this.playerNum = 0;
     }
     
-    
     /** 
      * @param playerNum the number of player in this game
      * @return boolean

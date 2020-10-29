@@ -12,6 +12,7 @@ public class Troop {
     private int speed;
     private int movementPoints;
 
+
     
     /** 
      * getter method to extract movement points
