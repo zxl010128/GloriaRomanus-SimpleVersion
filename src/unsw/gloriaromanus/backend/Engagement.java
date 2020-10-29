@@ -1,5 +1,7 @@
 package unsw.gloriaromanus.backend;
 
+import java.util.Random;
+
 public class Engagement {
     private Unit attacker;
     private Unit defender;
@@ -41,13 +43,57 @@ public class Engagement {
             }
         }
 
-        this.winner = startBattle(attacker, defender);
+        startBattle(attacker, defender);
 
     }
 
-    private Unit startBattle(Unit attacker, Unit defender) {
+    private void startBattle(Unit attacker, Unit defender) {
         // assume attacker attacks first
-        return null;
+        // First, calculate the damage
+        int damage = calculateDamage(attacker, defender);
+        attacker.attack(defender, damage);
+
+        
+    }
+
+    private int calculateDamage(Unit attacker, Unit defender) {
+        int damage = 0;
+        int enemySize = defender.getNumOfTroops();
+        int enemyArmor = defender.getArmor();
+        int enemyShield = defender.getShield();
+        double N = new Random().nextGaussian() + 1;
+
+        switch (attacker.getType()) {
+            case "melee" : {
+                if (this.type.equals("missile")) {
+                    damage = 0;
+
+                } else {
+                    // both melee
+                    // implement cavalry/chariots/elephants charge later!
+                    // implement berserker later!
+                    int meleeAttackDamage = attacker.getAttackDamage(); 
+                    damage = (int) Math.rint((enemySize * 0.1) * (meleeAttackDamage / (enemyArmor + enemyShield) * (N + 1)));
+                
+                }
+            }
+            case "missile" : {
+                if (this.type.equals("missile")) {
+                    // missile engagement
+                    int missileAttackDamage = attacker.getAttackDamage();
+                    
+                    damage = (int) Math.rint((enemySize * 0.1) * (missileAttackDamage / (enemyArmor + enemyShield)) * (N + 1));    
+                } else {
+                    // melee engagement
+                    int meleeAttackDamage = attacker.getAttackDamage(); 
+                    damage = (int) Math.rint((enemySize * 0.1) * (meleeAttackDamage / (enemyArmor + enemyShield) * (N + 1)));
+
+                }
+                
+            }
+        }
+
+        return damage;
     }
 
     public Faction getWinnerFaction() {

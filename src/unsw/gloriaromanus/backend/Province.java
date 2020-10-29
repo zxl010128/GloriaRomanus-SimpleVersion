@@ -9,7 +9,6 @@ public class Province {
     private double taxRate;
     private Faction faction;
     private List<Unit> units;
-    private int SoldierNum;
 
     public Province(String name) {
         this.name = name;
@@ -19,7 +18,6 @@ public class Province {
         this.taxRate = 0.15;
 
         this.units = new ArrayList<Unit>();
-        this.SoldierNum = 0;
     }
 
     
@@ -36,6 +34,9 @@ public class Province {
         }
     }
 
+    public List<Unit> getUnits() {
+        return units;
+    }
     
     /** 
      * for a Army from the given units
@@ -44,29 +45,52 @@ public class Province {
      */
     public Army generateArmy(List<Unit> units) {
         // assume all Units in param is located at current province for now
-        return new Army(units);
+        return new Army(units, this);
     }
 
     
     /** 
-     * @param s
+     * @param u
      */
-    public void removeUnit(Unit s) {
-        if (this.units.contains(s)) {
-            this.units.remove(s);
+    public void removeUnit(Unit u) {
+        if (this.units.contains(u)) {
+            this.units.remove(u);
         }
     }
 
     
     /** 
-     * @param s
+     * @param u
      */
-    public void addUnit(Unit s) {
-        this.units.add(s);
+    public void addUnit(Unit u) {
+        this.units.add(u);
+        u.setProvince(this);
     }
 
     public Faction getFraction() {
         return faction;
+    }
+
+    public void setFaction(Faction faction) {
+        this.faction = faction;
+    }
+
+    public void setUnits(List<Unit> units) {
+        this.units = units;
+    }
+
+    public int getNumOfSoldiers(){
+        // used later for displaying number of soldiers in frontend
+        int count = 0;
+        if (units.size() == 0) {
+            return 0;
+        }
+
+        for (Unit u : units) {
+            count += u.getNumOfTroops();
+        }
+
+        return count;
     }
     
 
