@@ -6,8 +6,9 @@ import java.util.List;
 public class Army {
     private List<Unit> units;
     private int movementPoints;
+    private Province province;
 
-    public Army(List<Unit> units) {
+    public Army(List<Unit> units, Province province) {
         this.units = new ArrayList<Unit>();
         int minMovementPoints = units.get(0).getMovementPoints();
 
@@ -19,6 +20,7 @@ public class Army {
         }
 
         this.movementPoints = minMovementPoints;
+        this.province = province;
     }
 
     /**
@@ -26,20 +28,46 @@ public class Army {
      * 
      * @param destination player's occupied province
      */
-    public void moveTo(Province destination) {
+    public void moveToOccupied(Province destination) {
         // implement later
         // Don't forget to update oldProvince after moving!
+        // check if the destination is okay to move to
+
+        // move
+
+        // update after moving
+        for (Unit u : units) {
+            destination.addUnit(u);
+            province.removeUnit(u);
+        }
     }
 
     /**
      * assign an army to invade a unoccupied province
      */
     public void invade(Province destination) {
+        // check if the destination is able to move to
+
         // move
 
         // after arrivingm, start battle
-        // Implement later
         // Don't forget to update oldProvince after moving!
+        Army defenseArmy = new Army(destination.getUnits(), destination);
+        Battle battleResolver = new Battle(this, defenseArmy);
+        Army winner = battleResolver.getWinner();
+        if (winner == null) {
+            // Draw
+            this.updateAfterDraw();
+
+        } else if (winner.getFaction().equals(this.getFaction())) {
+            // Win
+            this.updateAfterWin(destination);
+
+        } else {
+            // Lose
+            this.updateAfterLose();
+
+        }
     
     }
 
@@ -48,19 +76,43 @@ public class Army {
     }
 
     public Faction getFaction() {
-        return units.get(0).getFaction();
+        return province.getFraction();
     }
 
     public Province getProvince() {
-        return units.get(0).getProvince();
+        return province;
     }
 
     public int getNumOfUnits() {
         return units.size();
     }
+
+    public boolean containAvalUnits(){
+        for (Unit u : units) {
+            if (u.getHealth() > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     
     public void updateAfterDraw() {
-        moveTo(getProvince());
+        // moveTo(getProvince());
+    }
+
+
+    public void updateAfterWin(Province destination) {
+        // moveTo(destination);
+        
+        // update the occupied province
+        destination.setFaction(this.getFaction());
+        destination.setUnits(this.getUnits());
+    }
+
+    public void updateAfterLose() {
+        // do i need to remove unit here?
+        // or the unit will be removed when they are defeated?
     }
 
 }
