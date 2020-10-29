@@ -15,7 +15,7 @@ public class Unit {
     private int numOfTroops;
     private int movementPoints;
     private Province province;
-    private boolean avalibility; // MAYBE USELESS!!!!!!
+    // private boolean avalibility; // MAYBE USELESS!!!!!!
     private int attackDamage;
     private int armor;
     private int shield;
@@ -37,7 +37,7 @@ public class Unit {
         // this.attackDamage = troops.get(0).getAttackDamage();
 
         this.province = province;
-        this.avalibility = true;
+        // this.avalibility = true;
     }
 
     public String getName() {
@@ -52,6 +52,14 @@ public class Unit {
         return movementPoints;
     }
 
+    public void removeHealthBy(int damage) {
+        health -= damage;
+        if (health < 0) {
+            health = 0;
+        }
+
+        updateAfterDefeated();
+    }
     
     /** 
      * getter method to extract type
@@ -77,13 +85,13 @@ public class Unit {
         return numOfTroops;
     }
 
-    public boolean getAval(){
-        return avalibility;
-    }
+    // public boolean getAval(){
+    //     return avalibility;
+    // }
 
-    public void setAval(boolean b) {
-        avalibility = b;
-    }
+    // public void setAval(boolean b) {
+    //     avalibility = b;
+    // }
 
     public int getAttackDamage() {
         return attackDamage;
@@ -97,8 +105,31 @@ public class Unit {
         return shield;
     }
 
-    public void attack(Unit defender, int damage) {
+    public int getTotalDefense() {
+        return armor + shield;
+    }
 
-        
+    public int getHealth() {
+        return health;
+    }
+
+    public void updateAfterDefeated() {
+        // MAYBE BE USELESS
+        // remove the defeated unit from its original province
+        // province.removeUnit(this); 
+
+        // remove the defeated unit from its army
+
+
+    }
+
+    public void attack(Unit defender, int damage) {
+        int totalDefense = defender.getTotalDefense();
+        int actualDamage = damage - totalDefense;
+        if (actualDamage < 0) {
+            actualDamage = 0;
+        }
+
+        defender.removeHealthBy(actualDamage);
     }
 }
