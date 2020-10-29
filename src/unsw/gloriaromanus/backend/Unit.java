@@ -2,30 +2,47 @@ package unsw.gloriaromanus.backend;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import org.json.JSONObject;
 
 public class Unit {
-    private List<Troop> troops;
+    private String name;
+    private String type; // "missile" or "melee"
+    private int health;
+    private int trainingCost;
+    private int trainingTurns;
+    private int numOfTroops;
     private int movementPoints;
     private Province province;
-    private String type;
-    private boolean isDefeated;
+    private boolean avalibility; // MAYBE USELESS!!!!!!
+    private int attackDamage;
+    private int armor;
+    private int shield;
+    private int morale;
+    
 
     /**
      *
      * @param troops
      * @param province
      */
-    public Unit(List<Troop> troops, Province province) {
-        this.troops = new ArrayList<Troop>();
+    public Unit(Province province) {
+        // Implement later
+        // user factory pattern to read from JSON file
 
         // A unit is a bunch of troops of the same type
-        this.movementPoints = troops.get(0).getMovementPoints();
-        this.type = troops.get(0).getType();
+        // this.movementPoints = troops.get(0).getMovementPoints();
+        // this.type = troops.get(0).getType();
+        // this.attackDamage = troops.get(0).getAttackDamage();
 
         this.province = province;
-        this.isDefeated = false;
+        this.avalibility = true;
     }
 
+    public String getName() {
+        return name;
+    }
     
     /** 
      * getter method to extract movement points
@@ -52,7 +69,36 @@ public class Unit {
         return province;
     }
 
-    public void attack(Unit u) {
+    public void setProvince(Province province) {
+        this.province = province;
+    }
 
+    public int getNumOfTroops() {
+        return numOfTroops;
+    }
+
+    public boolean getAval(){
+        return avalibility;
+    }
+
+    public void setAval(boolean b) {
+        avalibility = b;
+    }
+
+    public int getAttackDamage() {
+        return attackDamage;
+    }
+
+    public int getArmor() {
+        return armor;
+    }
+
+    public int getShield() {
+        return shield;
+    }
+
+    public void attack(Unit defender, int damage) {
+
+        
     }
 }
