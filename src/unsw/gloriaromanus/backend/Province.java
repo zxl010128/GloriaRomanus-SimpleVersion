@@ -7,7 +7,7 @@ public class Province {
     private String name;
     private int wealth;
     private double taxRate;
-    // private Fraction fraction;
+    private Faction faction;
     private List<Unit> units;
     private int SoldierNum;
 
@@ -65,5 +65,9 @@ public class Province {
         this.units.add(s);
     }
 
+    public Faction getFraction() {
+        return faction;
+    }
+    
 
 }
