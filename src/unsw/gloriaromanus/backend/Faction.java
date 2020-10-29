@@ -6,7 +6,6 @@ import java.util.List;
 public class Faction {
     private String name;
     private int balance;
-    // int soldiersNum; Do we need this one?
     private List<Province> provinces;
 
     public Faction(String name, Province startingProvince) {

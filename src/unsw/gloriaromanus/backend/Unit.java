@@ -26,14 +26,29 @@ public class Unit {
         this.province = province;
     }
 
+    
+    /** 
+     * getter method to extract movement points
+     * @return int
+     */
     public int getMovementPoints() {
         return movementPoints;
     }
 
+    
+    /** 
+     * getter method to extract speed
+     * @return int
+     */
     public int getSpeed() {
         return speed;
     }
 
+    
+    /** 
+     * getter method to extract type
+     * @return String
+     */
     public String getType() {
         return type;
     }
