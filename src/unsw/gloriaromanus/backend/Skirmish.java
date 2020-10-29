@@ -1,5 +1,6 @@
 package unsw.gloriaromanus.backend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Skirmish {
@@ -12,22 +13,28 @@ public class Skirmish {
         this.attackUnit = attackUnit;
         this.defendUnit = defendUnit;
         this.winner = null;
+        this.engagements = new ArrayList<Engagement>();
         startBattle(attackUnit, defendUnit);
     }
 
     private void startBattle(Unit attackUnit, Unit defendUnit) {
         // During a skirmish, both units engage in a sequence of engagements against each other until a unit successfully routes 
         // (runs away from the battle permanently) or is defeated.
-        while (attackUnit.getAval() && defendUnit.getAval()) {
+        while (attackUnit.getHealth() != 0 && defendUnit.getHealth() != 0) {
             Engagement e = new Engagement(attackUnit, defendUnit);
+            engagements.add(e);
         }
-        
-        if (!attackUnit.getAval()) {
+
+        if (attackUnit.getHealth() == 0) {
             winner = defendUnit;
-        } else if (!defendUnit.getAval()) {
+        } else if (defendUnit.getHealth() == 0) {
             winner = attackUnit;
         }
 
+    }
+
+    public int getNumOfEngagements() {
+        return engagements.size();
     }
 
 }
