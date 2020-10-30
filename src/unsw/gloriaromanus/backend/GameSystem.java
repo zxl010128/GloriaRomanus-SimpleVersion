@@ -20,15 +20,16 @@ public class GameSystem {
     private int playerNum;
     private VictoryCondition victoryCondition;
 
+    // Only can be used in allocationFaction method
     List<String> Factions_list = new ArrayList<String>(); 
     List<String> Provinces_list = new ArrayList<String>();
     JSONObject relations = null; 
+    
     // Create a new Game
     // 1. set player number
     // 2. victoryCondition
     // 3. randomly allocate faction
     // 4. create Factions and Province
-    
     public GameSystem() {
         this.factions = new ArrayList<Faction>();
         this.provinces = new ArrayList<Province>();
@@ -90,11 +91,25 @@ public class GameSystem {
         }
     }
 
+    public void NextTurn() {
 
+        this.turn += 1;
+        this.year += 1;
+
+    }
+
+    
+    /** 
+     * @param v
+     */
     public void setVictoryCondtion(VictoryCondition v){
         this.victoryCondition = v;
     }
 
+    
+    /** 
+     * @return JSONObject
+     */
     public JSONObject getVictoryCondition(){
         return this.victoryCondition.getVictoryGoal();
     }

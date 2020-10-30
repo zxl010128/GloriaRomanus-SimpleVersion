@@ -49,4 +49,10 @@ public class Faction {
         return provinces;
     }
 
+    public void update(){
+        for(Province province: this.provinces) {
+            province.addWealth();
+            this.balance += province.addTreasury();
+        }
+    }    
 }
