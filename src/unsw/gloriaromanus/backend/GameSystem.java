@@ -12,7 +12,9 @@ public class GameSystem {
     private int turn;
     private int year;
     private int playerNum;
-    List<Faction> factions_list = new ArrayList<Faction>();
+    public List<Faction> factions_list = new ArrayList<Faction>();
+    public List<Province> province_list = new ArrayList<Province>();
+
 
     public GameSystem() {
         this.factions = new ArrayList<Faction>();
