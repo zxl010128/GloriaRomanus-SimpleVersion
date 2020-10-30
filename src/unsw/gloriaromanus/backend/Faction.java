@@ -6,6 +6,7 @@ import java.util.List;
 public class Faction {
     private String name;
     private int balance;
+    private int totalWealth;
     private List<Province> provinces;
 
     public Faction(String name, Province startingProvince) {
@@ -13,14 +14,18 @@ public class Faction {
         this.balance = 100;
         this.provinces = new ArrayList<Province>();
         provinces.add(startingProvince);
+        totalWealth = startingProvince.getWealth();
     }
 
     public void addProvince(Province p) {
         provinces.add(p);
+        totalWealth += p.getWealth();
     }
 
     public void removeProvince(Province p) {
         provinces.remove(p);
+        totalWealth -= p.getWealth();
+
     }
 
     public String getName() {
@@ -50,4 +55,20 @@ public class Faction {
         return provinces;
     }
 
+    public void update() {
+        // this is function get called each turn
+
+        // First, update all occupied provinces
+        // Maybe delete this later!
+        for (Province p : provinces) {
+            p.update();
+        }
+
+        int totalTaxRevenue = 0;
+        for (Province p : provinces) {
+            totalTaxRevenue += p.getTaxRevenue();
+        }
+
+        balance += totalTaxRevenue;
+    }
 }
