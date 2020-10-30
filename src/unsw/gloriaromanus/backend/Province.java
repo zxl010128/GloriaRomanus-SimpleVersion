@@ -3,6 +3,11 @@ package unsw.gloriaromanus.backend;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import org.json.JSONObject;
 
 public class Province {
     private String name;
@@ -11,6 +16,7 @@ public class Province {
     private Faction faction;
     private List<Unit> units;
     private List<Double> taxRates;
+    private List<Unit> unitsInTraining;
 
     public Province(String name, Faction faction) {
         this.name = name;
@@ -21,21 +27,23 @@ public class Province {
 
         this.faction = faction;
         this.units = new ArrayList<Unit>();
+        this.unitsInTraining = new ArrayList<Unit>();
     }
 
     
     /** 
-     * recruit soldier for a province
-     * @param type soldier type
+     * recruit unit for a province
+     * @param name unit name
      */
-    public void recruit(String type, int currTurn) {
+    public void recruit(String name, int currTurn) {
         // Read the UnitsInfo.JSON
-
-        // parameter may be changed later
-        switch (type) {
-            // implement later after fininshing soldier class
-            default:
-                break;
+        try {
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
+            JSONObject fullJSON = new JSONObject(content);
+            JSONObject unitData = fullJSON.getJSONObject(name);
+            Unit u = new Unit(unitData, this);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
