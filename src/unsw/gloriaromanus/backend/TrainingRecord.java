@@ -1,5 +1,7 @@
 package unsw.gloriaromanus.backend;
 
+import org.json.JSONObject;
+
 public class TrainingRecord {
     private Unit unit;
     private int finishTurn;
@@ -25,6 +27,14 @@ public class TrainingRecord {
 
     public boolean getFinished(){
         return finished;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject output = new JSONObject();
+        output.put("unit", unit.toJSON());
+        output.put("finishTurn", finishTurn);
+        output.put("finished", finished);
+        return output;
     }
     
 }

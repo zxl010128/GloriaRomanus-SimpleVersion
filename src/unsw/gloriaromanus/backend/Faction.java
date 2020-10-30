@@ -3,6 +3,8 @@ package unsw.gloriaromanus.backend;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 public class Faction {
     private String name;
     private int balance;
@@ -57,8 +59,14 @@ public class Faction {
         return provinces;
     }
 
+    public JSONObject toJSON() {
+        JSONObject output = new JSONObject();
+
+        return output;
+    }
+
     public void update() {
-        // this is function get called each turn
+        // this is function get called at the end of each turn (after clicking button)
 
         // First, update all occupied provinces
         // Maybe delete this later!
