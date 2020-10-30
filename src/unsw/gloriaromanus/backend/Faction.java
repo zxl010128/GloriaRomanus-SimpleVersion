@@ -9,12 +9,14 @@ public class Faction {
     private int totalWealth;
     private List<Province> provinces;
 
-    public Faction(String name, Province startingProvince) {
+    public Faction(String name, ArrayList<Province> startingProvinces) {
         this.name = name;
         this.balance = 100;
-        this.provinces = new ArrayList<Province>();
-        provinces.add(startingProvince);
-        totalWealth = startingProvince.getWealth();
+        this.provinces = startingProvinces;
+        this.totalWealth = 0;
+        for (Province p : provinces) {
+            totalWealth += p.getWealth();
+        }
     }
 
     public void addProvince(Province p) {
