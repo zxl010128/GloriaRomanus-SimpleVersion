@@ -96,4 +96,20 @@ public class Province {
         return name;
     }
 
+    public void addWealth() {
+        if (taxRate == 0.1) {
+            this.wealth += 10;
+        } else if (taxRate == 0.15) {
+            this.wealth += 0;
+        } else if (taxRate == 0.2) {
+            this.wealth -= 10;
+        } else if (taxRate == 0.25) {
+            this.wealth -= 20;
+        }
+    }
+
+    public Integer addTreasury() {
+        return (int)(this.wealth * taxRate);
+    }
+
 }
