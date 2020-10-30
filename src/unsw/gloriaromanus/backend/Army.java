@@ -3,6 +3,14 @@ package unsw.gloriaromanus.backend;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.io.IOException;
+
+import java.util.*;
+
+import org.json.*;
+
 public class Army {
     private List<Unit> units;
     private int movementPoints;
@@ -71,22 +79,176 @@ public class Army {
     
     }
 
+    
+    /** 
+     * @return boolean
+     */
+    public boolean isReachable(Province destination){
+        
+        // read a json file and check the adjecent
+        try {
+
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/province_adjacency_matrix_fully_connected.json"));
+            JSONObject Matrix = new JSONObject(content);
+            String provinces = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/provinces_list.json"));
+            JSONArray proList = new JSONArray(provinces);
+
+            List<String> province_list = new ArrayList<String>();
+            for(int i = 0; i < proList.length(); i++) {
+                province_list.add(proList.getString(i));
+            }
+
+            String startPoint = this.province.getName();  
+
+            // situation when current = dest
+            if (startPoint == destination.getName()) {
+                return true;
+            }
+
+            String temp_city;
+
+            // if visited, it will show 1 of this place ID
+            Map<String, Integer> visited = new HashMap<String, Integer>();
+
+            for(String province: province_list){
+                visited.put(province, 0);
+            }
+
+            // this array will record the connected place ID
+
+            Map<String, String> last_position = new HashMap<String, String>();
+
+            for(String province: province_list){
+                last_position.put(province, "-1");
+            }
+
+            // Queue created
+            Queue<String> q = new LinkedList<>();
+            q.add(startPoint);
+
+            // check whether the dest is founded
+            boolean is_Found = false;
+            
+            List<String> OccupiedProvince = new ArrayList<String>();
+            for(Province province : this.province.getFraction().getProvinces()) {
+                OccupiedProvince.add(province.getName());
+            }
+
+            while (!q.isEmpty() && !is_Found) {
+	
+                temp_city = q.remove();
+        
+                // if we have visited this city, we need to skip it
+                // there should be the situation the place connect more than once
+                if (visited.get(temp_city) == 1) {
+                    continue;
+                }
+        
+                // set visited of this city
+                visited.put(temp_city, 1);
+        
+                // get all the reachable locations
+                int num_locs = 0;
+                JSONObject connectList = Matrix.getJSONObject(temp_city);
+
+                List<String> ConnectedProvince = new ArrayList<String>();
+
+                for(String key : connectList.keySet()) {
+                    if(connectList.get(key).equals(true)){
+                        ConnectedProvince.add(key);
+                        num_locs += 1;
+                    }
+                }
+                
+                for(String province: ConnectedProvince){
+                    if (!destination.getName().equals(province) && !OccupiedProvince.contains(province)) {
+                        ConnectedProvince.remove(province);
+                        num_locs -= 1;
+                    }
+                }
+
+                // join the reachable place to Queue
+                for (int i = 0; i < num_locs; i++) {
+                    
+                    // the place must be non-visted
+                    if (visited.get(ConnectedProvince.get(i)) == 0 && last_position.get(ConnectedProvince.get(i)) == "-1") {
+                        
+                        last_position.put(ConnectedProvince.get(i), temp_city);
+                        // if this location is the dest, break the loop
+                        if (destination.getName().equals(ConnectedProvince.get(i))) {
+                            is_Found = true;
+                            break;
+                        }
+        
+                        // Join this place to the Queue
+                        q.add(ConnectedProvince.get(i));
+
+                    }
+        
+                }
+        
+            }
+        
+           q.clear();
+
+           	// situation when there is no dest in the map
+            if (is_Found == false) {
+                return false;
+            }
+
+            // count the length of the path
+            int Path_length = 0;
+            for (String position = destination.getName(); position != startPoint; position = last_position.get(position)) Path_length++;
+            
+            if (Path_length > this.movementPoints) {
+                return false;
+            }
+
+            return true;
+        
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return false;
+    }
+
+    
+    /** 
+     * @return List<Unit>
+     */
     public List<Unit> getUnits() {
         return units;
     }
 
+    
+    /** 
+     * @return Faction
+     */
     public Faction getFaction() {
         return province.getFraction();
     }
 
+    
+    /** 
+     * @return Province
+     */
     public Province getProvince() {
         return province;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getNumOfUnits() {
         return units.size();
     }
 
+    
+    /** 
+     * @return boolean
+     */
     public boolean containAvalUnits(){
         for (Unit u : units) {
             if (u.getHealth() > 0) {
@@ -102,6 +264,10 @@ public class Army {
     }
 
 
+    
+    /** 
+     * @param destination
+     */
     public void updateAfterWin(Province destination) {
         // moveTo(destination);
         
