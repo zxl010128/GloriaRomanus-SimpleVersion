@@ -1,6 +1,7 @@
 package unsw.gloriaromanus.backend;
 
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 
 public class Battle {
@@ -52,7 +53,19 @@ public class Battle {
     }
 
     private Unit unitRandomPicker(Army a) {
-        return null;
+        List<Unit> units = a.getUnits();
+        List<Unit> aliveUnits = new ArrayList<Unit>();
+        for (Unit u : units) {
+            if (u.getHealth() > 0) {
+                aliveUnits.add(u);
+            }
+        }
+
+        // obtain a number between [0, aliveUnits.size())
+        Random rand = new Random();
+        int n = rand.nextInt(aliveUnits.size());
+
+        return aliveUnits.get(n);
     }
     public Army getWinner() {
         return winner;
