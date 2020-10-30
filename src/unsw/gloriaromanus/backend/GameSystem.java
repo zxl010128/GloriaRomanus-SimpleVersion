@@ -19,6 +19,7 @@ public class GameSystem {
     private int year;
     private int playerNum;
     private VictoryCondition victoryCondition;
+    private TurnTracker turnTracker;
 
     // Only can be used in allocationFaction method
     List<String> Factions_list = new ArrayList<String>(); 
@@ -37,6 +38,7 @@ public class GameSystem {
         this.year = 200;
         this.playerNum = 0;
         this.victoryCondition = null;
+        this.turnTracker = new TurnTracker();
 
         try{
             String allfactions = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/factions_list.json"));
@@ -58,7 +60,6 @@ public class GameSystem {
     }
     
     public void allocateFaction(){        
-        
         for(int i = 1; i <= this.playerNum; i++) {
             Collections.shuffle(Factions_list);
             String FactionName = Factions_list.get(0);
@@ -73,7 +74,7 @@ public class GameSystem {
             }
 
             for (int j = 0; j < String_startProvinces.size(); j++) {
-                Province newProvince = new Province(String_startProvinces.get(j), null);
+                Province newProvince = new Province(String_startProvinces.get(j), null, turnTracker);
                 startProvinces.add(newProvince);
                 this.provinces.add(newProvince);
                 Provinces_list.remove(String_startProvinces.get(j));
@@ -91,7 +92,7 @@ public class GameSystem {
         }
 
         for(int i = 0; i < Provinces_list.size(); i++) {
-            Province new_Province = new Province(Provinces_list.get(i), null);
+            Province new_Province = new Province(Provinces_list.get(i), null, turnTracker);
             this.provinces.add(new_Province);
         }
     }
@@ -100,6 +101,8 @@ public class GameSystem {
 
         this.turn += 1;
         this.year += 1;
+
+        turnTracker.incrementTurn();
 
         for(Faction faction: this.factions){
             faction.update();
