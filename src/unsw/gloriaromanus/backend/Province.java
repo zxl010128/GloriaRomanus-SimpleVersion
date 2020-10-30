@@ -16,7 +16,6 @@ public class Province {
 
         // assume the default tax is normal tax (0.15)
         this.taxRate = 0.15;
-
         this.units = new ArrayList<Unit>();
     }
 
@@ -92,6 +91,9 @@ public class Province {
 
         return count;
     }
-    
+
+    public String getName() {
+        return name;
+    }
 
 }
