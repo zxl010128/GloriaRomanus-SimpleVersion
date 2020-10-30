@@ -73,20 +73,25 @@ public class GameSystem {
             }
 
             for (int j = 0; j < String_startProvinces.size(); j++) {
-                Province newProvince = new Province(String_startProvinces.get(j));
+                Province newProvince = new Province(String_startProvinces.get(j), null);
                 startProvinces.add(newProvince);
                 this.provinces.add(newProvince);
                 Provinces_list.remove(String_startProvinces.get(j));
             }
 
             Faction newFaction = new Faction(FactionName, startProvinces);
+            
+            for(Province province: startProvinces) {
+                province.setFaction(newFaction);
+            }
+            
             this.factions.add(newFaction);
             Factions_list.remove(FactionName);
 
         }
 
         for(int i = 0; i < Provinces_list.size(); i++) {
-            Province new_Province = new Province(Provinces_list.get(i));
+            Province new_Province = new Province(Provinces_list.get(i), null);
             this.provinces.add(new_Province);
         }
     }
@@ -95,6 +100,10 @@ public class GameSystem {
 
         this.turn += 1;
         this.year += 1;
+
+        for(Faction faction: this.factions){
+            faction.update();
+        }
 
     }
 
