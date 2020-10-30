@@ -67,10 +67,14 @@ public class Faction {
         }
 
         int totalTaxRevenue = 0;
+        int totalWealth = 0;
+
         for (Province p : provinces) {
             totalTaxRevenue += p.getTaxRevenue();
+            totalWealth += p.getWealth();
         }
 
-        balance += totalTaxRevenue;
+        this.balance += totalTaxRevenue;
+        this.totalWealth = totalWealth;
     }
 }
