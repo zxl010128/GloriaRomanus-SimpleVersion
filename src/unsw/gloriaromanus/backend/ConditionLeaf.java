@@ -7,6 +7,7 @@ public class ConditionLeaf implements VictoryCondition {
     private JSONObject condition;
 
     public ConditionLeaf(String condition) {
+        super();
         this.condition = new JSONObject();
         this.condition.put("goal", condition);
     }
