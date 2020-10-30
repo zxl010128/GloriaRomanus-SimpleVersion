@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 import org.json.JSONObject;
 
-public class Province {
+public class Province{
     private String name;
     private int wealth;
     private double taxRate;
@@ -35,16 +35,26 @@ public class Province {
      * recruit unit for a province
      * @param name unit name
      */
-    public void recruit(String name, int currTurn) {
+    public int recruit(String name, int currTurn) {
         // Read the UnitsInfo.JSON
+        if (unitsInTraining.size() == 2) {
+            return -1;
+        }
+
         try {
             String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
             JSONObject fullJSON = new JSONObject(content);
             JSONObject unitData = fullJSON.getJSONObject(name);
             Unit u = new Unit(unitData, this);
+            unitsInTraining.add(u);
+            
+            return currTurn + u.getTrainingTurns();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return -1;
     }
 
     public List<Unit> getUnits() {
@@ -136,22 +146,13 @@ public class Province {
     public void update() {
         // this function gets called each turn
         // update townealth
-        switch ((int) (taxRate * 100)) {
-            case 10: 
-                // low tax
-                wealth += 10;
-                break;
-            case 15: 
-                // normal tax
-                break;
-            case 20: 
-                // high tax
-                wealth -= 10;
-                break;
-            case 25:
-                // very high tax
-                wealth -= 30;
-                break;
+        if (taxRate == 0.1) {
+            wealth += 10;
+        } else if (taxRate == 0.15) {
+        } else if (taxRate == 0.2) {
+            wealth -= 10;
+        }  else if (taxRate == 0.25) {
+            wealth -= 30;
         }
 
         if (wealth < 0) {
