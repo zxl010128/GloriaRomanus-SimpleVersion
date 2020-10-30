@@ -19,8 +19,8 @@ public class Unit {
     private int attackDamage;
     private int armor;
     private int defense;
-    private int shield = 5;
-    private int morale = 5;
+    private int shield;
+    private int morale;
 
     public Unit(String name, String type, int health, int trainingCost, int trainingTurns, int numOfTroops,
             int movementPoints, Province province, int attackDamage, int defense, int morale) {
@@ -51,6 +51,9 @@ public class Unit {
         this.defense = input.getInt("defense");
         this.numOfTroops = input.getInt("numOfTroops");
         this.province = province;
+
+        this.shield = 5;
+        this.armor = 5;
     }
 
     
@@ -160,6 +163,25 @@ public class Unit {
         }
 
         defender.removeHealthBy(actualDamage);
+    }
+
+    public JSONObject toJSON(){
+        JSONObject output = new JSONObject();
+        output.put("name", name);
+        output.put("type", type);
+        output.put("health", health);
+        output.put("trainingCost", trainingCost);
+        output.put("trainingTurns", trainingTurns);
+        output.put("numOfTroops", numOfTroops);
+        output.put("movementPoints", movementPoints);
+        output.put("province", province.toJSON());
+        output.put("attackDamage", attackDamage);
+        output.put("armor", armor);
+        output.put("defense", defense);
+        output.put("shield", shield);
+        output.put("morale", morale);
+
+        return output;
     }
 
 
