@@ -46,4 +46,8 @@ public class Faction {
         return this.name.equals(f.getName());
     }
 
+    public List<Province> getProvinces() {
+        return provinces;
+    }
+
 }
