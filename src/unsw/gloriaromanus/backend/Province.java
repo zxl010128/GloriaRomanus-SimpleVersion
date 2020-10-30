@@ -16,9 +16,11 @@ public class Province{
     private Faction faction;
     private List<Unit> units;
     private List<Double> taxRates;
-    private List<Unit> unitsInTraining;
+    private List<TrainingRecord> unitsInTraining;
+    // private List<Observer> observers;
+    private TurnTracker turnTracker;
 
-    public Province(String name, Faction faction) {
+    public Province(String name, Faction faction, TurnTracker turnTracker){
         this.name = name;
         this.wealth = 100;
 
@@ -27,7 +29,9 @@ public class Province{
 
         this.faction = faction;
         this.units = new ArrayList<Unit>();
-        this.unitsInTraining = new ArrayList<Unit>();
+        this.unitsInTraining = new ArrayList<TrainingRecord>();
+        // this.observers = new ArrayList<>();
+        this.turnTracker = turnTracker;
     }
 
     
@@ -35,10 +39,10 @@ public class Province{
      * recruit unit for a province
      * @param name unit name
      */
-    public int recruit(String name, int currTurn) {
+    public boolean recruit(String name, int currTurn) {
         // Read the UnitsInfo.JSON
         if (unitsInTraining.size() == 2) {
-            return -1;
+            return false;
         }
 
         try {
@@ -46,15 +50,15 @@ public class Province{
             JSONObject fullJSON = new JSONObject(content);
             JSONObject unitData = fullJSON.getJSONObject(name);
             Unit u = new Unit(unitData, this);
-            unitsInTraining.add(u);
+            unitsInTraining.add(new TrainingRecord(u, turnTracker.getCurrTurn() + u.getTrainingTurns()));
             
-            return currTurn + u.getTrainingTurns();
+            return true;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return -1;
+        return false;
     }
 
     public List<Unit> getUnits() {
@@ -143,8 +147,12 @@ public class Province{
         return wealth;
     }
 
+    public void setUnitsInTraining(List<TrainingRecord> unitsInTraining) {
+        this.unitsInTraining = unitsInTraining;
+    }
+
     public void update() {
-        // this function gets called each turn
+        // this function gets called at the end of each turn (After clicking endturn)
         // update townealth
         if (taxRate == 0.1) {
             wealth += 10;
@@ -158,6 +166,45 @@ public class Province{
         if (wealth < 0) {
             wealth = 0;
         }
+
+        // check units in training
+        int nextTurn = turnTracker.getCurrTurn() + 1;
+        if (!unitsInTraining.isEmpty()) {
+            for (TrainingRecord r : unitsInTraining) {
+                if (r.getFinishTurn() ==  nextTurn) {
+                    // training finished!
+                    units.add(r.getUnit());
+                    r.setFinished(true);
+                }
+            }
+
+            List<TrainingRecord> newUnitsInTraining = new ArrayList<TrainingRecord>();
+            for (TrainingRecord r : unitsInTraining) {
+                if (!r.getFinished()) {
+                    newUnitsInTraining.add(r);
+                }
+            }
+
+            this.setUnitsInTraining(newUnitsInTraining);
+        }
     }
+
+    // @Override
+    // public void registerObserver(Observer o) {
+    //     if (!observers.contains(o)) {
+    //         observers.add(o);
+    //     }
+    // }
+
+    // @Override
+    // public void removeObserver(Observer o) {
+    //     observers.remove(o);
+    // }
+
+    // @Override
+    // public void notifyObserver() {
+    //     // TODO Auto-generated method stub
+        
+    // }
 
 }
