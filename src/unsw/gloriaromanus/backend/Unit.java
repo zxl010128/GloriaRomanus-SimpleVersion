@@ -18,11 +18,12 @@ public class Unit {
     // private boolean avalibility; // MAYBE USELESS!!!!!!
     private int attackDamage;
     private int armor;
-    private int shield;
-    private int morale;
+    private int defense;
+    private int shield = 5;
+    private int morale = 5;
 
     public Unit(String name, String type, int health, int trainingCost, int trainingTurns, int numOfTroops,
-    int movementPoints, Province province, int attackDamage, int armor, int shield, int morale) {
+            int movementPoints, Province province, int attackDamage, int defense, int morale) {
         this.name = name;
         this.type = type;
         this.health = health;
@@ -32,9 +33,24 @@ public class Unit {
         this.movementPoints = movementPoints;
         this.province = province;
         this.attackDamage = attackDamage;
-        this.armor = armor;
-        this.shield = shield;
+        this.defense = defense;
         this.morale = morale;
+    }
+
+
+    public Unit(JSONObject input, Province province) {
+        this.name = input.getString("name");
+        this.type = input.getString("type");
+        this.movementPoints = input.getInt("movementPoints");
+        this.health = input.getInt("health");
+        this.trainingCost = input.getInt("trainingCost");
+        this.trainingTurns = input.getInt("trainingTurns");
+        // this.specialAbility = input.getString("specialAbility");
+        this.morale = input.getInt("morale");
+        this.attackDamage = input.getInt("attackDamage");
+        this.defense = input.getInt("defense");
+        this.numOfTroops = input.getInt("numOfTroops");
+        this.province = province;
     }
 
     
@@ -149,5 +165,6 @@ public class Unit {
 
         defender.removeHealthBy(actualDamage);
     }
+
 
 }

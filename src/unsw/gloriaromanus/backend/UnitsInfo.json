@@ -10,7 +10,6 @@
         "morale": 10,
         "attackDamage": 50,
         "defense": 15,
-        "charge": 60,
         "numsOfTroops": 5
     },
 
@@ -25,7 +24,6 @@
         "morale": 6,
         "attackDamage": 15,
         "defense": 15,
-        "charge": 40,
         "numsOfTroops": 5
     },
 
@@ -40,7 +38,6 @@
         "morale": 6,
         "attackDamage": 20,
         "defense": 10,
-        "charge": 40,
         "numsOfTroops": 5
     },
 
@@ -55,7 +52,6 @@
         "morale": 6,
         "attackDamage": 25,
         "defense": 5,
-        "charge": 40,
         "numsOfTroops": 5
     },
 
@@ -70,7 +66,6 @@
         "morale": 3,
         "attackDamage": 10,
         "defense": 20,
-        "charge": 20,
         "numsOfTroops": 5
     },
 
@@ -85,7 +80,6 @@
         "morale": 4,
         "attackDamage": 15,
         "defense": 20,
-        "charge": 25,
         "numsOfTroops": 5
     },
 
@@ -100,7 +94,6 @@
         "morale": 4,
         "attackDamage": 20,
         "defense": 10,
-        "charge": 25,
         "numsOfTroops": 5
     },
 
@@ -115,7 +108,6 @@
         "morale": 7,
         "attackDamage": 30,
         "defense": 5,
-        "charge": 30,
         "numsOfTroops": 5
     },
 
@@ -130,7 +122,6 @@
         "morale": 2,
         "attackDamage": 10,
         "defense": 30,
-        "charge": 80,
         "numsOfTroops": 5
     },
 
@@ -145,7 +136,6 @@
         "morale": 7,
         "attackDamage": 25,
         "defense": 5,
-        "charge": 20,
         "numsOfTroops": 5
     },
 
@@ -160,7 +150,6 @@
         "morale": 5,
         "attackDamage": 20,
         "defense": 15,
-        "charge": 40,
         "numsOfTroops": 5
     },
 
@@ -175,7 +164,6 @@
         "morale": 6,
         "attackDamage": 30,
         "defense": 15,
-        "charge": 20,
         "numsOfTroops": 5
     },
 
@@ -190,7 +178,6 @@
         "morale":3,
         "attackDamage": 25,
         "defense": 10,
-        "charge": 15,
         "numsOfTroops": 5        
     },
 
@@ -205,7 +192,6 @@
         "morale":3,
         "attackDamage": 30,
         "defense": 5,
-        "charge": 15,
         "numsOfTroops": 5
     },
 
@@ -220,7 +206,6 @@
         "morale": 4,
         "attackDamage": 50,
         "defense": 10,
-        "charge": 50,
         "numsOfTroops": 5
     }
 }
