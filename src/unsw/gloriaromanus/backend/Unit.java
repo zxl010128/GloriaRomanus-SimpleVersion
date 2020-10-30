@@ -20,6 +20,23 @@ public class Unit {
     private int armor;
     private int shield;
     private int morale;
+
+    public Unit(String name, String type, int health, int trainingCost, int trainingTurns, int numOfTroops,
+    int movementPoints, Province province, int attackDamage, int armor, int shield, int morale) {
+        this.name = name;
+        this.type = type;
+        this.health = health;
+        this.trainingCost = trainingCost;
+        this.trainingTurns = trainingTurns;
+        this.numOfTroops = numOfTroops;
+        this.movementPoints = movementPoints;
+        this.province = province;
+        this.attackDamage = attackDamage;
+        this.armor = armor;
+        this.shield = shield;
+        this.morale = morale;
+    }
+
     
 
     /**
@@ -132,4 +149,5 @@ public class Unit {
 
         defender.removeHealthBy(actualDamage);
     }
+
 }
