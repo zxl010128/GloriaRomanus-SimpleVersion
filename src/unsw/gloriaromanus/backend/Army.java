@@ -221,6 +221,10 @@ public class Army {
         return units;
     }
 
+    public void setUnits(List<Unit> units) {
+        this.units = units;
+    }
+
     
     /** 
      * @return Faction
@@ -279,6 +283,7 @@ public class Army {
     public void updateAfterLose() {
         // do i need to remove unit here?
         // or the unit will be removed when they are defeated?
+        // already implemented in Battle.updateAferBattle()
     }
 
 }
