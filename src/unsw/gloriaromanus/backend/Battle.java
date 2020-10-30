@@ -16,13 +16,16 @@ public class Battle {
         this.skirmishes = new ArrayList<Skirmish>();
 
         startBattle(attackerArmy, defenderArmy);
+        
+        // remove dead units after the battle
+        updateAfterBattle(attackerArmy, defenderArmy);
+    }
+
+    public Army getWinner() {
+        return winner;
     }
 
     private void startBattle(Army attackerArmy, Army defenderArmy) {
-        List<Unit> attackerUnits = attackerArmy.getUnits();
-        List<Unit> defenderUnits = defenderArmy.getUnits();
-        Faction attackFaction = attackerArmy.getFaction();
-
         // counter for number of engagements
         int engCounter = 0;
 
@@ -67,7 +70,36 @@ public class Battle {
 
         return aliveUnits.get(n);
     }
-    public Army getWinner() {
-        return winner;
+
+    public void updateAfterBattle(Army attackerArmy, Army defenderArmy) {
+        // remove dead unit from army
+        List<Unit> attackerArmyUnits = attackerArmy.getUnits();
+        List<Unit> attackerArmyNewUnits = new ArrayList<Unit>();
+        Province attackerProvince = attackerArmy.getProvince();
+
+        for (Unit u : attackerArmyUnits){
+            if (u.getHealth() > 0) {
+                attackerArmyNewUnits.add(u);
+            } else {
+                attackerProvince.getUnits().remove(u);
+            }
+        }
+        attackerArmy.setUnits(attackerArmyNewUnits);
+
+        List<Unit> defenderArmyUnits = defenderArmy.getUnits();
+        List<Unit> defenderArmyNewUnits = new ArrayList<Unit>();
+        Province defenderProvince = defenderArmy.getProvince();
+
+        for (Unit u : defenderArmyUnits) {
+            if (u.getHealth() > 0) {
+                defenderArmyNewUnits.add(u);
+            } else {
+                defenderProvince.getUnits().remove(u);
+            }
+        }
+        defenderArmy.setUnits(defenderArmyNewUnits);
+       
     }
+
+    
 }

@@ -75,6 +75,10 @@ public class Army {
         return units;
     }
 
+    public void setUnits(List<Unit> units) {
+        this.units = units;
+    }
+
     public Faction getFaction() {
         return province.getFraction();
     }
