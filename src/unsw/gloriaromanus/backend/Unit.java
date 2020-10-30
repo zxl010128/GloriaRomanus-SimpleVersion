@@ -118,13 +118,9 @@ public class Unit {
         return numOfTroops;
     }
 
-    // public boolean getAval(){
-    //     return avalibility;
-    // }
-
-    // public void setAval(boolean b) {
-    //     avalibility = b;
-    // }
+    public int getTrainingTurns() {
+        return trainingTurns;
+    }
 
     public int getAttackDamage() {
         return attackDamage;
