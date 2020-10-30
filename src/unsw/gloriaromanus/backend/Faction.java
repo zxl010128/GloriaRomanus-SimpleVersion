@@ -8,11 +8,10 @@ public class Faction {
     private int balance;
     private List<Province> provinces;
 
-    public Faction(String name, Province startingProvince) {
+    public Faction(String name, ArrayList<Province> startingProvinces) {
         this.name = name;
         this.balance = 100;
-        this.provinces = new ArrayList<Province>();
-        provinces.add(startingProvince);
+        this.provinces = startingProvinces;
     }
 
     public void addProvince(Province p) {
@@ -50,4 +49,10 @@ public class Faction {
         return provinces;
     }
 
+    public void update(){
+        for(Province province: this.provinces) {
+            province.addWealth();
+            this.balance += province.addTreasury();
+        }
+    }    
 }
