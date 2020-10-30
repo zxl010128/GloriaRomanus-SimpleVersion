@@ -15,7 +15,6 @@ public class Province{
     private double taxRate;
     private Faction faction;
     private List<Unit> units;
-    private List<Double> taxRates;
     private List<TrainingRecord> unitsInTraining;
     // private List<Observer> observers;
     private TurnTracker turnTracker;
@@ -126,7 +125,7 @@ public class Province{
 
     public void setTaxRate(double taxRate) {
         // initialize  a double list to store available taxRates
-        this.taxRates = new ArrayList<Double>();
+        List<Double> taxRates = new ArrayList<Double>();
         taxRates.add(0.1);
         taxRates.add(0.15);
         taxRates.add(0.2);
@@ -149,6 +148,29 @@ public class Province{
 
     public void setUnitsInTraining(List<TrainingRecord> unitsInTraining) {
         this.unitsInTraining = unitsInTraining;
+    }
+
+    public JSONObject toJSON(){
+        JSONObject output = new JSONObject();
+        output.put("name", name);
+        output.put("wealth", wealth);
+        output.put("taxRate", taxRate);
+        output.put("faction", faction.toJSON());
+
+        List<JSONObject> unitsJSON = new ArrayList<JSONObject>();
+        for (Unit u : units) {
+            unitsJSON.add(u.toJSON());
+        }
+        output.put("units", unitsJSON);
+
+        List<JSONObject> unitsInTrainingJSON = new ArrayList<JSONObject>();
+        for (TrainingRecord r : unitsInTraining) {
+            unitsInTrainingJSON.add(r.toJSON());
+        }
+        output.put("unitsInTraining", unitsInTrainingJSON);
+        output.put("turnTracker", turnTracker);
+
+        return output;
     }
 
     public void update() {
