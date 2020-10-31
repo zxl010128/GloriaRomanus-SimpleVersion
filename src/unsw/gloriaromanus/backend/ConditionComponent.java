@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class ConditionComponent implements VictoryCondition {
     
+    // backend should limit the subgoals which only can have 2 goal inside
     private JSONObject condition;
     private ArrayList<VictoryCondition> subVictoryConditions;
     private JSONArray subgoals = new JSONArray();
@@ -17,6 +18,9 @@ public class ConditionComponent implements VictoryCondition {
     }
     
     public boolean add(VictoryCondition v) {
+        if (subgoals.length() > 2) {
+            return false;
+        }
         subVictoryConditions.add(v);
         this.subgoals.put(v.getVictoryGoal());
 		return true;
