@@ -93,7 +93,7 @@ public class GameSystem {
             Factions_list.remove(FactionName);
 
         }
-        System.out.println(this.factions);
+
         for(int i = 0; i < Provinces_list.size(); i++) {
             Province new_Province = new Province(Provinces_list.get(i), null, turnTracker);
             this.provinces.add(new_Province);
