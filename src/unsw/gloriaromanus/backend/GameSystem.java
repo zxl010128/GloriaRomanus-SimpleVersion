@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
-import java.io.FileWriter;
+
 import java.util.Objects;
 import java.io.PrintWriter;
 
@@ -14,7 +14,7 @@ import org.json.*;
 
 import java.io.File;
 
-public class GameSystem {
+public class GameSystem implements Observer {
 
     private List<Faction> factions;
     private List<Province> provinces;
@@ -64,8 +64,14 @@ public class GameSystem {
         } catch(Exception e) {
             e.printStackTrace();
         }
+        randomChooseCondition();
+
     }
 
+    /** 
+     * function to allocate Faction according to the num of player
+     * All the Faction and Province will be newed 
+     */
     public void allocateFaction() {
 
         for (int i = 1; i <= this.playerNum; i++) {
@@ -106,7 +112,92 @@ public class GameSystem {
             this.provinces.add(new_Province);
         }
 
+        for (Faction faction: this.factions) {
+            faction.setGamesys(this);
+        }
+
     }
+
+    /** 
+     * method to randomly provide a Victory Condition
+     */
+    public void randomChooseCondition() {
+
+        List<String> difficulty = new ArrayList<String>();
+        difficulty.add("Hard");
+        difficulty.add("Medium");
+        difficulty.add("Easy");
+
+        List<String> relations = new ArrayList<String>();
+        relations.add("And");
+        relations.add("Or");
+
+        List<String> conditions = new ArrayList<String>();
+        conditions.add("CONQUEST");
+        conditions.add("TREASURY");
+        conditions.add("WEALTH");
+
+        Collections.shuffle(difficulty);
+        String diff = difficulty.get(0);
+
+        if (diff.equals("Easy")) {
+            
+            Collections.shuffle(conditions);
+            String vicCon = conditions.get(0);
+
+            ConditionLeaf goal = new ConditionLeaf(vicCon);
+            setVictoryCondtion(goal);
+
+        } else if (diff.equals("Medium")) {
+            
+            Collections.shuffle(conditions);
+            String vicCon1 = conditions.get(0);
+            String vicCon2 = conditions.get(1);
+
+            Collections.shuffle(relations);
+            String relation = relations.get(0);
+
+            ConditionLeaf goal1 = new ConditionLeaf(vicCon1);
+            ConditionLeaf goal2 = new ConditionLeaf(vicCon2);
+
+            ConditionComponent subgoal = new ConditionComponent(relation);
+            subgoal.add(goal1);
+            subgoal.add(goal2);
+            setVictoryCondtion(subgoal);
+
+        } else if (diff.equals("Hard")) {
+            
+            Collections.shuffle(conditions);
+            String vicCon1 = conditions.get(0);
+            String vicCon2 = conditions.get(1);
+            String vicCon3 = conditions.get(2);
+
+            Collections.shuffle(relations);
+            String relation1 = relations.get(0);
+            
+            Collections.shuffle(relations);
+            String relation2 = relations.get(0);
+
+            ConditionLeaf goal1 = new ConditionLeaf(vicCon1);
+            ConditionLeaf goal2 = new ConditionLeaf(vicCon2);
+            ConditionLeaf goal3 = new ConditionLeaf(vicCon3);
+
+            ConditionComponent subgoal = new ConditionComponent(relation1);
+            subgoal.add(goal1);
+            subgoal.add(goal2);
+
+            ConditionComponent subgoal1 = new ConditionComponent(relation2);
+            subgoal1.add(subgoal);
+            subgoal1.add(goal3);
+
+            setVictoryCondtion(subgoal1);
+        }
+
+
+
+
+    }
+
 
     public void NextTurn() {
 
@@ -121,14 +212,26 @@ public class GameSystem {
 
     }
 
+    
+    /** 
+     * @return FactionsTracker
+     */
     public FactionsTracker getFactionsTracker() {
         return factionsTracker;
     }
 
+    
+    /** 
+     * @return ProvincesTracker
+     */
     public ProvincesTracker getProvincesTracker() {
         return provincesTracker;
     }
 
+    
+    /** 
+     * @return TurnTracker
+     */
     public TurnTracker getTurnTracker() {
         return turnTracker;
     }
@@ -250,6 +353,7 @@ public class GameSystem {
         for (Faction f : factions) {
             f.setProvincesTracker(provincesTracker);
             f.setFactionsTracker(factionsTracker);
+            f.setGamesys(this);
         }
     }
 
@@ -393,6 +497,11 @@ public class GameSystem {
         return playerNum;
     }
 
+    
+    /** 
+     * @param obj
+     * @return boolean
+     */
     @Override
     public boolean equals(Object obj) {
 
@@ -406,6 +515,10 @@ public class GameSystem {
         && Objects.equals(l.victoryCondition.toString(), victoryCondition.toString());
     }
 
+    
+    /** 
+     * @return String
+     */
     @Override
     public String toString() {
         return "GameSystem [factions="
@@ -416,6 +529,54 @@ public class GameSystem {
 
 
     
+    /** 
+     * @param obj
+     * @param FactionName
+     * @param OccupiedNum
+     * @param treasury
+     * @param wealth
+     */
+    @Override
+	public void update(Subject obj) {
+		Display(obj);
+	}
+
+	
+    /** 
+     * to check the notifier whether it is win or not
+     * if win savegame and check
+     * @param FactionName
+     * @param OccupiedNum
+     * @param treasury
+     * @param wealth
+     */
+    public void Display(Subject obj) {
+
+        // If this Faction win this game
+        if (VictoryCheck(this.victoryCondition, ((Faction) obj).getProvinces().size(), ((Faction) obj).getBalance(), ((Faction) obj).getTotalWealth()) == true) {
+            System.out.println(((Faction) obj).getName() + "has won this game!");
+
+            for(Faction faction: this.factions) {
+                if (faction.getName().equals(((Faction) obj).getName())) {
+                    faction.setIs_win(true);
+                    break;
+                }
+            }
+
+            this.saveCurrentGame();
+        
+        // If this Faction totallt lost
+        } else if (((Faction) obj).getProvinces().size() == 0) {
+            System.out.println(((Faction) obj).getName() + "has lost this game!");
+            for(Faction faction: this.factions) {
+                if (faction.getName().equals(((Faction) obj).getName())) {
+                    this.factions.remove(faction);
+                    break;
+                }
+            }
+        }
+
+	}
 
     
 }

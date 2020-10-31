@@ -6,20 +6,23 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Faction {
+public class Faction implements Subject{
     private String name;
     private int balance;
     private int totalWealth;
     private List<Province> provinces;
     private ProvincesTracker provincesTracker;
     private FactionsTracker factionsTracker;
+    private GameSystem gamesys;
+    private boolean is_win;
 
     public Faction(String name, ProvincesTracker provincesTracker, FactionsTracker factionsTracker) {
         this.name = name;
         this.balance = 100;
         this.provinces = new ArrayList<Province>();
         this.totalWealth = 0;
-
+        this.gamesys = null;
+        this.is_win = false;
         this.provincesTracker = provincesTracker;
         this.factionsTracker = factionsTracker;
         factionsTracker.addFaction(this);
@@ -30,6 +33,8 @@ public class Faction {
         this.balance = 100;
         this.provinces = startingProvinces;
         this.totalWealth = 0;
+        this.gamesys = null;
+        this.is_win = false;
         this.provincesTracker = provincesTracker;
         this.factionsTracker = factionsTracker;
         for (Province p : provinces) {
@@ -47,6 +52,8 @@ public class Faction {
         this.balance = json.getInt("balance");
         this.totalWealth = json.getInt("totalWealth");
         this.provinces = new ArrayList<Province>();
+        this.gamesys = null;
+        this.is_win = json.getBoolean("is_win");
         JSONArray provincesJSON = json.getJSONArray("provinces");
         for (int i = 0; i < provincesJSON.length(); i++) {
             this.provinces.add(new Province(provincesJSON.getJSONObject(i)));
@@ -70,16 +77,21 @@ public class Faction {
         return totalWealth;
     }
 
+    public int getBalance() {
+        return balance;
+    }
+
     public void addProvince(Province p) {
         provinces.add(p);
         totalWealth += p.getWealth();
         provincesTracker.addProvince(p);
+        notifyObservers();
     }
 
     public void removeProvince(Province p) {
         provinces.remove(p);
         totalWealth -= p.getWealth();
-
+        notifyObservers();
     }
 
     public String getName() {
@@ -122,7 +134,7 @@ public class Faction {
         output.put("name", name);
         output.put("balance", balance);
         output.put("totalWealth", totalWealth);
-        
+        output.put("is_win", is_win);
         JSONArray provincesJSON = new JSONArray();
         for (Province p : provinces) {
             provincesJSON.put(p.toJSON());
@@ -152,5 +164,27 @@ public class Faction {
 
         this.balance += totalTaxRevenue;
         this.totalWealth = totalWealth;
+        notifyObservers();
+    }
+
+    public GameSystem getGamesys() {
+        return gamesys;
+    }
+
+    public void setGamesys(GameSystem gamesys) {
+        this.gamesys = gamesys;
+    }
+
+    @Override
+	public void notifyObservers() {
+		this.gamesys.update(this);
+    }
+
+    public void setIs_win(boolean is_win) {
+        this.is_win = is_win;
+    }
+
+    public boolean isIs_win() {
+        return is_win;
     }
 }
