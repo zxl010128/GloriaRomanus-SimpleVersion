@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Province{
@@ -27,7 +28,7 @@ public class Province{
         // assume the default tax is normal tax (0.15)
         this.taxRate = 0.15;
 
-        this.factionName = faction.getName();
+        this.factionName = (faction == null) ? null : faction.getName();
         this.units = new ArrayList<Unit>();
         this.unitsInTraining = new ArrayList<TrainingRecord>();
         // this.observers = new ArrayList<>();
@@ -37,6 +38,36 @@ public class Province{
 
         this.factionsTracker = faction.getFactionsTracker();
         this.factionsTracker.update(faction, this);
+    }
+
+    public Province(JSONObject json) {
+        this.name = json.getString("name");
+        this.wealth = json.getInt("wealth");
+        this.taxRate = json.getDouble("taxRate");
+        this.factionName = json.getString("factionName");
+        this.units = new ArrayList<Unit>();
+        JSONArray unitsJSON = json.getJSONArray("units");
+        for (int i = 0; i < unitsJSON.length(); i++) {
+            units.add(new Unit(unitsJSON.getJSONObject(i)));
+        }
+        
+        this.unitsInTraining = new ArrayList<TrainingRecord>();
+        JSONArray unitsInTrainingJSON = json.getJSONArray("unitsInTraining");
+        for (int i = 0; i < unitsInTrainingJSON.length(); i++) {
+            unitsInTraining.add(new TrainingRecord(unitsInTrainingJSON.getJSONObject(i)));
+        }
+        
+        this.turnTracker = new TurnTracker(json.getJSONObject("turnTracker"));
+        this.factionsTracker = null;
+        this.provincesTracker = null;
+    }
+
+    public void setProvincesTracker(ProvincesTracker provincesTracker) {
+        this.provincesTracker = provincesTracker;
+    }
+
+    public void setFactionsTracker(FactionsTracker factionsTracker) {
+        this.factionsTracker = factionsTracker;
     }
 
     public ProvincesTracker getProvincesTracker() {
@@ -172,20 +203,21 @@ public class Province{
         output.put("taxRate", taxRate);
         output.put("factionName", (factionName == null) ? JSONObject.NULL : factionName);
 
-        List<JSONObject> unitsJSON = new ArrayList<JSONObject>();
+        JSONArray unitsJSON = new JSONArray();
         if (units.size() != 0) {
             for (Unit u : units) {
-                unitsJSON.add(u.toJSON());
+                unitsJSON.put(u.toJSON());
             }
         }  
         output.put("units", unitsJSON);    
         
 
-        List<JSONObject> unitsInTrainingJSON = new ArrayList<JSONObject>();
+        JSONArray unitsInTrainingJSON = new JSONArray();
         for (TrainingRecord r : unitsInTraining) {
-            unitsInTrainingJSON.add(r.toJSON());
+            unitsInTrainingJSON.put(r.toJSON());
         }
         output.put("unitsInTraining", unitsInTrainingJSON);
+
         output.put("turnTracker", turnTracker.toJSON());
 
         return output;
@@ -228,23 +260,5 @@ public class Province{
             this.setUnitsInTraining(newUnitsInTraining);
         }
     }
-
-    // @Override
-    // public void registerObserver(Observer o) {
-    //     if (!observers.contains(o)) {
-    //         observers.add(o);
-    //     }
-    // }
-
-    // @Override
-    // public void removeObserver(Observer o) {
-    //     observers.remove(o);
-    // }
-
-    // @Override
-    // public void notifyObserver() {
-    //     // TODO Auto-generated method stub
-        
-    // }
 
 }
