@@ -1,6 +1,7 @@
 package unsw.gloriaromanus.backend;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -9,7 +10,15 @@ public class FactionsTracker {
     private List<Faction> factions;
 
     public FactionsTracker() {
-        factions = new ArrayList<Faction>();
+        this.factions = new ArrayList<Faction>();
+    }
+
+    public FactionsTracker(JSONObject json) {
+        this.factions = new ArrayList<Faction>();
+        JSONArray factionsJSON = json.getJSONArray("factions");
+        for (int i = 0; i < factionsJSON.length(); i++) {
+            this.factions.add(new Faction(factionsJSON.getJSONObject(i)));
+        }
     }
 
     public void addFaction(Faction f) {
@@ -46,12 +55,10 @@ public class FactionsTracker {
 
     public JSONObject toJSON() {
         JSONObject output = new JSONObject();
-        List<JSONObject> factionsJSON = new ArrayList<JSONObject>();
-
+        JSONArray factionsJSON = new JSONArray();
         for (Faction f : factions) {
-            factionsJSON.add(f.toJSON());
+            factionsJSON.put(f.toJSON());
         }
-
         output.put("factions", factionsJSON);
 
         return output;

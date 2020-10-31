@@ -13,6 +13,12 @@ public class TrainingRecord {
         this.finished = false;
     }
 
+    public TrainingRecord(JSONObject json) {
+        this.unit = new Unit(json.getJSONObject("unit"));
+        this.finishTurn = json.getInt("finishTurn");
+        this.finished = json.getBoolean("finished");
+    }
+
     public Unit getUnit() {
         return unit;
     }
