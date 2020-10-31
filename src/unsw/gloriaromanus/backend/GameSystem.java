@@ -13,8 +13,8 @@ import java.io.File;
 
 public class GameSystem {
 
-    private ArrayList<Faction> factions;
-    private ArrayList<Province> provinces;
+    private List<Faction> factions;
+    private List<Province> provinces;
     private int turn;
     private int year;
     private int playerNum;
@@ -34,8 +34,6 @@ public class GameSystem {
     // 3. randomly allocate faction
     // 4. create Factions and Province
     public GameSystem() {
-        this.factions = new ArrayList<Faction>();
-        this.provinces = new ArrayList<Province>();
         this.turn = 0;
         this.year = 200;
         this.playerNum = 0;
@@ -43,6 +41,8 @@ public class GameSystem {
         this.turnTracker = new TurnTracker();
         this.provincesTracker = new ProvincesTracker();
         this.factionsTracker = new FactionsTracker();
+        this.factions = factionsTracker.getFactions();
+        this.provinces = provincesTracker.getProvinces();
 
         try{
             String allfactions = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/factions_list.json"));
@@ -84,7 +84,7 @@ public class GameSystem {
                 Provinces_list.remove(String_startProvinces.get(j));
             }
 
-            Faction newFaction = new Faction(FactionName, startProvinces, provincesTracker);
+            Faction newFaction = new Faction(FactionName, startProvinces, provincesTracker, factionsTracker);
             
             for(Province province: startProvinces) {
                 province.setFaction(newFaction);
@@ -100,6 +100,7 @@ public class GameSystem {
             this.provinces.add(new_Province);
         }
     }
+
 
     public void NextTurn() {
 
@@ -169,6 +170,47 @@ public class GameSystem {
         // saved game
         
     }
+
+    public JSONObject toJSON() {
+        // JSONObject out = new JSONObject();
+        JSONObject output = new JSONObject();
+        List<JSONObject> factionsJSON = new ArrayList<JSONObject>();
+        for (Faction f : factions) {
+            factionsJSON.add(f.toJSON());
+        }
+        output.put("factions", factionsJSON);
+
+        List<JSONObject> provincesJSON = new ArrayList<JSONObject>();
+        for (Province p : provinces) {
+            provincesJSON.add(p.toJSON());
+        }
+        output.put("provinces", provincesJSON);
+        output.put("turn", turn);
+        output.put("year", year);
+        output.put("playerNum", playerNum);
+        output.put("victoryCondition", (victoryCondition == null) ? JSONObject.NULL : victoryCondition.getVictoryGoal());
+        output.put("turnTracker", turnTracker.toJSON());
+        output.put("provincesTracker", provincesTracker.toJSON());
+        output.put("factionsTracker", factionsTracker.toJSON());
+
+        // out.put("GameSystem", output);
+
+        return output;
+    }
+
+    public void loadJSON(JSONObject json) {
+        this.turn = json.getInt("turn");
+        this.year = json.getInt("year");
+        this.playerNum = json.getInt("playerNum");
+        // this.victoryCondition
+        this.turnTracker = new TurnTracker(json.getJSONObject("turnTracker"));
+        this.provincesTracker = new ProvincesTracker(json.getJSONObject("provincesTracker"));
+        this.factionsTracker = new FactionsTracker(json.getJSONObject("factionsTracker"));
+        this.provinces = provincesTracker.getProvinces();
+        this.factions = factionsTracker.getFactions(); 
+    }
+
+
 
     public boolean VictoryCheck(VictoryCondition v, int OccupiedNum, int treasury, int wealth) {
 
