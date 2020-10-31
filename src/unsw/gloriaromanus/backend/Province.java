@@ -147,6 +147,9 @@ public class Province{
     }
 
     public void setFaction(Faction faction) {
+        if (this.factionsTracker == null) {
+            this.factionsTracker = faction.getFactionsTracker();
+        }
         this.factionName = faction.getName();
         this.factionsTracker.update(faction, this);
     }
