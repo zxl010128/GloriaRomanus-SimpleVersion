@@ -31,12 +31,14 @@ public class Faction {
         this.provinces = startingProvinces;
         this.totalWealth = 0;
         this.provincesTracker = provincesTracker;
+        this.factionsTracker = factionsTracker;
         for (Province p : provinces) {
             totalWealth += p.getWealth();
             this.provincesTracker.addProvince(p);
+            p.setFaction(this);
         }
 
-        this.factionsTracker = factionsTracker;
+        
         factionsTracker.addFaction(this);       
     }
 
