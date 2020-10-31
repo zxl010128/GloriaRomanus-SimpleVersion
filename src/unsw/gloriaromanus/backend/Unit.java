@@ -42,7 +42,7 @@ public class Unit {
         this.shield = 5;
         this.armor = 5;
 
-        this.provincesTracker = province.getProvincesTracker();
+        this.provincesTracker =  (province != null) ? province.getProvincesTracker() : null;
     }
 
     public Unit(JSONObject json) {
@@ -63,6 +63,17 @@ public class Unit {
         this.provincesTracker = null;
     }
 
+    public ProvincesTracker getProvincesTracker() {
+        return provincesTracker;
+    }
+
+    public void setProvincesTracker(ProvincesTracker provincesTracker) {
+        this.provincesTracker = provincesTracker;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
@@ -118,6 +129,10 @@ public class Unit {
         return numOfTroops;
     }
 
+    public int getTrainingCost() {
+        return trainingCost;
+    }
+
     public int getTrainingTurns() {
         return trainingTurns;
     }
@@ -135,11 +150,15 @@ public class Unit {
     }
 
     public int getTotalDefense() {
-        return armor + shield;
+        return defense + armor + shield;
     }
 
     public int getHealth() {
         return health;
+    }
+
+    public int getMorale() {
+        return morale;
     }
 
     public void updateAfterDefeated() {
