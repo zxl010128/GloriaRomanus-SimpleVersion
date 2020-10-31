@@ -112,6 +112,10 @@ public class Unit {
         return provinceName;
     }
 
+    public int getDefense() {
+        return defense;
+    }
+
     // public Faction getFaction(){
     //     return getProvince().getFactionName();
     // }
