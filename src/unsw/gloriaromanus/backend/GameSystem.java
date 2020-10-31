@@ -45,9 +45,9 @@ public class GameSystem {
         this.provinces = provincesTracker.getProvinces();
 
         try{
-            String allfactions = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/factions_list.json"));
+            String allfactions = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/factions_list.json"));
             JSONObject facList = new JSONObject(allfactions);
-            String allprovinces = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/provinces_list.json"));
+            String allprovinces = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/provinces_list.json"));
             JSONArray proList = new JSONArray(allprovinces);      
             
             relations = facList;
@@ -56,7 +56,7 @@ public class GameSystem {
                 Provinces_list.add(proList.getString(i));
             }
             List<String> facs = new ArrayList<>(facList.keySet());
-            Provinces_list = facs;
+            Factions_list = facs;
 
         } catch(IOException e) {
             e.printStackTrace();
@@ -74,7 +74,7 @@ public class GameSystem {
 
             for (int j = 0; j < provincesList.length(); j++) {
                 String_startProvinces.add(provincesList.optString(j));
-                Provinces_list.remove(provincesList.opt(j));
+                Provinces_list.remove(provincesList.get(j));
             }
 
             for (int j = 0; j < String_startProvinces.size(); j++) {
@@ -90,11 +90,10 @@ public class GameSystem {
                 province.setFaction(newFaction);
             }
             
-            this.factions.add(newFaction);
             Factions_list.remove(FactionName);
 
         }
-
+        System.out.println(this.factions);
         for(int i = 0; i < Provinces_list.size(); i++) {
             Province new_Province = new Province(Provinces_list.get(i), null, turnTracker);
             this.provinces.add(new_Province);
@@ -138,7 +137,7 @@ public class GameSystem {
     public boolean setPlayerNum(int playerNum) {
         
         // player number should be more than 2 and less than the total factions number
-        if (playerNum > factions.size() || playerNum < 2) {
+        if (playerNum > Factions_list.size() || playerNum < 2) {
             return false;
         } else {
             this.playerNum = playerNum;
@@ -316,6 +315,18 @@ public class GameSystem {
 
         return false;
 
+    }
+
+    public List<Faction> getFactions() {
+        return factions;
+    }
+
+    public List<Province> getProvinces() {
+        return provinces;
+    }
+
+    public int getPlayerNum() {
+        return playerNum;
     }
 
 
