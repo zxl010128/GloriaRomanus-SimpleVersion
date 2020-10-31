@@ -20,6 +20,8 @@ public class GameSystem {
     private int playerNum;
     private VictoryCondition victoryCondition;
     private TurnTracker turnTracker;
+    private ProvincesTracker provincesTracker;
+    private FactionsTracker factionsTracker;
 
     // Only can be used in allocationFaction method
     List<String> Factions_list = new ArrayList<String>(); 
@@ -39,6 +41,8 @@ public class GameSystem {
         this.playerNum = 0;
         this.victoryCondition = null;
         this.turnTracker = new TurnTracker();
+        this.provincesTracker = new ProvincesTracker();
+        this.factionsTracker = new FactionsTracker();
 
         try{
             String allfactions = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/factions_list.json"));
@@ -80,7 +84,7 @@ public class GameSystem {
                 Provinces_list.remove(String_startProvinces.get(j));
             }
 
-            Faction newFaction = new Faction(FactionName, startProvinces);
+            Faction newFaction = new Faction(FactionName, startProvinces, provincesTracker);
             
             for(Province province: startProvinces) {
                 province.setFaction(newFaction);
