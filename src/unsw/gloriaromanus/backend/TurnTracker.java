@@ -11,6 +11,10 @@ public class TurnTracker implements Observer {
         this.currTurn = 1;
     }
 
+    public TurnTracker(JSONObject json) {
+        this.currTurn = json.getInt("currTurn");
+    }
+
     public void incrementTurn(){
         this.currTurn += 1;
     }
