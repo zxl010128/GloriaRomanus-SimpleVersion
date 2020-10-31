@@ -170,6 +170,111 @@ public class GameSystem {
         
     }
 
+    public boolean VictoryCheck(VictoryCondition v, int OccupiedNum, int treasury, int wealth) {
+
+        JSONObject VicCon = v.getVictoryGoal();
+        
+        if (VicCon == null) {
+            return false;
+        } 
+
+        if (VicCon.length() == 1) {
+
+            String ConditionString = VicCon.getString("goal");
+            return ConditionCheck(ConditionString, OccupiedNum, treasury, wealth);
+        
+        } else if (VicCon.length() == 2) {
+            
+            String relation = VicCon.getString("goal");
+            
+            boolean is_found = false;
+            String relation2 = null;
+            String subgoal1 = null;
+            String subgoal2 = null;
+
+            for (int i = 0; i < 2; i++) {
+                JSONObject Condition = VicCon.getJSONArray("subgoals").getJSONObject(i);
+                if (Condition.getString("goal").equals("AND") || Condition.getString("goal").equals("OR")) {
+                    is_found = true;
+                    relation2 = Condition.getString("goal");
+                    subgoal1 = Condition.getJSONArray("subgoals").getJSONObject(0).getString("goal");
+                    subgoal2 = Condition.getJSONArray("subgoals").getJSONObject(1).getString("goal");
+                    break;
+                } 
+                
+            }
+            
+            if (!is_found) {
+                
+                String goal1 = VicCon.getJSONArray("subgoals").getJSONObject(0).getString("goal");
+                String goal2 = VicCon.getJSONArray("subgoals").getJSONObject(1).getString("goal");
+
+                if (relation.equals("AND")) {
+                    return ConditionCheck(goal1, OccupiedNum, treasury, wealth) &&
+                    ConditionCheck(goal2, OccupiedNum, treasury, wealth);
+
+                } else if (relation.equals("OR")) {
+                    return ConditionCheck(goal1, OccupiedNum, treasury, wealth) ||
+                    ConditionCheck(goal2, OccupiedNum, treasury, wealth);
+                }
+
+            } else if (is_found) {
+                
+                boolean subGoalCheck = false;
+                
+                if (relation2.equals("AND")) {
+                    subGoalCheck = ConditionCheck(subgoal1, OccupiedNum, treasury, wealth) &&
+                    ConditionCheck(subgoal2, OccupiedNum, treasury, wealth);
+
+                } else if (relation2.equals("OR")) {
+                    subGoalCheck = ConditionCheck(subgoal1, OccupiedNum, treasury, wealth) ||
+                    ConditionCheck(subgoal2, OccupiedNum, treasury, wealth);
+                }
+                
+                String goal = null;
+                
+                for (int i = 0; i < 2; i++) {
+                    JSONObject Condition = VicCon.getJSONArray("subgoals").getJSONObject(i);
+                    
+                    if (!Condition.getString("goal").equals("AND") && !Condition.getString("goal").equals("OR")) {
+                        goal = Condition.getString("goal");
+                    } 
+                }
+                
+                if (relation.equals("AND")) {
+                    return ConditionCheck(goal, OccupiedNum, treasury, wealth) && subGoalCheck;
+                } else if (relation.equals("OR")) {
+                    return ConditionCheck(goal, OccupiedNum, treasury, wealth) || subGoalCheck;
+                }
+                
+                
+            }
+        }
+
+        return false;
+
+    }   
+
+    public boolean ConditionCheck(String VicConName, int OccupiedNum, int treasury, int wealth) {
+        
+        switch(VicConName) {
+            
+            case "CONQUEST":
+                return OccupiedNum == 52;
+
+            case "TREASURY":
+                return treasury >= 100000;
+
+            case "WEALTH":
+                return wealth >= 400000;
+
+            default:
+                break;
+        }
+
+        return false;
+
+    }
 
 
     
