@@ -150,5 +150,9 @@ public class UnitTest{
         assertEquals(newGame.VictoryCheck(comGoal1, 52, 0, 4399999), true);
         assertEquals(newGame.VictoryCheck(comGoal1, 17, 200000, 400001), true);
     }
+
+    @Test void RecruitTest() {
+        
+    }
 }
 
