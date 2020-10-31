@@ -20,5 +20,12 @@ public class UnitTest{
         assertEquals(u.getNumTroops(), 50);
     }
 
+    @Test
+    public void blahTest3(){
+        GameSystem newGame = new GameSystem();
+        newGame.setPlayerNum(4);
+        newGame.allocateFaction();
+    }
+
 }
 
