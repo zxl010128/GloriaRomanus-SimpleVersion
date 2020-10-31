@@ -13,11 +13,12 @@ public class Province{
     private String name;
     private int wealth;
     private double taxRate;
-    private Faction faction;
+    private String factionName;
     private List<Unit> units;
     private List<TrainingRecord> unitsInTraining;
-    // private List<Observer> observers;
     private TurnTracker turnTracker;
+    private ProvincesTracker provincesTracker;
+    private FactionsTracker factionsTracker;
 
     public Province(String name, Faction faction, TurnTracker turnTracker){
         this.name = name;
@@ -26,13 +27,25 @@ public class Province{
         // assume the default tax is normal tax (0.15)
         this.taxRate = 0.15;
 
-        this.faction = faction;
+        this.factionName = faction.getName();
         this.units = new ArrayList<Unit>();
         this.unitsInTraining = new ArrayList<TrainingRecord>();
         // this.observers = new ArrayList<>();
         this.turnTracker = turnTracker;
+        this.provincesTracker = faction.getProvincesTracker();
+        provincesTracker.addProvince(this);
+
+        this.factionsTracker = faction.getFactionsTracker();
+        this.factionsTracker.update(faction, this);
     }
 
+    public ProvincesTracker getProvincesTracker() {
+        return provincesTracker;
+    }
+
+    public FactionsTracker getFactionsTracker() {
+        return factionsTracker;
+    }
     
     /** 
      * recruit unit for a province
@@ -93,12 +106,12 @@ public class Province{
         u.setProvince(this);
     }
 
-    public Faction getFraction() {
-        return faction;
+    public String getFactionName() {
+        return factionName;
     }
 
     public void setFaction(Faction faction) {
-        this.faction = faction;
+        this.factionName = faction.getName();
     }
 
     public void setUnits(List<Unit> units) {
@@ -150,25 +163,30 @@ public class Province{
         this.unitsInTraining = unitsInTraining;
     }
 
+    
+
     public JSONObject toJSON(){
         JSONObject output = new JSONObject();
         output.put("name", name);
         output.put("wealth", wealth);
         output.put("taxRate", taxRate);
-        output.put("faction", faction.toJSON());
+        output.put("factionName", (factionName == null) ? JSONObject.NULL : factionName);
 
         List<JSONObject> unitsJSON = new ArrayList<JSONObject>();
-        for (Unit u : units) {
-            unitsJSON.add(u.toJSON());
-        }
-        output.put("units", unitsJSON);
+        if (units.size() != 0) {
+            for (Unit u : units) {
+                unitsJSON.add(u.toJSON());
+            }
+        }  
+        output.put("units", unitsJSON);    
+        
 
         List<JSONObject> unitsInTrainingJSON = new ArrayList<JSONObject>();
         for (TrainingRecord r : unitsInTraining) {
             unitsInTrainingJSON.add(r.toJSON());
         }
         output.put("unitsInTraining", unitsInTrainingJSON);
-        output.put("turnTracker", turnTracker);
+        output.put("turnTracker", turnTracker.toJSON());
 
         return output;
     }
