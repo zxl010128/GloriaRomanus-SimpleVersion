@@ -206,7 +206,15 @@ public class GameSystem {
         this.provincesTracker = new ProvincesTracker(json.getJSONObject("provincesTracker"));
         this.factionsTracker = new FactionsTracker(json.getJSONObject("factionsTracker"));
         this.provinces = provincesTracker.getProvinces();
+        for (Province p : provinces) {
+            p.setProvincesTracker(provincesTracker);
+            p.setFactionsTracker(factionsTracker);
+        }
         this.factions = factionsTracker.getFactions(); 
+        for (Faction f : factions) {
+            f.setProvincesTracker(provincesTracker);
+            f.setFactionsTracker(factionsTracker);
+        }
     }
 
 
