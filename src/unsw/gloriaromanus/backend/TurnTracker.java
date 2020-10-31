@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
-public class TurnTracker implements Observer {
+public class TurnTracker {
     private int currTurn;
     
     public TurnTracker() {
@@ -28,11 +28,5 @@ public class TurnTracker implements Observer {
         output.put("currTurn", currTurn);
 
         return output;
-    }
-
-    @Override
-    public void update(Subject obj, int finishTurn) {
-        // TODO Auto-generated method stub
-        
     }
 }
