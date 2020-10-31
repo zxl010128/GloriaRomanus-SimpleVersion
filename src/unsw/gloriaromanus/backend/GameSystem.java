@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.util.Objects;
+import java.io.PrintWriter;
 
 import org.json.*;
 
@@ -24,10 +27,10 @@ public class GameSystem {
     private FactionsTracker factionsTracker;
 
     // Only can be used in allocationFaction method
-    List<String> Factions_list = new ArrayList<String>(); 
+    List<String> Factions_list = new ArrayList<String>();
     List<String> Provinces_list = new ArrayList<String>();
-    JSONObject relations = null; 
-    
+    JSONObject relations = null;
+
     // Create a new Game
     // 1. set player number
     // 2. victoryCondition
@@ -44,28 +47,28 @@ public class GameSystem {
         this.factions = factionsTracker.getFactions();
         this.provinces = provincesTracker.getProvinces();
 
-        try{
+        try {
             String allfactions = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/factions_list.json"));
             JSONObject facList = new JSONObject(allfactions);
             String allprovinces = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/provinces_list.json"));
-            JSONArray proList = new JSONArray(allprovinces);      
-            
+            JSONArray proList = new JSONArray(allprovinces);
+
             relations = facList;
 
-            for(int i = 0; i < proList.length(); i++) {
+            for (int i = 0; i < proList.length(); i++) {
                 Provinces_list.add(proList.getString(i));
             }
             List<String> facs = new ArrayList<String>(facList.keySet());
             Factions_list = facs;
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
-    public void allocateFaction(){        
-        
-        for(int i = 1; i <= this.playerNum; i++) {
+
+    public void allocateFaction() {
+
+        for (int i = 1; i <= this.playerNum; i++) {
             Collections.shuffle(Factions_list);
             String FactionName = Factions_list.get(0);
             JSONArray provincesList = relations.getJSONArray(FactionName);
@@ -85,26 +88,25 @@ public class GameSystem {
             }
 
             new Faction(FactionName, startProvinces, provincesTracker, factionsTracker);
-            
+
             // for (int j = 0; j < startProvinces.size(); j++) {
-            //     startProvinces.get(j).setFactionsTracker(factionsTracker);
-            //     startProvinces.get(j).setFaction(newFaction);
+            // startProvinces.get(j).setFactionsTracker(factionsTracker);
+            // startProvinces.get(j).setFaction(newFaction);
             // }
             // for(Province province: startProvinces) {
-            //     province.setFaction(newFaction);
+            // province.setFaction(newFaction);
             // }
-            
+
             Factions_list.remove(FactionName);
 
         }
 
-        for(int i = 0; i < Provinces_list.size(); i++) {
+        for (int i = 0; i < Provinces_list.size(); i++) {
             Province new_Province = new Province(Provinces_list.get(i), null, turnTracker);
             this.provinces.add(new_Province);
         }
 
     }
-
 
     public void NextTurn() {
 
@@ -113,71 +115,81 @@ public class GameSystem {
 
         turnTracker.incrementTurn();
 
-        for(Faction faction: this.factions){
+        for (Faction faction : this.factions) {
             faction.update();
         }
 
     }
 
-    
-    /** 
+    /**
      * @param v
      */
-    public void setVictoryCondtion(VictoryCondition v){
+    public void setVictoryCondtion(VictoryCondition v) {
         this.victoryCondition = v.getVictoryGoal();
     }
 
-    
-    /** 
+    /**
      * @return JSONObject
      */
-    public JSONObject getVictoryCondition(){
+    public JSONObject getVictoryCondition() {
         return this.victoryCondition;
     }
 
-    /** 
+    /**
      * @param playerNum the number of player in this game
      * @return boolean
      */
     public boolean setPlayerNum(int playerNum) {
-        
+
         // player number should be more than 2 and less than the total factions number
         // frontend should print a message to re enter the playernum
         if (playerNum > Factions_list.size() || playerNum < 2) {
             return false;
         } else {
             this.playerNum = playerNum;
-        }    
-        
-        return true;
-    }
-
-    
-    /** 
-     * check the saved file existence
-     * @return boolean
-     */
-    public boolean isSavedFileExist(){
-        String FileName = "DataSaved";
-        File logFile = new File(FileName);
-
-        if(!logFile.exists()) {
-            return false;
         }
+
         return true;
     }
 
-    
-    /** 
+    public void reloadSavedGame() {
+
+        try {
+            String Backup = Files.readString(Paths.get("GameBackUp.json"));
+            JSONObject dataSaved = new JSONObject(Backup);
+
+            this.loadJSON(dataSaved);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * @param game
      */
-    public void saveCurrentGame(GameSystem game){
+    public void saveCurrentGame() {
         // saved game
-        
+        String fileName = "GameBackUp.json";
+        File BackUpFile = new File(fileName);
+
+        try {
+            BackUpFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            PrintWriter myFile = new PrintWriter(BackUpFile, "UTF-8");
+            JSONObject savedData = this.toJSON();
+            myFile.println(savedData);
+            myFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    
-    /** 
+    /**
      * @return JSONObject
      */
     public JSONObject toJSON() {
@@ -194,21 +206,18 @@ public class GameSystem {
             provincesJSON.add(p.toJSON());
         }
         output.put("provinces", provincesJSON);
-        output.put("turn", turn);
-        output.put("year", year);
-        output.put("playerNum", playerNum);
-        output.put("victoryCondition", victoryCondition);
+        output.put("turn", this.turn);
+        output.put("year", this.year);
+        output.put("playerNum", this.playerNum);
+        output.put("victoryCondition", this.victoryCondition);
         output.put("turnTracker", turnTracker.toJSON());
         output.put("provincesTracker", provincesTracker.toJSON());
         output.put("factionsTracker", factionsTracker.toJSON());
 
-        // out.put("GameSystem", output);
-
         return output;
     }
 
-    
-    /** 
+    /**
      * @param json
      */
     public void loadJSON(JSONObject json) {
@@ -224,18 +233,16 @@ public class GameSystem {
             p.setProvincesTracker(provincesTracker);
             p.setFactionsTracker(factionsTracker);
         }
-        this.factions = factionsTracker.getFactions(); 
+        this.factions = factionsTracker.getFactions();
         for (Faction f : factions) {
             f.setProvincesTracker(provincesTracker);
             f.setFactionsTracker(factionsTracker);
         }
     }
 
-
-
-    
-    /** 
+    /**
      * check whether a player wins
+     * 
      * @param v
      * @param OccupiedNum
      * @param treasury
@@ -243,20 +250,20 @@ public class GameSystem {
      * @return boolean
      */
     public boolean VictoryCheck(JSONObject VicCon, int OccupiedNum, int treasury, int wealth) {
-        
+
         if (VicCon == null) {
             return false;
-        } 
+        }
 
         if (VicCon.length() == 1) {
 
             String ConditionString = VicCon.getString("goal");
             return ConditionCheck(ConditionString, OccupiedNum, treasury, wealth);
-        
+
         } else if (VicCon.length() == 2) {
-            
+
             String relation = VicCon.getString("goal");
-            
+
             boolean is_found = false;
             String relation2 = null;
             String subgoal1 = null;
@@ -270,63 +277,61 @@ public class GameSystem {
                     subgoal1 = Condition.getJSONArray("subgoals").getJSONObject(0).getString("goal");
                     subgoal2 = Condition.getJSONArray("subgoals").getJSONObject(1).getString("goal");
                     break;
-                } 
-                
+                }
+
             }
-            
+
             if (!is_found) {
-                
+
                 String goal1 = VicCon.getJSONArray("subgoals").getJSONObject(0).getString("goal");
                 String goal2 = VicCon.getJSONArray("subgoals").getJSONObject(1).getString("goal");
 
                 if (relation.equals("AND")) {
-                    return ConditionCheck(goal1, OccupiedNum, treasury, wealth) &&
-                    ConditionCheck(goal2, OccupiedNum, treasury, wealth);
+                    return ConditionCheck(goal1, OccupiedNum, treasury, wealth)
+                            && ConditionCheck(goal2, OccupiedNum, treasury, wealth);
 
                 } else if (relation.equals("OR")) {
-                    return ConditionCheck(goal1, OccupiedNum, treasury, wealth) ||
-                    ConditionCheck(goal2, OccupiedNum, treasury, wealth);
+                    return ConditionCheck(goal1, OccupiedNum, treasury, wealth)
+                            || ConditionCheck(goal2, OccupiedNum, treasury, wealth);
                 }
 
             } else if (is_found) {
-                
+
                 boolean subGoalCheck = false;
-                
+
                 if (relation2.equals("AND")) {
-                    subGoalCheck = ConditionCheck(subgoal1, OccupiedNum, treasury, wealth) &&
-                    ConditionCheck(subgoal2, OccupiedNum, treasury, wealth);
+                    subGoalCheck = ConditionCheck(subgoal1, OccupiedNum, treasury, wealth)
+                            && ConditionCheck(subgoal2, OccupiedNum, treasury, wealth);
 
                 } else if (relation2.equals("OR")) {
-                    subGoalCheck = ConditionCheck(subgoal1, OccupiedNum, treasury, wealth) ||
-                    ConditionCheck(subgoal2, OccupiedNum, treasury, wealth);
+                    subGoalCheck = ConditionCheck(subgoal1, OccupiedNum, treasury, wealth)
+                            || ConditionCheck(subgoal2, OccupiedNum, treasury, wealth);
                 }
-                
+
                 String goal = null;
-                
+
                 for (int i = 0; i < 2; i++) {
                     JSONObject Condition = VicCon.getJSONArray("subgoals").getJSONObject(i);
-                    
+
                     if (!Condition.getString("goal").equals("AND") && !Condition.getString("goal").equals("OR")) {
                         goal = Condition.getString("goal");
-                    } 
+                    }
                 }
-                
+
                 if (relation.equals("AND")) {
                     return ConditionCheck(goal, OccupiedNum, treasury, wealth) && subGoalCheck;
                 } else if (relation.equals("OR")) {
                     return ConditionCheck(goal, OccupiedNum, treasury, wealth) || subGoalCheck;
                 }
-                
-                
+
             }
         }
 
         return false;
 
-    }   
+    }
 
-    
-    /** 
+    /**
      * @param VicConName
      * @param OccupiedNum
      * @param treasury
@@ -334,9 +339,9 @@ public class GameSystem {
      * @return boolean
      */
     public boolean ConditionCheck(String VicConName, int OccupiedNum, int treasury, int wealth) {
-        
-        switch(VicConName) {
-            
+
+        switch (VicConName) {
+
             case "CONQUEST":
                 return OccupiedNum == 52;
 
@@ -354,28 +359,46 @@ public class GameSystem {
 
     }
 
-    
-    /** 
+    /**
      * @return List<Faction>
      */
     public List<Faction> getFactions() {
         return factions;
     }
 
-    
-    /** 
+    /**
      * @return List<Province>
      */
     public List<Province> getProvinces() {
         return provinces;
     }
 
-    
-    /** 
+    /**
      * @return int
      */
     public int getPlayerNum() {
         return playerNum;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+
+        GameSystem l = (GameSystem) obj;
+
+        return Objects.equals(l.turn, turn) && Objects.equals(l.year, year) && Objects.equals(l.playerNum, playerNum)
+        && Objects.equals(l.victoryCondition.toString(), victoryCondition.toString());
+    }
+
+    @Override
+    public String toString() {
+        return "GameSystem [factions="
+                + factions + ", factionsTracker=" + factionsTracker + ", playerNum=" + playerNum + ", provinces="
+                + provinces + ", provincesTracker=" + provincesTracker + ", turn=" + turn
+                + ", turnTracker=" + turnTracker + ", victoryCondition=" + victoryCondition + ", year=" + year + "]";
     }
 
 

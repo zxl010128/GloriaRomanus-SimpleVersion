@@ -19,7 +19,7 @@ public class UnitTest{
     @Test
     public void constructorTest(){
         try {
-            String content = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/UnitsInfo.json"));
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
             JSONObject fullJSON = new JSONObject(content);
             JSONObject unitData = fullJSON.getJSONObject("Roman legionary");
             Unit u = new Unit(unitData, null);
@@ -161,6 +161,29 @@ public class UnitTest{
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 99999, 0), true);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 4399999), true);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 17, 200000, 400001), true);
+    }
+
+    @Test
+    public void SaveGame(){
+        GameSystem newGame = new GameSystem();
+        ConditionLeaf goal = new ConditionLeaf("WEALTH");
+        ConditionLeaf goal1 = new ConditionLeaf("TREASURY");
+        ConditionLeaf goal2 = new ConditionLeaf("CONQUEST");
+        ConditionComponent comGoal = new ConditionComponent("AND");
+        comGoal.add(goal);
+        comGoal.add(goal1);
+        ConditionComponent comGoal1 = new ConditionComponent("OR");
+        comGoal1.add(comGoal);
+        comGoal1.add(goal2);
+        newGame.setVictoryCondtion(comGoal1);
+        newGame.setPlayerNum(5);
+        newGame.allocateFaction();
+
+        newGame.saveCurrentGame();
+        GameSystem newGame1 = new GameSystem();
+        newGame1.reloadSavedGame();
+
+        assertEquals(newGame.equals(newGame1), true);
     }
 }
 
