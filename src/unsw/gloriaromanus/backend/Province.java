@@ -32,11 +32,17 @@ public class Province{
         this.unitsInTraining = new ArrayList<TrainingRecord>();
         // this.observers = new ArrayList<>();
         this.turnTracker = turnTracker;
-        this.provincesTracker = faction.getProvincesTracker();
-        provincesTracker.addProvince(this);
+        if (faction != null) {
+            this.provincesTracker = faction.getProvincesTracker();
+            provincesTracker.addProvince(this);
 
-        this.factionsTracker = faction.getFactionsTracker();
-        this.factionsTracker.update(faction, this);
+            this.factionsTracker = faction.getFactionsTracker();
+            this.factionsTracker.update(faction, this);    
+        } else {
+            this.provincesTracker = null;
+            this.factionsTracker = null;
+        }
+
     }
 
     public Province(JSONObject json) {
