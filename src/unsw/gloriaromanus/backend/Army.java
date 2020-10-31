@@ -19,11 +19,11 @@ public class Army {
     private FactionsTracker factionsTracker;
 
     public Army(List<Unit> units, Province province) {
-        this.units = new ArrayList<Unit>();
+        this.units = units;
         int minMovementPoints = units.get(0).getMovementPoints();
-
+        
         for (Unit s : units) {
-            this.units.add(s);
+            // this.units.add(s);
             if (s.getMovementPoints() < minMovementPoints) {
                 minMovementPoints = s.getMovementPoints();
             }
