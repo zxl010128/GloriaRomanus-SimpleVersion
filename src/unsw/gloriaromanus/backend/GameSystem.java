@@ -86,9 +86,13 @@ public class GameSystem {
 
             Faction newFaction = new Faction(FactionName, startProvinces, provincesTracker, factionsTracker);
             
-            for(Province province: startProvinces) {
-                province.setFaction(newFaction);
-            }
+            // for (int j = 0; j < startProvinces.size(); j++) {
+            //     startProvinces.get(j).setFactionsTracker(factionsTracker);
+            //     startProvinces.get(j).setFaction(newFaction);
+            // }
+            // for(Province province: startProvinces) {
+            //     province.setFaction(newFaction);
+            // }
             
             Factions_list.remove(FactionName);
 
