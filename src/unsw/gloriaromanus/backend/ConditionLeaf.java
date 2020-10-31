@@ -16,4 +16,5 @@ public class ConditionLeaf implements VictoryCondition {
     public JSONObject getVictoryGoal(){
         return condition;
     }
+
 }
