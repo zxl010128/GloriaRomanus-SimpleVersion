@@ -63,18 +63,34 @@ public class Unit {
         this.provincesTracker = null;
     }
 
+    
+    /** 
+     * @return ProvincesTracker
+     */
     public ProvincesTracker getProvincesTracker() {
         return provincesTracker;
     }
 
+    
+    /** 
+     * @param provincesTracker
+     */
     public void setProvincesTracker(ProvincesTracker provincesTracker) {
         this.provincesTracker = provincesTracker;
     }
 
+    
+    /** 
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getName() {
         return name;
     }
@@ -87,6 +103,10 @@ public class Unit {
         return movementPoints;
     }
 
+    
+    /** 
+     * @param damage
+     */
     public void removeHealthBy(int damage) {
         health -= damage;
         if (health < 0) {
@@ -104,18 +124,34 @@ public class Unit {
         return type;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getFactionName() {
         return factionName;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getProvinceName() {
         return provinceName;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getDefense() {
         return defense;
     }
 
+    
+    /** 
+     * @return Province
+     */
     // public Faction getFaction(){
     //     return getProvince().getFactionName();
     // }
@@ -124,43 +160,83 @@ public class Unit {
         return provincesTracker.getProvince(provinceName);
     }
 
+    
+    /** 
+     * @param province
+     */
     public void setProvince(Province province) {
         this.provinceName = province.getName();
         this.factionName = province.getFactionName();
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getNumOfTroops() {
         return numOfTroops;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getTrainingCost() {
         return trainingCost;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getTrainingTurns() {
         return trainingTurns;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getAttackDamage() {
         return attackDamage;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getArmor() {
         return armor;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getShield() {
         return shield;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getTotalDefense() {
         return defense + armor + shield;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getHealth() {
         return health;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getMorale() {
         return morale;
     }
@@ -175,6 +251,11 @@ public class Unit {
 
     }
 
+    
+    /** 
+     * @param defender
+     * @param damage
+     */
     public void attack(Unit defender, int damage) {
         int totalDefense = defender.getTotalDefense();
         int actualDamage = damage - totalDefense;
