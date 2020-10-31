@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
-import java.io.FileWriter;
+
 import java.util.Objects;
 import java.io.PrintWriter;
 
@@ -14,7 +14,7 @@ import org.json.*;
 
 import java.io.File;
 
-public class GameSystem {
+public class GameSystem implements Observer {
 
     private List<Faction> factions;
     private List<Province> provinces;
@@ -104,6 +104,10 @@ public class GameSystem {
         for (int i = 0; i < Provinces_list.size(); i++) {
             Province new_Province = new Province(Provinces_list.get(i), null, turnTracker);
             this.provinces.add(new_Province);
+        }
+
+        for (Faction faction: this.factions) {
+            faction.setGamesys(this);
         }
 
     }
@@ -250,6 +254,7 @@ public class GameSystem {
         for (Faction f : factions) {
             f.setProvincesTracker(provincesTracker);
             f.setFactionsTracker(factionsTracker);
+            f.setGamesys(this);
         }
     }
 
@@ -415,7 +420,28 @@ public class GameSystem {
     }
 
 
-    
+    @Override
+	public void update(Subject obj, String FactionName, int OccupiedNum, int treasury, int wealth) {
+		VictoryDisplay(FactionName, OccupiedNum, treasury, wealth);
+	}
+
+	public void VictoryDisplay(String FactionName, int OccupiedNum, int treasury, int wealth) {
+        
+        if (VictoryCheck(this.victoryCondition, OccupiedNum, treasury, wealth) == true) {
+            System.out.println(FactionName + "has won this game!");
+
+            for(Faction faction: this.factions) {
+                if (faction.getName().equals(FactionName)) {
+                    faction.setIs_win(true);
+                    break;
+                }
+            }
+
+            this.saveCurrentGame();
+        } 
+
+        return;
+	}
 
     
 }
