@@ -61,7 +61,7 @@ public class GameSystem {
             List<String> facs = new ArrayList<String>(facList.keySet());
             Factions_list = facs;
 
-        } catch (IOException e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -121,6 +121,19 @@ public class GameSystem {
 
     }
 
+    public FactionsTracker getFactionsTracker() {
+        return factionsTracker;
+    }
+
+    public ProvincesTracker getProvincesTracker() {
+        return provincesTracker;
+    }
+
+    public TurnTracker getTurnTracker() {
+        return turnTracker;
+    }
+
+    /** 
     /**
      * @param v
      */

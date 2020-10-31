@@ -66,6 +66,10 @@ public class Faction {
         return factionsTracker;
     }
 
+    public int getTotalWealth() {
+        return totalWealth;
+    }
+
     public void addProvince(Province p) {
         provinces.add(p);
         totalWealth += p.getWealth();
