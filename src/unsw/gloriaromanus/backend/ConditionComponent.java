@@ -18,7 +18,7 @@ public class ConditionComponent implements VictoryCondition {
     }
     
     public boolean add(VictoryCondition v) {
-        if (subgoals.length() > 2) {
+        if (subgoals.length() >= 2) {
             return false;
         }
         subVictoryConditions.add(v);
