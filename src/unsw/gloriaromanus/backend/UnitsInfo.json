@@ -2,7 +2,7 @@
     "Roman legionary": {
         "name": "Roman legionary",
         "type": "melee",
-        "movement point": 15,
+        "movementPoints": 15,
         "health": 100,
         "trainingCost": 30,
         "trainingTurns": 3,
@@ -10,13 +10,13 @@
         "morale": 10,
         "attackDamage": 50,
         "defense": 15,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "Gallic berserker": {
         "name": "Gallic berserker",
         "type": "melee",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 70,
         "trainingCost": 20,
         "trainingTurns": 2,
@@ -24,13 +24,13 @@
         "morale": 6,
         "attackDamage": 15,
         "defense": 15,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "Celtic Briton berserker": {
         "name": "Celtic Briton berserker",
         "type": "melee",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 50,
         "trainingCost": 20,
         "trainingTurns": 2,
@@ -38,13 +38,13 @@
         "morale": 6,
         "attackDamage": 20,
         "defense": 10,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "Germanic berserker": {
         "name": "Germanic berserker",
         "type": "melee",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 30,
         "trainingCost": 20,
         "trainingTurns": 2,
@@ -52,13 +52,13 @@
         "morale": 6,
         "attackDamage": 25,
         "defense": 5,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "melee cavalry": {
         "name": "melee cavalry",
         "type": "melee",
-        "movement point": 15,
+        "movementPoints": 15,
         "health": 90,
         "trainingCost": 10,
         "trainingTurns": 1,
@@ -66,13 +66,13 @@
         "morale": 3,
         "attackDamage": 10,
         "defense": 20,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "pikemen": {
         "name": "pikemen",
         "type": "melee",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 50,
         "trainingCost": 10,
         "trainingTurns": 1,
@@ -80,13 +80,13 @@
         "morale": 4,
         "attackDamage": 15,
         "defense": 20,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "hoplite": {
         "name": "hoplite",
         "type": "melee",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 70,
         "trainingCost": 10,
         "trainingTurns": 1,
@@ -94,13 +94,13 @@
         "morale": 4,
         "attackDamage": 20,
         "defense": 10,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "javelin-skirmisher": {
         "name": "javelin-skirmisher",
         "type": "melee",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 40,
         "trainingCost": 15,
         "trainingTurns": 1,
@@ -108,13 +108,13 @@
         "morale": 7,
         "attackDamage": 30,
         "defense": 5,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "elephant": {
         "name": "elephant",
         "type": "melee",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 150,
         "trainingCost": 40,
         "trainingTurns": 3,
@@ -122,13 +122,13 @@
         "morale": 2,
         "attackDamage": 10,
         "defense": 30,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "horse-archer": {
         "name": "horse-archer",
         "type": "missile",
-        "movement point": 15,
+        "movementPoints": 15,
         "health": 50,
         "trainingCost": 10,
         "trainingTurns": 1,
@@ -136,13 +136,13 @@
         "morale": 7,
         "attackDamage": 25,
         "defense": 5,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "druid": {
         "name": "druid",
         "type": "missile",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 100,
         "trainingCost": 20,
         "trainingTurns": 2,
@@ -150,13 +150,13 @@
         "morale": 5,
         "attackDamage": 20,
         "defense": 15,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "melee infantry": {
         "name": "melee infantry",
         "type": "melee",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 70,
         "trainingCost": 10,
         "trainingTurns": 1,
@@ -164,13 +164,13 @@
         "morale": 6,
         "attackDamage": 30,
         "defense": 15,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "heavy infantry": {
         "name": "heavy infantry",
         "type": "melee",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 50,
         "trainingCost": 5,
         "trainingTurns": 1,
@@ -178,13 +178,13 @@
         "morale":3,
         "attackDamage": 25,
         "defense": 10,
-        "numsOfTroops": 5        
+        "numOfTroops": 5        
     },
 
     "missile infantry": {
         "name": "missile infantry",
         "type": "missile",
-        "movement point": 10,
+        "movementPoints": 10,
         "health": 40,
         "trainingCost": 5,
         "trainingTurns": 1,
@@ -192,13 +192,13 @@
         "morale":3,
         "attackDamage": 30,
         "defense": 5,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     },
 
     "chariots": {
         "name": "chariots",
         "type": "missile",
-        "movement point": 4,
+        "movementPoints": 4,
         "health": 60,
         "trainingCost": 25,
         "trainingTurns": 2,
@@ -206,7 +206,7 @@
         "morale": 4,
         "attackDamage": 50,
         "defense": 10,
-        "numsOfTroops": 5
+        "numOfTroops": 5
     }
 }
 
