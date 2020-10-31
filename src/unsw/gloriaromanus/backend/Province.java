@@ -209,8 +209,6 @@ public class Province{
         this.unitsInTraining = unitsInTraining;
     }
 
-    
-
     public JSONObject toJSON(){
         JSONObject output = new JSONObject();
         output.put("name", name);
