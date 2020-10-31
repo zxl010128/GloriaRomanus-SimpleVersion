@@ -77,16 +77,21 @@ public class Faction implements Subject{
         return totalWealth;
     }
 
+    public int getBalance() {
+        return balance;
+    }
+
     public void addProvince(Province p) {
         provinces.add(p);
         totalWealth += p.getWealth();
         provincesTracker.addProvince(p);
+        notifyObservers();
     }
 
     public void removeProvince(Province p) {
         provinces.remove(p);
         totalWealth -= p.getWealth();
-
+        notifyObservers();
     }
 
     public String getName() {
@@ -159,6 +164,7 @@ public class Faction implements Subject{
 
         this.balance += totalTaxRevenue;
         this.totalWealth = totalWealth;
+        notifyObservers();
     }
 
     public GameSystem getGamesys() {
@@ -170,11 +176,15 @@ public class Faction implements Subject{
     }
 
     @Override
-	public void notifyObservers(String FactionName, int OccupiedNum, int treasury, int wealth) {
-		this.gamesys.update(this, FactionName, OccupiedNum, treasury, wealth);
+	public void notifyObservers() {
+		this.gamesys.update(this);
     }
 
     public void setIs_win(boolean is_win) {
         this.is_win = is_win;
+    }
+
+    public boolean isIs_win() {
+        return is_win;
     }
 }
