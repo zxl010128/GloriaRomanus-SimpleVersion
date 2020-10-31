@@ -1,6 +1,8 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +19,7 @@ public class UnitTest{
     @Test
     public void constructorTest(){
         try {
-            String content = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/UnitsInfo.json"));
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
             JSONObject fullJSON = new JSONObject(content);
             JSONObject unitData = fullJSON.getJSONObject("Roman legionary");
             Unit u = new Unit(unitData, null);
@@ -35,7 +37,7 @@ public class UnitTest{
 
             u.setName("JJ");
             assertEquals(u.getName(), "JJ");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -43,7 +45,7 @@ public class UnitTest{
     @Test
     public void GameStartTest1(){
         GameSystem newGame = new GameSystem();
-        assertEquals(newGame.setPlayerNum(4), true);
+        assertTrue(newGame.setPlayerNum(4));
         newGame.allocateFaction();
         assertEquals(newGame.getPlayerNum(), 4);
         assertEquals(newGame.getProvinces().size(), 52);
@@ -151,8 +153,48 @@ public class UnitTest{
         assertEquals(newGame.VictoryCheck(comGoal1, 17, 200000, 400001), true);
     }
 
-    @Test void RecruitTest() {
-        
+    @Test
+    public void recruitTest() {
+        GameSystem game = new GameSystem();
+        Faction f1 = new Faction("Romans", game.getProvincesTracker(), game.getFactionsTracker());
+        Province p1 = new Province("Aegyptus", f1, game.getTurnTracker());
+        assertEquals(p1.getFactionName(), f1.getName());
+        assertFalse(p1.recruit("Minnie Mouse", game.getTurnTracker().getCurrTurn()));
+        assertTrue(p1.recruit("Gallic berserker", game.getTurnTracker().getCurrTurn()));
+        assertTrue(p1.recruit("Roman legionary", game.getTurnTracker().getCurrTurn()));
+        assertEquals(p1.getUnitsInTraining().get(0).getUnit().getName(), "Gallic berserker");
+        assertEquals(p1.getUnitsInTraining().get(1).getUnit().getName(), "Roman legionary");
+        assertFalse(p1.recruit("Celtic Briton berserker", game.getTurnTracker().getCurrTurn()));
+        game.NextTurn();
+        game.NextTurn();
+        assertEquals(p1.getUnitsInTraining().size(), 0);
+        assertEquals(p1.getUnits().size(), 2);
+    }
+
+    @Test
+    public void taxAndWealthTest() {
+        GameSystem game = new GameSystem();
+        Faction f1 = new Faction("Romans", game.getProvincesTracker(), game.getFactionsTracker());
+        Province p1 = new Province("Aegyptus", f1, game.getTurnTracker());
+        Province p2 = new Province("Arabia", f1, game.getTurnTracker());
+
+        assertEquals(p1.getTaxRate(), 0.15);
+        assertEquals(p1.getWealth(), 100);
+        assertEquals(p2.getTaxRate(), 0.15);
+        assertEquals(p2.getWealth(), 100);
+        assertEquals(f1.getTotalWealth(), 200);
+
+        p1.setTaxRate(0.1);
+        p2.setTaxRate(0.2);
+
+        game.NextTurn();
+
+        assertEquals(p1.getWealth(), 110);
+        assertEquals(p2.getWealth(), 90);
+        assertEquals(f1.getTotalWealth(), 200);
+
+
+
     }
 }
 

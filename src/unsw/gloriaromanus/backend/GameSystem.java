@@ -45,9 +45,9 @@ public class GameSystem {
         this.provinces = provincesTracker.getProvinces();
 
         try{
-            String allfactions = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/factions_list.json"));
+            String allfactions = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/factions_list.json"));
             JSONObject facList = new JSONObject(allfactions);
-            String allprovinces = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/provinces_list.json"));
+            String allprovinces = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/provinces_list.json"));
             JSONArray proList = new JSONArray(allprovinces);      
             
             relations = facList;
@@ -58,7 +58,7 @@ public class GameSystem {
             List<String> facs = new ArrayList<>(facList.keySet());
             Factions_list = facs;
 
-        } catch(IOException e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -119,7 +119,18 @@ public class GameSystem {
 
     }
 
-    
+    public FactionsTracker getFactionsTracker() {
+        return factionsTracker;
+    }
+
+    public ProvincesTracker getProvincesTracker() {
+        return provincesTracker;
+    }
+
+    public TurnTracker getTurnTracker() {
+        return turnTracker;
+    }
+
     /** 
      * @param v
      */

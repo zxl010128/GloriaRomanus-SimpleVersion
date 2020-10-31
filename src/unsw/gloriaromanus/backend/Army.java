@@ -225,7 +225,7 @@ public class Army {
 
             return true;
         
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         
