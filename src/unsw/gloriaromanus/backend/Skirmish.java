@@ -20,9 +20,9 @@ public class Skirmish {
     private void startBattle(Unit attackUnit, Unit defendUnit) {
         // During a skirmish, both units engage in a sequence of engagements against each other until a unit successfully routes 
         // (runs away from the battle permanently) or is defeated.
-        while (attackUnit.getHealth() != 0 && defendUnit.getHealth() != 0) {
+        while (attackUnit.getHealth() > 0 && defendUnit.getHealth() > 0) {
             Engagement e = new Engagement(attackUnit, defendUnit);
-            engagements.add(e);
+            // engagements.add(e);
         }
 
         if (attackUnit.getHealth() == 0) {
