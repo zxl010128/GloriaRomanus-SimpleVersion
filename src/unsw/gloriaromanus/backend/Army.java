@@ -98,6 +98,7 @@ public class Army {
 
     
     /** 
+     * BFS to check the shortest path
      * @return boolean
      */
     public boolean isReachable(Province destination){
