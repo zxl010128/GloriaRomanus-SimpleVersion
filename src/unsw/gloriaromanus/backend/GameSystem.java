@@ -18,7 +18,7 @@ public class GameSystem {
     private int turn;
     private int year;
     private int playerNum;
-    private VictoryCondition victoryCondition;
+    private JSONObject victoryCondition;
     private TurnTracker turnTracker;
     private ProvincesTracker provincesTracker;
     private FactionsTracker factionsTracker;
@@ -45,9 +45,9 @@ public class GameSystem {
         this.provinces = provincesTracker.getProvinces();
 
         try{
-            String allfactions = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/factions_list.json"));
+            String allfactions = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/factions_list.json"));
             JSONObject facList = new JSONObject(allfactions);
-            String allprovinces = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/provinces_list.json"));
+            String allprovinces = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/provinces_list.json"));
             JSONArray proList = new JSONArray(allprovinces);      
             
             relations = facList;
@@ -55,7 +55,7 @@ public class GameSystem {
             for(int i = 0; i < proList.length(); i++) {
                 Provinces_list.add(proList.getString(i));
             }
-            List<String> facs = new ArrayList<>(facList.keySet());
+            List<String> facs = new ArrayList<String>(facList.keySet());
             Factions_list = facs;
 
         } catch(IOException e) {
@@ -102,7 +102,7 @@ public class GameSystem {
             Province new_Province = new Province(Provinces_list.get(i), null, turnTracker);
             this.provinces.add(new_Province);
         }
-        System.out.println(this.provinces);
+
     }
 
 
@@ -124,7 +124,7 @@ public class GameSystem {
      * @param v
      */
     public void setVictoryCondtion(VictoryCondition v){
-        this.victoryCondition = v;
+        this.victoryCondition = v.getVictoryGoal();
     }
 
     
@@ -132,7 +132,7 @@ public class GameSystem {
      * @return JSONObject
      */
     public JSONObject getVictoryCondition(){
-        return this.victoryCondition.getVictoryGoal();
+        return this.victoryCondition;
     }
 
     /** 
@@ -142,6 +142,7 @@ public class GameSystem {
     public boolean setPlayerNum(int playerNum) {
         
         // player number should be more than 2 and less than the total factions number
+        // frontend should print a message to re enter the playernum
         if (playerNum > Factions_list.size() || playerNum < 2) {
             return false;
         } else {
@@ -175,8 +176,12 @@ public class GameSystem {
         
     }
 
+    
+    /** 
+     * @return JSONObject
+     */
     public JSONObject toJSON() {
-        // JSONObject out = new JSONObject();
+
         JSONObject output = new JSONObject();
         List<JSONObject> factionsJSON = new ArrayList<JSONObject>();
         for (Faction f : factions) {
@@ -192,7 +197,7 @@ public class GameSystem {
         output.put("turn", turn);
         output.put("year", year);
         output.put("playerNum", playerNum);
-        output.put("victoryCondition", (victoryCondition == null) ? JSONObject.NULL : victoryCondition.getVictoryGoal());
+        output.put("victoryCondition", victoryCondition);
         output.put("turnTracker", turnTracker.toJSON());
         output.put("provincesTracker", provincesTracker.toJSON());
         output.put("factionsTracker", factionsTracker.toJSON());
@@ -202,11 +207,15 @@ public class GameSystem {
         return output;
     }
 
+    
+    /** 
+     * @param json
+     */
     public void loadJSON(JSONObject json) {
         this.turn = json.getInt("turn");
         this.year = json.getInt("year");
         this.playerNum = json.getInt("playerNum");
-        // this.victoryCondition
+        this.victoryCondition = json.getJSONObject("victoryCondition");
         this.turnTracker = new TurnTracker(json.getJSONObject("turnTracker"));
         this.provincesTracker = new ProvincesTracker(json.getJSONObject("provincesTracker"));
         this.factionsTracker = new FactionsTracker(json.getJSONObject("factionsTracker"));
@@ -224,9 +233,16 @@ public class GameSystem {
 
 
 
-    public boolean VictoryCheck(VictoryCondition v, int OccupiedNum, int treasury, int wealth) {
-
-        JSONObject VicCon = v.getVictoryGoal();
+    
+    /** 
+     * check whether a player wins
+     * @param v
+     * @param OccupiedNum
+     * @param treasury
+     * @param wealth
+     * @return boolean
+     */
+    public boolean VictoryCheck(JSONObject VicCon, int OccupiedNum, int treasury, int wealth) {
         
         if (VicCon == null) {
             return false;
@@ -309,6 +325,14 @@ public class GameSystem {
 
     }   
 
+    
+    /** 
+     * @param VicConName
+     * @param OccupiedNum
+     * @param treasury
+     * @param wealth
+     * @return boolean
+     */
     public boolean ConditionCheck(String VicConName, int OccupiedNum, int treasury, int wealth) {
         
         switch(VicConName) {
@@ -330,14 +354,26 @@ public class GameSystem {
 
     }
 
+    
+    /** 
+     * @return List<Faction>
+     */
     public List<Faction> getFactions() {
         return factions;
     }
 
+    
+    /** 
+     * @return List<Province>
+     */
     public List<Province> getProvinces() {
         return provinces;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int getPlayerNum() {
         return playerNum;
     }
