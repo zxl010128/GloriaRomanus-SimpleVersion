@@ -9,25 +9,25 @@ import org.junit.jupiter.params.provider.ValueSource;
 import unsw.gloriaromanus.backend.*;
 
 public class UnitTest{
-    @Test
-    public void blahTest(){
-        assertEquals("a", "a");
-    }
-    
-    @Test
-    public void blahTest2(){
-        Unit u = new Unit();
-        assertEquals(u.getNumTroops(), 50);
-    }
 
     @Test
-    public void GameStartTest3(){
+    public void GameStartTest1(){
         GameSystem newGame = new GameSystem();
         assertEquals(newGame.setPlayerNum(4), true);
         newGame.allocateFaction();
         assertEquals(newGame.getPlayerNum(), 4);
         assertEquals(newGame.getProvinces().size(), 52);
         assertEquals(newGame.getFactions().size(), 4);
+    }
+
+    @Test
+    public void GameStartTest2(){
+        GameSystem newGame = new GameSystem();
+        assertEquals(newGame.setPlayerNum(16), true);
+        newGame.allocateFaction();
+        assertEquals(newGame.getPlayerNum(), 16);
+        assertEquals(newGame.getProvinces().size(), 52);
+        assertEquals(newGame.getFactions().size(), 16);
     }
 
     @Test
@@ -82,5 +82,43 @@ public class UnitTest{
         assertEquals(newGame.VictoryCheck(comGoal, 17, 200000, 400001), true);
     }
 
+    @Test
+    public void VicrotyConditionTest4(){
+        GameSystem newGame = new GameSystem();
+        ConditionLeaf goal = new ConditionLeaf("WEALTH");
+        ConditionLeaf goal1 = new ConditionLeaf("TREASURY");
+        ConditionLeaf goal2 = new ConditionLeaf("CONQUEST");
+        ConditionComponent comGoal = new ConditionComponent("AND");
+        comGoal.add(goal);
+        comGoal.add(goal1);
+        ConditionComponent comGoal1 = new ConditionComponent("AND");
+        comGoal1.add(comGoal);
+        comGoal1.add(goal2);
+        assertEquals(newGame.VictoryCheck(comGoal1, 51, 0, 0), false);
+        assertEquals(newGame.VictoryCheck(comGoal1, 51, 200000, 0), false);
+        assertEquals(newGame.VictoryCheck(comGoal1, 52, 99999, 0), false);
+        assertEquals(newGame.VictoryCheck(comGoal1, 52, 0, 4399999), false);
+        assertEquals(newGame.VictoryCheck(comGoal1, 17, 200000, 400001), false);
+        assertEquals(newGame.VictoryCheck(comGoal1, 52, 200000, 400001), true);
+    }
+
+    @Test
+    public void VicrotyConditionTest5(){
+        GameSystem newGame = new GameSystem();
+        ConditionLeaf goal = new ConditionLeaf("WEALTH");
+        ConditionLeaf goal1 = new ConditionLeaf("TREASURY");
+        ConditionLeaf goal2 = new ConditionLeaf("CONQUEST");
+        ConditionComponent comGoal = new ConditionComponent("AND");
+        comGoal.add(goal);
+        comGoal.add(goal1);
+        ConditionComponent comGoal1 = new ConditionComponent("OR");
+        comGoal1.add(comGoal);
+        comGoal1.add(goal2);
+        assertEquals(newGame.VictoryCheck(comGoal1, 52, 0, 0), true);
+        assertEquals(newGame.VictoryCheck(comGoal1, 51, 200000, 0), false);
+        assertEquals(newGame.VictoryCheck(comGoal1, 52, 99999, 0), true);
+        assertEquals(newGame.VictoryCheck(comGoal1, 52, 0, 4399999), true);
+        assertEquals(newGame.VictoryCheck(comGoal1, 17, 200000, 400001), true);
+    }
 }
 
