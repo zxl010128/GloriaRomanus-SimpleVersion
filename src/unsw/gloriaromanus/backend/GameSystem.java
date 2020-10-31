@@ -64,6 +64,7 @@ public class GameSystem {
     }
     
     public void allocateFaction(){        
+        
         for(int i = 1; i <= this.playerNum; i++) {
             Collections.shuffle(Factions_list);
             String FactionName = Factions_list.get(0);
@@ -73,7 +74,7 @@ public class GameSystem {
             ArrayList<String> String_startProvinces = new ArrayList<String>();
 
             for (int j = 0; j < provincesList.length(); j++) {
-                String_startProvinces.add(provincesList.optString(j));
+                String_startProvinces.add(provincesList.getString(j));
                 Provinces_list.remove(provincesList.get(j));
             }
 
@@ -81,10 +82,9 @@ public class GameSystem {
                 Province newProvince = new Province(String_startProvinces.get(j), null, turnTracker);
                 startProvinces.add(newProvince);
                 this.provinces.add(newProvince);
-                Provinces_list.remove(String_startProvinces.get(j));
             }
 
-            Faction newFaction = new Faction(FactionName, startProvinces, provincesTracker, factionsTracker);
+            new Faction(FactionName, startProvinces, provincesTracker, factionsTracker);
             
             // for (int j = 0; j < startProvinces.size(); j++) {
             //     startProvinces.get(j).setFactionsTracker(factionsTracker);
@@ -102,6 +102,7 @@ public class GameSystem {
             Province new_Province = new Province(Provinces_list.get(i), null, turnTracker);
             this.provinces.add(new_Province);
         }
+        System.out.println(this.provinces);
     }
 
 
