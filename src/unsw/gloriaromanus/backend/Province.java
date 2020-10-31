@@ -255,6 +255,9 @@ public class Province{
                 if (r.getFinishTurn() ==  nextTurn) {
                     // training finished!
                     units.add(r.getUnit());
+                    if (r.getUnit().getProvincesTracker() == null) {
+                        r.getUnit().setProvincesTracker(provincesTracker);
+                    }
                     r.setFinished(true);
                 }
             }
