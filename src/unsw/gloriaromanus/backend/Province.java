@@ -102,7 +102,7 @@ public class Province{
             
             return true;
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -113,6 +113,10 @@ public class Province{
         return units;
     }
     
+    public List<TrainingRecord> getUnitsInTraining() {
+        return unitsInTraining;
+    }
+
     /** 
      * for a Army from the given units
      * @param units
@@ -186,9 +190,7 @@ public class Province{
 
         if (taxRates.contains(taxRate)) {
             this.taxRate = taxRate;
-        } else {
-            System.out.println("invalid tax rate!");
-        }
+        } 
     }
 
     public int getTaxRevenue() {
@@ -197,6 +199,10 @@ public class Province{
 
     public int getWealth() {
         return wealth;
+    }
+
+    public double getTaxRate() {
+        return taxRate;
     }
 
     public void setUnitsInTraining(List<TrainingRecord> unitsInTraining) {
