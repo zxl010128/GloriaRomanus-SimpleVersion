@@ -7,8 +7,38 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import unsw.gloriaromanus.backend.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class UnitTest{
+    @Test
+    public void constructorTest(){
+        try {
+            String content = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/UnitsInfo.json"));
+            JSONObject fullJSON = new JSONObject(content);
+            JSONObject unitData = fullJSON.getJSONObject("Roman legionary");
+            Unit u = new Unit(unitData, null);
+            
+            assertEquals(u.getName(), "Roman legionary");
+            assertEquals(u.getType(), "melee");
+            assertEquals(u.getMovementPoints(), 15);
+            assertEquals(u.getHealth(), 100);
+            assertEquals(u.getTrainingCost(), 30);
+            assertEquals(u.getTrainingTurns(), 3);
+            assertEquals(u.getMorale(), 10);
+            assertEquals(u.getAttackDamage(), 50);
+            assertEquals(u.getTotalDefense(), 25);
+            assertEquals(u.getNumOfTroops(), 5);
+
+            u.setName("JJ");
+            assertEquals(u.getName(), "JJ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void GameStartTest1(){
