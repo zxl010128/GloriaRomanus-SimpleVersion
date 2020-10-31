@@ -23,8 +23,11 @@ public class UnitTest{
     @Test
     public void blahTest3(){
         GameSystem newGame = new GameSystem();
-        newGame.setPlayerNum(4);
+        assertEquals(newGame.setPlayerNum(4), true);
         newGame.allocateFaction();
+        assertEquals(newGame.getPlayerNum(), 4);
+        assertEquals(newGame.getProvinces().size(), 52);
+        assertEquals(newGame.getFactions().size(), 4);
     }
 
 }
