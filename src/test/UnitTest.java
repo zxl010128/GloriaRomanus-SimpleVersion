@@ -167,6 +167,18 @@ public class UnitTest{
     }
 
     @Test
+    public void VicrotyConditionTest6(){
+        ConditionLeaf goal = new ConditionLeaf("WEALTH");
+        ConditionLeaf goal1 = new ConditionLeaf("TREASURY");
+        ConditionLeaf goal2 = new ConditionLeaf("CONQUEST");
+        ConditionComponent comGoal = new ConditionComponent("AND");
+        comGoal.add(goal);
+        comGoal.add(goal1);
+        assertFalse(comGoal.add(goal2)); 
+    }
+
+
+    @Test
     public void SaveGame(){
         GameSystem newGame = new GameSystem();
         ConditionLeaf goal = new ConditionLeaf("WEALTH");
@@ -190,10 +202,69 @@ public class UnitTest{
     }
 
     @Test
+    public void FactionRemove(){
+        GameSystem newGame = new GameSystem();
+        assertTrue(newGame.setPlayerNum(4));
+        newGame.allocateFaction();
+
+        Faction newF = newGame.getFactions().get(0);
+        List<Province> provinces= newF.getProvinces();
+        if (provinces.size() == 3) {
+            newF.removeProvince(provinces.get(0));
+            newF.removeProvince(provinces.get(0));
+            newF.removeProvince(provinces.get(0));
+        } else if (provinces.size() == 4) {
+            newF.removeProvince(provinces.get(0));
+            newF.removeProvince(provinces.get(0));
+            newF.removeProvince(provinces.get(0));
+            newF.removeProvince(provinces.get(0));
+        }
+        assertEquals(newGame.getFactions().size(), 3);
+    }
+
+    @Test
+    public void FactionSYS(){
+        GameSystem newGame = new GameSystem();
+        assertTrue(newGame.setPlayerNum(4));
+        newGame.allocateFaction();
+
+        for(Faction faction: newGame.getFactions()) {
+            assertTrue(faction.getGamesys().equals(newGame));
+        }
+    }
+
+    @Test
+    public void Victory(){
+        GameSystem newGame = new GameSystem();
+        ConditionLeaf goal = new ConditionLeaf("CONQUEST");
+        newGame.setVictoryCondtion(goal);
+        assertTrue(newGame.setPlayerNum(2));
+        newGame.allocateFaction();
+
+        Faction faction = newGame.getFactions().get(0);
+        for(Province province: newGame.getProvinces()) {
+            if (!faction.getProvinces().contains(province)) {
+                faction.addProvince(province);
+            }
+        }
+        assertTrue(faction.isIs_win());
+
+    }
+
+    @Test
+    public void testGameSysToString(){
+        GameSystem newGame = new GameSystem();
+        
+        assertTrue(newGame.toString() instanceof String);
+
+    }
+
+    @Test
     public void recruitTest() {
         try {
             GameSystem game = new GameSystem();
             Faction f1 = new Faction("Romans", game.getProvincesTracker(), game.getFactionsTracker());
+            f1.setGamesys(game);
             Province p1 = new Province("Aegyptus", f1, game.getTurnTracker());
             Province p2 = new Province("Iudaea", f1, game.getTurnTracker());
 
@@ -237,6 +308,7 @@ public class UnitTest{
     public void taxAndWealthTest() {
         GameSystem game = new GameSystem();
         Faction f1 = new Faction("Romans", game.getProvincesTracker(), game.getFactionsTracker());
+        f1.setGamesys(game);
         Province p1 = new Province("Aegyptus", f1, game.getTurnTracker());
         Province p2 = new Province("Arabia", null, game.getTurnTracker());
         p2.setFaction(f1);
@@ -312,6 +384,8 @@ public class UnitTest{
             GameSystem game = new GameSystem();
             Faction f1 = new Faction("Romans", game.getProvincesTracker(), game.getFactionsTracker());
             Faction f2 = new Faction("Carthaginians", game.getProvincesTracker(), game.getFactionsTracker());
+            f1.setGamesys(game);
+            f2.setGamesys(game);
             Province p1 = new Province("Aegyptus", f1, game.getTurnTracker());
             Province p2 = new Province("Africa Proconsularis", f2, game.getTurnTracker());
 

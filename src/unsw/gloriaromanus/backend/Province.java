@@ -96,7 +96,17 @@ public class Province{
         try {
             String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
             JSONObject fullJSON = new JSONObject(content);
+            
+            boolean is_found = false;
+            for (String SoldierName: fullJSON.keySet()) {
+                if (SoldierName.equals(name)) {
+                    is_found = true;
+                    break;
+                }
+            }
+            if (!is_found) return false;
             JSONObject unitData = fullJSON.getJSONObject(name);
+
             Unit u = new Unit(unitData, this);
             unitsInTraining.add(new TrainingRecord(u, turnTracker.getCurrTurn() + u.getTrainingTurns()));
             

@@ -10,6 +10,13 @@
             "name": "CodeLens (Launch) - tempTest",
             "request": "launch",
             "mainClass": "unsw.gloriaromanus.backend.tempTest",
+            "projectName": "w09a-paiandmatty_aa5049cd"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - tempTest",
+            "request": "launch",
+            "mainClass": "unsw.gloriaromanus.backend.tempTest",
             "projectName": "w09a-paiandmatty_2210cff6"
         },
         {
