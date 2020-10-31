@@ -10,8 +10,21 @@ public class Faction {
     private int balance;
     private int totalWealth;
     private List<Province> provinces;
+    private ProvincesTracker provincesTracker;
+    private FactionsTracker factionsTracker;
 
-    public Faction(String name, ArrayList<Province> startingProvinces) {
+    public Faction(String name, ProvincesTracker provincesTracker, FactionsTracker factionsTracker) {
+        this.name = name;
+        this.balance = 100;
+        this.provinces = new ArrayList<Province>();
+        this.totalWealth = 0;
+
+        this.provincesTracker = provincesTracker;
+        this.factionsTracker = factionsTracker;
+        factionsTracker.addFaction(this);
+    }
+
+    public Faction(String name, ArrayList<Province> startingProvinces, ProvincesTracker provincesTracker) {
         this.name = name;
         this.balance = 100;
         this.provinces = startingProvinces;
@@ -19,6 +32,16 @@ public class Faction {
         for (Province p : provinces) {
             totalWealth += p.getWealth();
         }
+
+        this.provincesTracker = provincesTracker;
+    }
+
+    public ProvincesTracker getProvincesTracker() {
+        return provincesTracker;
+    }
+
+    public FactionsTracker getFactionsTracker() {
+        return factionsTracker;
     }
 
     public void addProvince(Province p) {
@@ -61,7 +84,17 @@ public class Faction {
 
     public JSONObject toJSON() {
         JSONObject output = new JSONObject();
+        output.put("name", name);
+        output.put("balance", balance);
+        output.put("totalWealth", totalWealth);
+        
+        List<JSONObject> provincesJSON = new ArrayList<JSONObject>();
+        for (Province p : provinces) {
+            provincesJSON.add(p.toJSON());
+        }
+        output.put("provinces", provincesJSON);
 
+        output.put("provincesTracker", provincesTracker.toJSON());
         return output;
     }
 

@@ -14,7 +14,10 @@ import org.json.*;
 public class Army {
     private List<Unit> units;
     private int movementPoints;
-    private Province province;
+    private String provinceName;
+    private String factionName;
+    private ProvincesTracker provincesTracker;
+    private FactionsTracker factionsTracker;
 
     public Army(List<Unit> units, Province province) {
         this.units = new ArrayList<Unit>();
@@ -28,7 +31,22 @@ public class Army {
         }
 
         this.movementPoints = minMovementPoints;
-        this.province = province;
+        this.provinceName = province.getName();
+        this.factionName = province.getFactionName();
+        this.provincesTracker = province.getProvincesTracker();
+        this.factionsTracker = province.getFactionsTracker();
+    }
+
+    public Province getProvince() {
+        return provincesTracker.getProvince(provinceName);
+    }
+
+    public String getFactionName() {
+        return factionName;
+    }
+
+    public Faction getFaction() {
+        return factionsTracker.getFaction(factionName);
     }
 
     /**
@@ -46,7 +64,7 @@ public class Army {
         // update after moving
         for (Unit u : units) {
             destination.addUnit(u);
-            province.removeUnit(u);
+            provincesTracker.getProvince(provinceName).removeUnit(u);
         }
     }
 
@@ -67,7 +85,7 @@ public class Army {
             // Draw
             this.updateAfterDraw();
 
-        } else if (winner.getFaction().equals(this.getFaction())) {
+        } else if (winner.getFactionName().equals(this.getFactionName())) {
             // Win
             this.updateAfterWin(destination);
 
@@ -98,7 +116,7 @@ public class Army {
                 province_list.add(proList.getString(i));
             }
 
-            String startPoint = this.province.getName();  
+            String startPoint = this.getProvince().getName();  
 
             // situation when current = dest
             if (startPoint == destination.getName()) {
@@ -130,7 +148,8 @@ public class Army {
             boolean is_Found = false;
             
             List<String> OccupiedProvince = new ArrayList<String>();
-            for(Province province : this.province.getFraction().getProvinces()) {
+            
+            for(Province province : this.getFaction().getProvinces()) {
                 OccupiedProvince.add(province.getName());
             }
 
@@ -223,22 +242,6 @@ public class Army {
 
     public void setUnits(List<Unit> units) {
         this.units = units;
-    }
-
-    
-    /** 
-     * @return Faction
-     */
-    public Faction getFaction() {
-        return province.getFraction();
-    }
-
-    
-    /** 
-     * @return Province
-     */
-    public Province getProvince() {
-        return province;
     }
 
     

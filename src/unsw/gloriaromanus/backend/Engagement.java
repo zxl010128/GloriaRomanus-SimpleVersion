@@ -49,7 +49,7 @@ public class Engagement {
 
     private void startBattle(Unit attacker, Unit defender) {
         // assume attacker attacks first
-        Province defendProvince = defender.getProvince();
+        // Province defendProvince = defender.getProvince();
         // First, calculate the damage
         int damage = calculateDamage(attacker, defender);
         attacker.attack(defender, damage);
@@ -104,7 +104,7 @@ public class Engagement {
         return damage;
     }
 
-    public Faction getWinnerFaction() {
-        return winner.getFaction();
+    public String getWinnerFaction() {
+        return winner.getFactionName();
     }
 }

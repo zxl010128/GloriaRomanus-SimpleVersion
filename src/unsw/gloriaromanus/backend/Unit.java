@@ -14,29 +14,14 @@ public class Unit {
     private int trainingTurns;
     private int numOfTroops;
     private int movementPoints;
-    private Province province;
-    // private boolean avalibility; // MAYBE USELESS!!!!!!
+    private String provinceName;
+    private String factionName;
     private int attackDamage;
     private int armor;
     private int defense;
     private int shield;
     private int morale;
-
-    public Unit(String name, String type, int health, int trainingCost, int trainingTurns, int numOfTroops,
-            int movementPoints, Province province, int attackDamage, int defense, int morale) {
-        this.name = name;
-        this.type = type;
-        this.health = health;
-        this.trainingCost = trainingCost;
-        this.trainingTurns = trainingTurns;
-        this.numOfTroops = numOfTroops;
-        this.movementPoints = movementPoints;
-        this.province = province;
-        this.attackDamage = attackDamage;
-        this.defense = defense;
-        this.morale = morale;
-    }
-
+    private ProvincesTracker provincesTracker;
 
     public Unit(JSONObject input, Province province) {
         this.name = input.getString("name");
@@ -50,31 +35,16 @@ public class Unit {
         this.attackDamage = input.getInt("attackDamage");
         this.defense = input.getInt("defense");
         this.numOfTroops = input.getInt("numOfTroops");
-        this.province = province;
+
+        this.provinceName = (province != null) ? province.getName() : null;
+        this.factionName = (province != null) ? province.getFactionName() : null;
 
         this.shield = 5;
         this.armor = 5;
+
+        this.provincesTracker = province.getProvincesTracker();
     }
 
-    
-
-    /**
-     *
-     * @param troops
-     * @param province
-     */
-    public Unit(Province province) {
-        // Implement later
-        // user factory pattern to read from JSON file
-
-        // A unit is a bunch of troops of the same type
-        // this.movementPoints = troops.get(0).getMovementPoints();
-        // this.type = troops.get(0).getType();
-        // this.attackDamage = troops.get(0).getAttackDamage();
-
-        this.province = province;
-        // this.avalibility = true;
-    }
 
     public String getName() {
         return name;
@@ -105,16 +75,25 @@ public class Unit {
         return type;
     }
 
-    public Faction getFaction(){
-        return province.getFraction();
+    public String getFactionName() {
+        return factionName;
     }
 
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    // public Faction getFaction(){
+    //     return getProvince().getFactionName();
+    // }
+
     public Province getProvince() {
-        return province;
+        return provincesTracker.getProvince(provinceName);
     }
 
     public void setProvince(Province province) {
-        this.province = province;
+        this.provinceName = province.getName();
+        this.factionName = province.getFactionName();
     }
 
     public int getNumOfTroops() {
@@ -174,7 +153,8 @@ public class Unit {
         output.put("trainingTurns", trainingTurns);
         output.put("numOfTroops", numOfTroops);
         output.put("movementPoints", movementPoints);
-        output.put("province", province.toJSON());
+        output.put("provinceName", (provinceName == null) ? JSONObject.NULL : provinceName);
+        output.put("factionName", (factionName == null) ? JSONObject.NULL : factionName);
         output.put("attackDamage", attackDamage);
         output.put("armor", armor);
         output.put("defense", defense);
