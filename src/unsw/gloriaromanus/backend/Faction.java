@@ -103,6 +103,14 @@ public class Faction {
         return provinces;
     }
 
+    public void setFactionsTracker(FactionsTracker factionsTracker) {
+        this.factionsTracker = factionsTracker;
+    }
+
+    public void setProvincesTracker(ProvincesTracker provincesTracker) {
+        this.provincesTracker = provincesTracker;
+    }
+
     public JSONObject toJSON() {
         JSONObject output = new JSONObject();
         output.put("name", name);
