@@ -1,6 +1,8 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +19,7 @@ public class UnitTest{
     @Test
     public void constructorTest(){
         try {
-            String content = Files.readString(Paths.get("bin/unsw/gloriaromanus/backend/UnitsInfo.json"));
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
             JSONObject fullJSON = new JSONObject(content);
             JSONObject unitData = fullJSON.getJSONObject("Roman legionary");
             Unit u = new Unit(unitData, null);
@@ -43,7 +45,7 @@ public class UnitTest{
     @Test
     public void GameStartTest1(){
         GameSystem newGame = new GameSystem();
-        assertEquals(newGame.setPlayerNum(4), true);
+        assertTrue(newGame.setPlayerNum(4));
         newGame.allocateFaction();
         assertEquals(newGame.getPlayerNum(), 4);
         assertEquals(newGame.getProvinces().size(), 52);
@@ -53,7 +55,7 @@ public class UnitTest{
     @Test
     public void GameStartTest2(){
         GameSystem newGame = new GameSystem();
-        assertEquals(newGame.setPlayerNum(16), true);
+        assertTrue(newGame.setPlayerNum(16));
         newGame.allocateFaction();
         assertEquals(newGame.getPlayerNum(), 16);
         assertEquals(newGame.getProvinces().size(), 52);
@@ -63,25 +65,31 @@ public class UnitTest{
     @Test
     public void playerTest(){
         GameSystem newGame = new GameSystem();
-        assertEquals(newGame.setPlayerNum(4), true);
-        assertEquals(newGame.setPlayerNum(1), false);
-        assertEquals(newGame.setPlayerNum(16), true);
-        assertEquals(newGame.setPlayerNum(17), false);
+        assertTrue(newGame.setPlayerNum(4));
+        assertFalse(newGame.setPlayerNum(1));
+        assertTrue(newGame.setPlayerNum(16));
+        assertFalse(newGame.setPlayerNum(17));
         assertEquals(newGame.getPlayerNum(), 16);
     }
 
     @Test
     public void VicrotyConditionTest1(){
         GameSystem newGame = new GameSystem();
+        
         ConditionLeaf goal = new ConditionLeaf("CONQUEST");
-        assertEquals(newGame.VictoryCheck(goal, 52, 0, 0), true);
-        assertEquals(newGame.VictoryCheck(goal, 51, 0, 0), false);
+        newGame.setVictoryCondtion(goal);
+        assertTrue(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 0));
+        assertFalse(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 0, 0));
+
         ConditionLeaf goal1 = new ConditionLeaf("TREASURY");
-        assertEquals(newGame.VictoryCheck(goal1, 51, 0, 0), false);
-        assertEquals(newGame.VictoryCheck(goal1, 51, 200000, 0), true);
+        newGame.setVictoryCondtion(goal1);
+        assertFalse(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 0, 0));
+        assertTrue(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 200000, 0));
+        
         ConditionLeaf goal2 = new ConditionLeaf("TREASURY");
-        assertEquals(newGame.VictoryCheck(goal2, 51, 0, 35564), false);
-        assertEquals(newGame.VictoryCheck(goal2, 51, 200000, 400001), true);
+        newGame.setVictoryCondtion(goal2);
+        assertFalse(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 0, 35564));
+        assertTrue(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 200000, 400001));
     }
 
     @Test
@@ -92,9 +100,10 @@ public class UnitTest{
         ConditionComponent comGoal = new ConditionComponent("AND");
         comGoal.add(goal);
         comGoal.add(goal1);
-        assertEquals(newGame.VictoryCheck(comGoal, 51, 0, 0), false);
-        assertEquals(newGame.VictoryCheck(comGoal, 51, 200000, 0), false);
-        assertEquals(newGame.VictoryCheck(comGoal, 52, 200000, 0), true);
+        newGame.setVictoryCondtion(comGoal);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 0, 0), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 200000, 0), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 200000, 0), true);
     }
 
     @Test
@@ -105,11 +114,12 @@ public class UnitTest{
         ConditionComponent comGoal = new ConditionComponent("OR");
         comGoal.add(goal);
         comGoal.add(goal1);
-        assertEquals(newGame.VictoryCheck(comGoal, 51, 0, 0), false);
-        assertEquals(newGame.VictoryCheck(comGoal, 51, 200000, 0), true);
-        assertEquals(newGame.VictoryCheck(comGoal, 52, 99999, 0), false);
-        assertEquals(newGame.VictoryCheck(comGoal, 52, 0, 4399999), true);
-        assertEquals(newGame.VictoryCheck(comGoal, 17, 200000, 400001), true);
+        newGame.setVictoryCondtion(comGoal);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 0, 0), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 200000, 0), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 99999, 0), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 4399999), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 17, 200000, 400001), true);
     }
 
     @Test
@@ -124,12 +134,13 @@ public class UnitTest{
         ConditionComponent comGoal1 = new ConditionComponent("AND");
         comGoal1.add(comGoal);
         comGoal1.add(goal2);
-        assertEquals(newGame.VictoryCheck(comGoal1, 51, 0, 0), false);
-        assertEquals(newGame.VictoryCheck(comGoal1, 51, 200000, 0), false);
-        assertEquals(newGame.VictoryCheck(comGoal1, 52, 99999, 0), false);
-        assertEquals(newGame.VictoryCheck(comGoal1, 52, 0, 4399999), false);
-        assertEquals(newGame.VictoryCheck(comGoal1, 17, 200000, 400001), false);
-        assertEquals(newGame.VictoryCheck(comGoal1, 52, 200000, 400001), true);
+        newGame.setVictoryCondtion(comGoal1);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 0, 0), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 200000, 0), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 99999, 0), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 4399999), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 17, 200000, 400001), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 200000, 400001), true);
     }
 
     @Test
@@ -144,11 +155,35 @@ public class UnitTest{
         ConditionComponent comGoal1 = new ConditionComponent("OR");
         comGoal1.add(comGoal);
         comGoal1.add(goal2);
-        assertEquals(newGame.VictoryCheck(comGoal1, 52, 0, 0), true);
-        assertEquals(newGame.VictoryCheck(comGoal1, 51, 200000, 0), false);
-        assertEquals(newGame.VictoryCheck(comGoal1, 52, 99999, 0), true);
-        assertEquals(newGame.VictoryCheck(comGoal1, 52, 0, 4399999), true);
-        assertEquals(newGame.VictoryCheck(comGoal1, 17, 200000, 400001), true);
+        newGame.setVictoryCondtion(comGoal1);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 0), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 200000, 0), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 99999, 0), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 4399999), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 17, 200000, 400001), true);
+    }
+
+    @Test
+    public void SaveGame(){
+        GameSystem newGame = new GameSystem();
+        ConditionLeaf goal = new ConditionLeaf("WEALTH");
+        ConditionLeaf goal1 = new ConditionLeaf("TREASURY");
+        ConditionLeaf goal2 = new ConditionLeaf("CONQUEST");
+        ConditionComponent comGoal = new ConditionComponent("AND");
+        comGoal.add(goal);
+        comGoal.add(goal1);
+        ConditionComponent comGoal1 = new ConditionComponent("OR");
+        comGoal1.add(comGoal);
+        comGoal1.add(goal2);
+        newGame.setVictoryCondtion(comGoal1);
+        newGame.setPlayerNum(5);
+        newGame.allocateFaction();
+
+        newGame.saveCurrentGame();
+        GameSystem newGame1 = new GameSystem();
+        newGame1.reloadSavedGame();
+
+        assertEquals(newGame.equals(newGame1), true);
     }
 }
 

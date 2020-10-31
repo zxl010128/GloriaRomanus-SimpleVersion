@@ -27,7 +27,7 @@ public class Province{
         // assume the default tax is normal tax (0.15)
         this.taxRate = 0.15;
 
-        this.factionName = (faction == null) ? null : faction.getName();
+        this.factionName = (faction == null) ? "null" : faction.getName();
         this.units = new ArrayList<Unit>();
         this.unitsInTraining = new ArrayList<TrainingRecord>();
         // this.observers = new ArrayList<>();
@@ -210,7 +210,7 @@ public class Province{
         output.put("name", name);
         output.put("wealth", wealth);
         output.put("taxRate", taxRate);
-        output.put("factionName", (factionName == null) ? JSONObject.NULL : factionName);
+        output.put("factionName", factionName);
 
         JSONArray unitsJSON = new JSONArray();
         if (units.size() != 0) {
