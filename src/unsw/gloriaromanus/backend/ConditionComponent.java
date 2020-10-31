@@ -17,6 +17,12 @@ public class ConditionComponent implements VictoryCondition {
         this.subVictoryConditions = new ArrayList<VictoryCondition>();
     }
     
+    
+    /** 
+     * add the VictoryCondition as subgoal
+     * @param v
+     * @return boolean
+     */
     public boolean add(VictoryCondition v) {
         if (subgoals.length() >= 2) {
             return false;
@@ -26,6 +32,10 @@ public class ConditionComponent implements VictoryCondition {
 		return true;
 	}
 
+    
+    /** 
+     * @return JSONObject
+     */
     @Override
     public JSONObject getVictoryGoal(){
         this.condition.put("subgoals", this.subgoals);
