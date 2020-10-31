@@ -190,9 +190,7 @@ public class Province{
 
         if (taxRates.contains(taxRate)) {
             this.taxRate = taxRate;
-        } else {
-            System.out.println("invalid tax rate!");
-        }
+        } 
     }
 
     public int getTaxRevenue() {
