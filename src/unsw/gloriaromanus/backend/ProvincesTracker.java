@@ -2,6 +2,7 @@ package unsw.gloriaromanus.backend;
 
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -10,8 +11,20 @@ public class ProvincesTracker {
     private List<Province> provinces; 
 
     public ProvincesTracker(){
-        provinces = new ArrayList<Province>();
+        this.provinces = new ArrayList<Province>();
 
+    }
+
+    /**
+     * constructor when loading
+     */
+    public ProvincesTracker(JSONObject json) {
+        JSONArray provincesJSON = json.getJSONArray("provinces");
+        this.provinces = new ArrayList<Province>();
+
+        for (int i = 0; i < provincesJSON.length(); i++) {
+            provinces.add(new Province(provincesJSON.getJSONObject(i)));
+        }
     }
 
     public void addProvince(Province p) {
@@ -48,18 +61,11 @@ public class ProvincesTracker {
 
     public JSONObject toJSON() {
         JSONObject output = new JSONObject();
-        List<JSONObject> provincesJSON = new ArrayList<JSONObject>();
-        // List<JSONObject> factionsJSON = new ArrayList<JSONObject>();
+        JSONArray provincesJSON = new JSONArray();
         for (Province p : provinces) {
-            provincesJSON.add(p.toJSON());
+            provincesJSON.put(p.toJSON());
         }
-
-        // for (Faction f : factions) {
-        //     factionsJSON.add(f.toJSON());
-        // }
-
         output.put("provinces", provincesJSON);
-        // output.put("factions", factionsJSON);
 
         return output;
     }

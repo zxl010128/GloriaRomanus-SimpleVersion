@@ -45,6 +45,24 @@ public class Unit {
         this.provincesTracker = province.getProvincesTracker();
     }
 
+    public Unit(JSONObject json) {
+        this.name = json.getString("name");
+        this.type = json.getString("type");
+        this.health = json.getInt("health");
+        this.trainingCost = json.getInt("trainingCost");
+        this.trainingTurns = json.getInt("trainingTurns");
+        this.numOfTroops = json.getInt("numOfTroops");
+        this.movementPoints = json.getInt("movementPoints");
+        this.provinceName = json.getString("provinceName");
+        this.factionName = json.getString("factionName");
+        this.attackDamage = json.getInt("attackDamage");
+        this.armor = json.getInt("armor");
+        this.defense = json.getInt("defense");
+        this.shield = json.getInt("shield");
+        this.morale = json.getInt("morale");
+        this.provincesTracker = null;
+    }
+
 
     public String getName() {
         return name;
@@ -145,6 +163,7 @@ public class Unit {
     }
 
     public JSONObject toJSON(){
+        // JSONObject out = new JSONObject();
         JSONObject output = new JSONObject();
         output.put("name", name);
         output.put("type", type);
