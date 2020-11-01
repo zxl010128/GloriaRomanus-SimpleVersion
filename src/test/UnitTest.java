@@ -287,6 +287,11 @@ public class UnitTest{
 
             Unit u1 = new Unit(unitData1, null);
             p1.addUnit(u1);
+            
+            assertEquals(u1.getFactionName(), "Romans");
+            assertEquals(u1.getProvinceName(), "Aegyptus");
+            assertEquals(u1.getProvince() instanceof Province , "Aegyptus");
+
             assertEquals(p1.getUnits().size(), 3);
             assertEquals(p1.getNumOfSoldiers(), 15);
 
@@ -361,17 +366,57 @@ public class UnitTest{
 
             assertEquals(melee2.getHealth(), 30);
             assertEquals(melee2.getDefense(), 5);
+            assertEquals(melee2.getShield(), 5);
+            assertEquals(melee2.getArmor(), 5);
             assertEquals(melee2.getTotalDefense(), 15);
             assertEquals(melee1.getAttackDamage(), 50);
+            melee1.attack(melee2, 2);
+            assertEquals(melee2.getHealth(), 30);
+
             melee1.attack(melee2, 20);
             assertEquals(melee2.getHealth(), 25);
 
             melee1.attack(melee2, 50);
-            assertEquals(melee2.getHealth(), 0);
+            assertEquals(melee2.getHealth(), 0);            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void engagementTest() {
+        try {
+            GameSystem game = new GameSystem();
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
+            JSONObject fullJSON = new JSONObject(content);
+            JSONObject unitData1 = fullJSON.getJSONObject("Roman legionary");
+            JSONObject unitData2 = fullJSON.getJSONObject("Germanic berserker");
+            JSONObject unitData3 = fullJSON.getJSONObject("horse-archer");
+            JSONObject unitData4 = fullJSON.getJSONObject("missile infantry");
+
+            Unit melee1 = new Unit(unitData1, null);
+            Unit melee2 = new Unit(unitData2, null);
+            Unit melee3 = new Unit(unitData2, null);
+            Unit melee4 = new Unit(unitData2, null);
+
+
+            Unit missile1 = new Unit(unitData3, null);
+            Unit missile2 = new Unit(unitData4, null);
+            Unit missile3 = new Unit(unitData4, null);
+            Unit missile4 = new Unit(unitData4, null);
 
 
 
-            
+            Engagement e1 = new Engagement(melee1, melee2);
+            assertEquals(e1.getType(), "melee");
+
+            Engagement e2 = new Engagement(missile1, missile2);
+            assertEquals(e2.getType(), "missile");
+
+            Engagement e3 = new Engagement(melee3, missile3);
+            assertEquals(e3.getAttacker().getName(), "Germanic berserker");
+            assertEquals(e3.getDefender().getName(), "missile infantry");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -417,10 +462,6 @@ public class UnitTest{
             units1.add(u3);
             units1.add(u5);
 
-            // List<Unit> units2 = new ArrayList<Unit>();
-            // units2.add(u2);
-            // units2.add(u4);
-            // units2.add(u6);
             assertEquals(units1.size(), 3);
             Army army1 = p1.generateArmy(units1);
             assertEquals(p2.getFactionName(), "Carthaginians");
@@ -432,16 +473,69 @@ public class UnitTest{
             assertTrue(army1.getUnits().contains(u5));
             assertFalse(army1.getUnits().contains(u2));
 
-            // army1.invade(p2);
-            // CHANGE LATER
-            // assertEquals(p2.getFactionName(), "Romans");
-            // assertEquals(army1.getProvince().getName(), "Africa Proconsularis");
-            // assertTrue(army1.containAvalUnits());
+            army1.invade(p2);
+            assertTrue(army1.containAvalUnits());
+        } catch (IOException e) {
+            assertEquals(1, 2);
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void isReachableTest() {
+        try {
+            // create 2 factions
+            GameSystem game = new GameSystem();
+            Faction f1 = new Faction("Romans", game.getProvincesTracker(), game.getFactionsTracker());
+            f1.setGamesys(game);
+            Province p1 = new Province("Aegyptus", f1, game.getTurnTracker());
+            Province p2 = new Province("Arabia", f1, game.getTurnTracker());
+
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
+            JSONObject fullJSON = new JSONObject(content);
+            JSONObject unitData1 = fullJSON.getJSONObject("Roman legionary");
+            JSONObject unitData2 = fullJSON.getJSONObject("Germanic berserker");
+            JSONObject unitData3 = fullJSON.getJSONObject("Celtic Briton berserker");
+
+            Unit u1 = new Unit(unitData1, p1);
+            Unit u2 = new Unit(unitData2, p2);
+            Unit u3 = new Unit(unitData3, p1);
+
+            p1.addUnit(u1);
+            p1.addUnit(u2);
+            p1.addUnit(u3);
+
+            List<Unit> units1 = new ArrayList<Unit>();
+            units1.add(u1);
+            units1.add(u2);
+            units1.add(u3);
+
+            assertEquals(units1.size(), 3);
+            Army army1 = p1.generateArmy(units1);
+            assertEquals(army1.isReachable(p2), true);
         } catch (IOException e) {
             assertEquals(1, 2);
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void unitSaveLoadTest() {
+        try {
+            GameSystem game = new GameSystem();
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
+            JSONObject fullJSON = new JSONObject(content);
+            JSONObject unitData1 = fullJSON.getJSONObject("Roman legionary");
+
+            Unit melee1 = new Unit(unitData1, null);
+            JSONObject json = melee1.toJSON();
+
+            Unit melee2 = new Unit(json);
+            assertEquals(melee1.getName(), melee2.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }

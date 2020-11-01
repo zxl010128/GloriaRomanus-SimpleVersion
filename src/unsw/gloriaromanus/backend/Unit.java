@@ -54,7 +54,9 @@ public class Unit {
         this.numOfTroops = json.getInt("numOfTroops");
         this.movementPoints = json.getInt("movementPoints");
         this.provinceName = json.getString("provinceName");
+        if (this.provinceName.equals("null")) this.provinceName = null;
         this.factionName = json.getString("factionName");
+        if (this.factionName.equals("null")) this.factionName = null;
         this.attackDamage = json.getInt("attackDamage");
         this.armor = json.getInt("armor");
         this.defense = json.getInt("defense");
@@ -276,8 +278,8 @@ public class Unit {
         output.put("trainingTurns", trainingTurns);
         output.put("numOfTroops", numOfTroops);
         output.put("movementPoints", movementPoints);
-        output.put("provinceName", (provinceName == null) ? JSONObject.NULL : provinceName);
-        output.put("factionName", (factionName == null) ? JSONObject.NULL : factionName);
+        output.put("provinceName", (provinceName == null) ? "null" : provinceName);
+        output.put("factionName", (factionName == null) ? "null" : factionName);
         output.put("attackDamage", attackDamage);
         output.put("armor", armor);
         output.put("defense", defense);
