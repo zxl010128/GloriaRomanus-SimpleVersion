@@ -170,19 +170,23 @@ public class Army {
                 int num_locs = 0;
                 JSONObject connectList = Matrix.getJSONObject(temp_city);
 
-                List<String> ConnectedProvince = new ArrayList<String>();
+
+                List<String> TotalConnectedProvince = new ArrayList<String>();
 
                 for(String key : connectList.keySet()) {
                     if(connectList.get(key).equals(true)){
-                        ConnectedProvince.add(key);
-                        num_locs += 1;
+                        TotalConnectedProvince.add(key);
                     }
                 }
-                
-                for(String province: ConnectedProvince){
+
+                List<String> ConnectedProvince = new ArrayList<String>();
+
+                for(String province: TotalConnectedProvince){
                     if (!destination.getName().equals(province) && !OccupiedProvince.contains(province)) {
-                        ConnectedProvince.remove(province);
-                        num_locs -= 1;
+                        continue;
+                    } else {
+                        ConnectedProvince.add(province);
+                        num_locs += 1;
                     }
                 }
 
@@ -207,8 +211,8 @@ public class Army {
                 }
         
             }
-        
-           q.clear();
+
+            q.clear();
 
            	// situation when there is no dest in the map
             if (is_Found == false) {
@@ -289,4 +293,9 @@ public class Army {
         // already implemented in Battle.updateAferBattle()
     }
 
+    public int getMovementPoints() {
+        return movementPoints;
+    }
+
+    
 }
