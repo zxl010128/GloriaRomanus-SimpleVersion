@@ -45,6 +45,7 @@ public class Unit {
         this.armor = 5;
 
         this.provincesTracker =  (province != null) ? province.getProvincesTracker() : null;
+        this.specialAbility = input.getString("specialAbility");
     }
 
     public Unit(JSONObject json) {
@@ -65,6 +66,7 @@ public class Unit {
         this.shield = json.getInt("shield");
         this.morale = json.getInt("morale");
         this.provincesTracker = null;
+        this.specialAbility = json.getString("specialAbility");
     }
 
     
@@ -150,6 +152,10 @@ public class Unit {
      */
     public int getDefense() {
         return defense;
+    }
+
+    public String getSpecialAbilityName() {
+        return specialAbility;
     }
 
     
@@ -258,6 +264,14 @@ public class Unit {
     public void setAttackDamage(int attackDamage) {
         this.attackDamage = attackDamage;
     }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setMorale(int morale) {
+        this.morale = morale;
+    }
     
     /** 
      * @param defender
@@ -294,6 +308,7 @@ public class Unit {
         output.put("defense", defense);
         output.put("shield", shield);
         output.put("morale", morale);
+        output.put("specialAbility", specialAbility);
 
         return output;
     }
@@ -329,7 +344,9 @@ public class Unit {
                 }
                 break;
             case "Cantabrian circle":
-                opponent.setAttackDamage((int) (opponent.getAttackDamage()/2));
+                int newDamage = (int) (opponent.getAttackDamage() * 0.5);
+                opponent.setAttackDamage((newDamage));
+                
                 break;
             case "Druidic fervour":
                 List<Unit> alliedUnits = this.getProvince().getUnits();
