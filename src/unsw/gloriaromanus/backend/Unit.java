@@ -22,6 +22,8 @@ public class Unit {
     private int shield;
     private int morale;
     private ProvincesTracker provincesTracker;
+    // add new specialAbility
+    private String specialAbility;
 
     public Unit(JSONObject input, Province province) {
         this.name = input.getString("name");
@@ -253,6 +255,9 @@ public class Unit {
 
     }
 
+    public void setAttackDamage(int attackDamage) {
+        this.attackDamage = attackDamage;
+    }
     
     /** 
      * @param defender
@@ -266,6 +271,10 @@ public class Unit {
         }
 
         defender.removeHealthBy(actualDamage);
+    }
+
+    public void addMoraleBy(int i) {
+        this.morale += i;
     }
 
     public JSONObject toJSON(){
@@ -289,5 +298,49 @@ public class Unit {
         return output;
     }
 
+    public void useAbility(Unit opponent) {
+        switch (specialAbility) {
+            case "Legionary eagle":
+                for (Unit u : this.getProvince().getUnits()) {
+                    u.addMoraleBy(1);
+                }
+                break;
+            case "Berserker rage":
+                this.morale = 9999;
+                this.armor = 0;
+                this.shield = 0;
+                this.attackDamage *= 2;
+                break;
+            case "Heroic charge":
+                this.attackDamage *= 2;
+                this.morale += (int) (this.morale * 0.5);
+                break;
+            case "Phalanx":
+                this.defense *= 2;
+                this.movementPoints -= (int) (this.movementPoints/2);
+                break;
+            case "Elephants running amok":
+                Random rand = new Random();
+                int n = rand.nextInt(10);
+                if (n == 0) {
+                    for (Unit u : this.getProvince().getUnits()) {
+                        u.removeHealthBy(this.attackDamage);
+                    }
+                }
+                break;
+            case "Cantabrian circle":
+                opponent.setAttackDamage((int) (opponent.getAttackDamage()/2));
+                break;
+            case "Druidic fervour":
+                List<Unit> alliedUnits = this.getProvince().getUnits();
+                for (Unit u : alliedUnits) {
+                    u.addMoraleBy((int)(u.getMorale()/10));
+                }
+                break;
+            case "Shield charge" :
+                this.setAttackDamage(this.attackDamage + this.defense);
+                break;
+        }
+    }
 
 }
