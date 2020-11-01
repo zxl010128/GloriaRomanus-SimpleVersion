@@ -6,7 +6,7 @@ public class Engagement {
     private Unit attacker;
     private Unit defender;
     private String type;
-    private Unit winner;
+    // private Unit winner;
 
     public Engagement(Unit attacker, Unit defender) {
         this.attacker = attacker;
@@ -47,6 +47,18 @@ public class Engagement {
 
     }
 
+    public Unit getAttacker() {
+        return attacker;
+    }
+
+    public Unit getDefender() {
+        return defender;
+    }
+
+    public String getType() {
+        return type;
+    }
+
     private void startBattle(Unit attacker, Unit defender) {
         // assume attacker attacks first
         // Province defendProvince = defender.getProvince();
@@ -64,7 +76,7 @@ public class Engagement {
         
     }
 
-    private int calculateDamage(Unit attacker, Unit defender) {
+    public int calculateDamage(Unit attacker, Unit defender) {
         int damage = 0;
         int enemySize = defender.getNumOfTroops();
         int enemyArmor = defender.getArmor();
@@ -104,7 +116,7 @@ public class Engagement {
         return damage;
     }
 
-    public String getWinnerFaction() {
-        return winner.getFactionName();
-    }
+    // public String getWinnerFaction() {
+    //     return winner.getFactionName();
+    // }
 }
