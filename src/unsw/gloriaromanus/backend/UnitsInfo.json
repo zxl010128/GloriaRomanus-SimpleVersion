@@ -76,7 +76,7 @@
         "health": 50,
         "trainingCost": 10,
         "trainingTurns": 1,
-        "specialAbility":"Heroic charge",
+        "specialAbility":"Phalanx",
         "morale": 4,
         "attackDamage": 15,
         "defense": 20,

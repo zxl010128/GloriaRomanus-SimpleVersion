@@ -1,5 +1,6 @@
 package test;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -369,6 +370,11 @@ public class UnitTest{
             assertEquals(melee2.getArmor(), 5);
             assertEquals(melee2.getTotalDefense(), 15);
             assertEquals(melee1.getAttackDamage(), 50);
+            melee1.setAttackDamage(100);
+            assertEquals(melee1.getAttackDamage(), 100);
+            melee1.setAttackDamage(50);
+
+
             melee1.attack(melee2, 2);
             assertEquals(melee2.getHealth(), 30);
 
@@ -589,7 +595,148 @@ public class UnitTest{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void specialAbilityTest() {
+        try {
+            GameSystem game = new GameSystem();
+            Faction f1 = new Faction("Romans", game.getProvincesTracker(), game.getFactionsTracker());
+            f1.setGamesys(game);
+            Province p1 = new Province("Aegyptus", f1, game.getTurnTracker());
+            Province p2 = new Province("Arabia", f1, game.getTurnTracker());
+            Province p3 = new Province("Creta et Cyrene", f1, game.getTurnTracker());
+            Province p4 = new Province("Africa Proconsularis", f1, game.getTurnTracker());
+            Province p5 = new Province("Numidia", null, game.getTurnTracker()); 
+                 
+
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
+            JSONObject fullJSON = new JSONObject(content);
+            JSONObject unitData1 = fullJSON.getJSONObject("Roman legionary");
+            JSONObject unitData2 = fullJSON.getJSONObject("Germanic berserker");
+            JSONObject unitData3 = fullJSON.getJSONObject("Celtic Briton berserker");
+            JSONObject unitData4 = fullJSON.getJSONObject("horse-archer");
+
+            Unit u1 = new Unit(unitData1, p1);
+            Unit u2 = new Unit(unitData2, p2);
+            Unit u3 = new Unit(unitData3, p1);
+            Unit u4 = new Unit(unitData4, p1);
+            p1.addUnit(u1);
+            p2.addUnit(u2);
+            p1.addUnit(u3);
+            p1.addUnit(u4);
+
+
+            assertEquals(u1.getSpecialAbilityName(), "Legionary eagle");
+            assertEquals(u2.getSpecialAbilityName(), "Berserker rage");
+            assertEquals(u3.getSpecialAbilityName(), "Berserker rage");
+            assertEquals(u4.getSpecialAbilityName(),"Cantabrian circle");
+
+            assertEquals(u1.getProvince().getUnits().size(), 3);
+            // legionionary eagle test
+            assertEquals(u1.getMorale(), 10);
+            assertEquals(u3.getMorale(), 6);
+            assertEquals(u4.getMorale(), 7);
+            u1.useAbility(null);
+            assertEquals(u1.getMorale(), 11);
+            assertEquals(u3.getMorale(), 7);
+            assertEquals(u4.getMorale(), 8);
+
+            // Berserker rage test
+            assertEquals(u2.getMorale(), 6);
+            assertEquals(u2.getAttackDamage(), 25);
+            u2.useAbility(null);
+            assertEquals(u2.getMorale(), 9999);
+            assertEquals(u2.getArmor(), 0);
+            assertEquals(u2.getShield(), 0);
+            assertEquals(u2.getAttackDamage(), 50);
+
+            // Heroic charge test
+            JSONObject unitData5 = fullJSON.getJSONObject("melee cavalry");
+            Unit u5 = new Unit(unitData5, p1);
+            assertEquals(u5.getAttackDamage(), 10);
+            assertEquals(u5.getMorale(), 3);
+            u5.useAbility(null);
+            assertEquals(u5.getAttackDamage(), 20);
+            assertEquals(u5.getMorale(), 4);
+
+            // Phalanx test
+            JSONObject unitData6 = fullJSON.getJSONObject("pikemen");
+            Unit u6 = new Unit(unitData6, p2);
+            assertEquals(u6.getDefense(), 20);
+            assertEquals(u6.getMovementPoints(), 10);
+            u6.useAbility(null);
+            assertEquals(u6.getDefense(), 40);
+            assertEquals(u6.getMovementPoints(), 5);
+
+            // Elephants running amok
+            JSONObject unitData7 = fullJSON.getJSONObject("elephant");
+            Unit u7 = new Unit(unitData7, p2);
+            assertEquals(u7.getAttackDamage(), 10);
+            assertEquals(u6.getHealth(), 50);
+            assertEquals(u2.getHealth(), 30);
+            p2.addUnit(u7);
+            p2.addUnit(u6);
+            
+            for (int i = 0; i < 100; i++) {
+                u2.setHealth(30);
+                u6.setHealth(50);
+                u7.useAbility(null);
+                if (u6.getHealth() == 40) {
+                    assertEquals(u2.getHealth(), 20);
+                } else {
+                    assertEquals(u2.getHealth(), 30);
+                }
+            }
+
+            // Cantabrian circle test
+
+            Unit horseArcher = new Unit(fullJSON.getJSONObject("horse-archer"), p2);
+            horseArcher.setHealth(30);
+            u6.setHealth(50);
+            u6.setAttackDamage(20);
+            assertEquals(horseArcher.getSpecialAbilityName(), "Cantabrian circle");
+            assertEquals(u6.getAttackDamage(), 20);
+            horseArcher.useAbility(u6);
+            assertEquals(u6.getAttackDamage(), 10);
+            u6.setAttackDamage(15);
+            
+
+            // Druidic fervour test
+            JSONObject unitData8 = fullJSON.getJSONObject("druid");
+            Unit u8 = new Unit(unitData8, p2);
+            p2.addUnit(u8);
+            // 6 7 2 8
+            u6.setMorale(40);
+            u7.setMorale(20);
+            u2.setMorale(70);
+            u8.setMorale(50);
+            assertEquals(u6.getMorale(), 40);
+            assertEquals(u7.getMorale(), 20);
+            assertEquals(u2.getMorale(), 70);
+            assertEquals(u8.getMorale(), 50);
+            u8.useAbility(null);
+            assertEquals(u6.getMorale(), 44);
+            assertEquals(u7.getMorale(), 22);
+            assertEquals(u2.getMorale(), 77);
+            assertEquals(u8.getMorale(), 55);
+
+            // Shield charge
+            // melee infantry
+            JSONObject unitData9 = fullJSON.getJSONObject("melee infantry");
+            Unit u9 = new Unit(unitData9, p2);
+            assertEquals(u9.getAttackDamage(), 30);
+            assertEquals(u9.getDefense(), 15);
+            u9.useAbility(null);
+            assertEquals(u9.getAttackDamage(), 45);
+
+
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
