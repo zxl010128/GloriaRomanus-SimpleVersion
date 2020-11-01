@@ -290,8 +290,7 @@ public class UnitTest{
             
             assertEquals(u1.getFactionName(), "Romans");
             assertEquals(u1.getProvinceName(), "Aegyptus");
-            assertEquals(u1.getProvince() instanceof Province , "Aegyptus");
-
+    
             assertEquals(p1.getUnits().size(), 3);
             assertEquals(p1.getNumOfSoldiers(), 15);
 
@@ -512,7 +511,61 @@ public class UnitTest{
 
             assertEquals(units1.size(), 3);
             Army army1 = p1.generateArmy(units1);
+
             assertEquals(army1.isReachable(p2), true);
+        } catch (IOException e) {
+            assertEquals(1, 2);
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void isReachableTest2() {
+        try {
+            // create 2 factions
+            GameSystem game = new GameSystem();
+            Faction f1 = new Faction("Romans", game.getProvincesTracker(), game.getFactionsTracker());
+            f1.setGamesys(game);
+            Province p1 = new Province("Aegyptus", f1, game.getTurnTracker());
+            Province p2 = new Province("Arabia", f1, game.getTurnTracker());
+            Province p3 = new Province("Creta et Cyrene", f1, game.getTurnTracker());
+            Province p4 = new Province("Africa Proconsularis", f1, game.getTurnTracker());
+            Province p5 = new Province("Numidia", null, game.getTurnTracker()); 
+                 
+
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/UnitsInfo.json"));
+            JSONObject fullJSON = new JSONObject(content);
+            JSONObject unitData1 = fullJSON.getJSONObject("Roman legionary");
+            JSONObject unitData2 = fullJSON.getJSONObject("Germanic berserker");
+            JSONObject unitData3 = fullJSON.getJSONObject("Celtic Briton berserker");
+
+            Unit u1 = new Unit(unitData1, p1);
+            Unit u2 = new Unit(unitData2, p2);
+            Unit u3 = new Unit(unitData3, p1);
+
+            p1.addUnit(u1);
+            p1.addUnit(u2);
+            p1.addUnit(u3);
+
+            List<Unit> units1 = new ArrayList<Unit>();
+            units1.add(u1);
+            units1.add(u2);
+            units1.add(u3);
+
+            assertEquals(units1.size(), 3);
+            Army army1 = p1.generateArmy(units1);
+
+            assertEquals(army1.isReachable(p2), true);
+            assertEquals(army1.isReachable(p4), true);
+            assertEquals(army1.isReachable(p5), true);
+
+            Faction f2 = new Faction("Romans2", game.getProvincesTracker(), game.getFactionsTracker());
+            f2.setGamesys(game);
+            f2.addProvince(p5);  
+
+            assertEquals(army1.isReachable(p5), true);
+
         } catch (IOException e) {
             assertEquals(1, 2);
             e.printStackTrace();
