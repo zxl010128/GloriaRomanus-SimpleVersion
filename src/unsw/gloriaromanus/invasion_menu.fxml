@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Background?>
+<?import javafx.scene.layout.BackgroundFill?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.geometry.Insets?>
+
+
+<VBox StackPane.alignment="TOP_LEFT" spacing="10" maxWidth="250" styleClass="panel-region" fx:controller="unsw.gloriaromanus.InvasionMenuController" xmlns:fx="http://javafx.com/fxml" stylesheets="/unsw/gloriaromanus/style.css">
+    <padding>
+        <Insets topRightBottomLeft="10"/>
+    </padding>
+    <background>
+        <Background>
+            <fills>
+                <BackgroundFill>
+                    <fill>
+                        <Color opacity="0.3"/>
+                    </fill>
+                </BackgroundFill>
+            </fills>
+        </Background>
+    </background>
+    <HBox>
+        <VBox>
+            <Label text="Your province"/>
+            <TextField fx:id="invading_province" text="" editable="false"/>
+        </VBox>
+        <VBox>
+            <Label text="Enemy province"/>
+            <TextField fx:id="opponent_province" text="" editable="false"/>
+        </VBox>
+    </HBox>
+    <Button text="Invade" onAction="#clickedInvadeButton"/>
+    <VBox>
+        <Label text="Output from interactions"/>
+        <TextArea fx:id="output_terminal" text="" editable="false"/>
+    </VBox>
+    <Button text="Switch Menus" onAction="#clickedSwitchMenu"/>
+</VBox>
