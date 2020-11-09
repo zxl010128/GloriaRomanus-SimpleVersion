@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,12 +18,11 @@ import java.util.stream.Collectors;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.FeatureTable;
@@ -55,18 +53,16 @@ import org.geojson.LngLatAlt;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javafx.util.Pair;
-
 public class GloriaRomanusController{
 
   @FXML
   private MapView mapView;
-
   @FXML
-  private StackPane stackPaneMain;
-
-  // could use ControllerFactory?
-  private ArrayList<Pair<MenuController, VBox>> controllerParentPairs;
+  private TextField invading_province;
+  @FXML
+  private TextField opponent_province;
+  @FXML
+  private TextArea output_terminal;
 
   private ArcGISMap map;
 
@@ -82,7 +78,7 @@ public class GloriaRomanusController{
   private FeatureLayer featureLayer_provinces;
 
   @FXML
-  private void initialize() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
+  private void initialize() throws JsonParseException, JsonMappingException, IOException {
     // TODO = you should rely on an object oriented design to determine ownership
     provinceToOwningFactionMap = getProvinceToOwningFactionMap();
 
@@ -99,23 +95,10 @@ public class GloriaRomanusController{
     currentlySelectedHumanProvince = null;
     currentlySelectedEnemyProvince = null;
 
-    String []menus = {"invasion_menu.fxml", "basic_menu.fxml"};
-    controllerParentPairs = new ArrayList<Pair<MenuController, VBox>>();
-    for (String fxmlName: menus){
-      System.out.println(fxmlName);
-      FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlName));
-      VBox root = (VBox)loader.load();
-      MenuController menuController = (MenuController)loader.getController();
-      menuController.setParent(this);
-      controllerParentPairs.add(new Pair<MenuController, VBox>(menuController, root));
-    }
-
-    stackPaneMain.getChildren().add(controllerParentPairs.get(0).getValue());
-
     initializeProvinceLayers();
-
   }
 
+  @FXML
   public void clickedInvadeButton(ActionEvent e) throws IOException {
     if (currentlySelectedHumanProvince != null && currentlySelectedEnemyProvince != null){
       String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
@@ -289,19 +272,14 @@ public class GloriaRomanusController{
                     featureLayer.unselectFeature(currentlySelectedHumanProvince);
                   }
                   currentlySelectedHumanProvince = f;
-                  if (controllerParentPairs.get(0).getKey() instanceof InvasionMenuController){
-                    ((InvasionMenuController)controllerParentPairs.get(0).getKey()).setInvadingProvince(province);
-                  }
-
+                  invading_province.setText(province);
                 }
                 else{
                   if (currentlySelectedEnemyProvince != null){
                     featureLayer.unselectFeature(currentlySelectedEnemyProvince);
                   }
                   currentlySelectedEnemyProvince = f;
-                  if (controllerParentPairs.get(0).getKey() instanceof InvasionMenuController){
-                    ((InvasionMenuController)controllerParentPairs.get(0).getKey()).setOpponentProvince(province);
-                  }
+                  opponent_province.setText(province);
                 }
 
                 featureLayer.selectFeature(f);                
@@ -367,16 +345,12 @@ public class GloriaRomanusController{
     featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedEnemyProvince, currentlySelectedHumanProvince));
     currentlySelectedEnemyProvince = null;
     currentlySelectedHumanProvince = null;
-    if (controllerParentPairs.get(0).getKey() instanceof InvasionMenuController){
-      ((InvasionMenuController)controllerParentPairs.get(0).getKey()).setInvadingProvince("");
-      ((InvasionMenuController)controllerParentPairs.get(0).getKey()).setOpponentProvince("");
-    }
+    invading_province.setText("");
+    opponent_province.setText("");
   }
 
   private void printMessageToTerminal(String message){
-    if (controllerParentPairs.get(0).getKey() instanceof InvasionMenuController){
-      ((InvasionMenuController)controllerParentPairs.get(0).getKey()).appendToTerminal(message);
-    }
+    output_terminal.appendText(message+"\n");
   }
 
   /**
@@ -387,12 +361,5 @@ public class GloriaRomanusController{
     if (mapView != null) {
       mapView.dispose();
     }
-  }
-
-  public void switchMenu() throws JsonParseException, JsonMappingException, IOException {
-    System.out.println("trying to switch menu");
-    stackPaneMain.getChildren().remove(controllerParentPairs.get(0).getValue());
-    Collections.reverse(controllerParentPairs);
-    stackPaneMain.getChildren().add(controllerParentPairs.get(0).getValue());
   }
 }
