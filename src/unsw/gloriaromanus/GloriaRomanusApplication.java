@@ -11,21 +11,32 @@ import javafx.stage.Stage;
 public class GloriaRomanusApplication extends Application {
 
   private static GloriaRomanusController controller;
-
+  private static MainMenuController mainMenuController;
   @Override
   public void start(Stage stage) throws IOException {
     // set up the scene
     FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
     Parent root = loader.load();
     controller = loader.getController();
-    Scene scene = new Scene(root);
+    Scene gameScene = new Scene(root);
+
+    // load main menu
+    FXMLLoader mainMenuLoader = new FXMLLoader(getClass().getResource("main_menu.fxml"));
+    Parent mainMenuRoot = mainMenuLoader.load();
+    Scene mainMenuScene = new Scene(mainMenuRoot);
+    mainMenuController = mainMenuLoader.getController();
+    mainMenuController.setStage(stage);
+    mainMenuController.setGameScene(gameScene);
+    
 
     // set up the stage
     stage.setTitle("Gloria Romanus");
     stage.setWidth(800);
     stage.setHeight(700);
-    stage.setScene(scene);
+    stage.setScene(mainMenuScene);
     stage.show();
+
+  
 
   }
 
