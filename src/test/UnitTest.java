@@ -547,7 +547,7 @@ public class UnitTest{
             JSONObject unitData3 = fullJSON.getJSONObject("Celtic Briton berserker");
 
             Unit u1 = new Unit(unitData1, p1);
-            Unit u2 = new Unit(unitData2, p1);
+            Unit u2 = new Unit(unitData2, p2);
             Unit u3 = new Unit(unitData3, p1);
 
             p1.addUnit(u1);
@@ -571,9 +571,6 @@ public class UnitTest{
             f2.addProvince(p5);  
 
             assertEquals(army1.isReachable(p5), true);
-
-            army1.moveToOccupied(p2);
-            assertEquals(p2.getUnits().size(), 3);
 
         } catch (IOException e) {
             assertEquals(1, 2);
@@ -732,6 +729,10 @@ public class UnitTest{
             assertEquals(u9.getDefense(), 15);
             u9.useAbility(null);
             assertEquals(u9.getAttackDamage(), 45);
+
+
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
