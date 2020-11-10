@@ -41,4 +41,14 @@ public class ConditionComponent implements VictoryCondition {
         this.condition.put("subgoals", this.subgoals);
         return condition;
     }
+
+    // @Override
+    // public String toString() {
+    //     String out = "";
+    //     for (VictoryCondition vc : subVictoryConditions) {
+    //         out += vc.toString() + " ";
+    //     }
+
+    //     return out;
+    // }
 }
