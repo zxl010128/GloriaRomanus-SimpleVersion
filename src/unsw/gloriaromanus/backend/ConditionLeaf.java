@@ -17,4 +17,9 @@ public class ConditionLeaf implements VictoryCondition {
         return condition;
     }
 
+    // @Override
+    // public String toString() {
+    //     return condition.getString("goal");
+    // }
+
 }

@@ -480,7 +480,7 @@ public class GameSystem implements Observer {
      * @return List<Faction>
      */
     public List<Faction> getFactions() {
-        return factions;
+        return factionsTracker.getFactions();
     }
 
     /**
@@ -488,6 +488,10 @@ public class GameSystem implements Observer {
      */
     public List<Province> getProvinces() {
         return provinces;
+    }
+
+    public int getYear() {
+        return year;
     }
 
     /**

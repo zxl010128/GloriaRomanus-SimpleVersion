@@ -20,7 +20,7 @@
 <StackPane fx:controller="unsw.gloriaromanus.GloriaRomanusController" xmlns:fx="http://javafx.com/fxml"
            stylesheets="/unsw/gloriaromanus/style.css">
     <MapView fx:id="mapView"/>
-    <VBox StackPane.alignment="TOP_LEFT" spacing="10" maxWidth="250" styleClass="panel-region">
+    <VBox fx:id="menu" StackPane.alignment="TOP_LEFT" spacing="10" maxWidth="250" styleClass="panel-region">
         <padding>
             <Insets topRightBottomLeft="10"/>
         </padding>
@@ -57,12 +57,12 @@
                         <Insets right="50.0" />
                     </VBox.margin>
                 </Label>
-                <Label text="1000" />
+                <Label fx:id="yearLabel" />
                 
             </VBox>
             <VBox>
                 <Label text="Current Turn:" />
-                <Label text="0" />
+                <Label fx:id="turnLabel" />
             </VBox>
 
         </HBox>
@@ -82,7 +82,7 @@
             <TextArea fx:id="output_terminal" text="" editable="false"/>
         </VBox>
         <VBox>
-            <Button fx:id="endTurnButton" text="End Turn">
+            <Button fx:id="endTurnButton" text="End Turn" onAction="#handleEndTurnButton">
                 <VBox.margin>
                     <Insets bottom="30.0" />
                 </VBox.margin>

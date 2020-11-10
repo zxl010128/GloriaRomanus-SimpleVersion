@@ -16,16 +16,24 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import unsw.gloriaromanus.backend.GameSystem;
+import unsw.gloriaromanus.backend.TurnTracker;
+import unsw.gloriaromanus.backend.VictoryCondition;
+import unsw.gloriaromanus.backend.Faction;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.FeatureTable;
@@ -68,6 +76,18 @@ public class GloriaRomanusController{
   private TextArea output_terminal;
   @FXML
   private Button quitButton;
+  @FXML
+  private Label factionLabel;
+  @FXML
+  private Label victoryConditonLabel;
+  @FXML
+  private Label balanceLabel;
+  @FXML
+  private Label yearLabel;
+  @FXML
+  private Label turnLabel;
+  @FXML
+  private VBox menu;
 
   private ArcGISMap map;
 
@@ -85,15 +105,20 @@ public class GloriaRomanusController{
   private Stage stage;
   private Scene mainMenuScene;
 
+  private GameSystem gameSystem;
+  // private VictoryCondition victoryCondition;
+  private TurnTracker turnTracker;
+  public Faction currFaction;
+
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
-    // TODO = you should rely on an object oriented design to determine ownership
+    // All factions will start with no soldiers
     provinceToOwningFactionMap = getProvinceToOwningFactionMap();
 
     provinceToNumberTroopsMap = new HashMap<String, Integer>();
     Random r = new Random();
     for (String provinceName : provinceToOwningFactionMap.keySet()) {
-      provinceToNumberTroopsMap.put(provinceName, r.nextInt(500));
+      provinceToNumberTroopsMap.put(provinceName, 0);
     }
 
     // TODO = load this from a configuration file you create (user should be able to
@@ -106,6 +131,28 @@ public class GloriaRomanusController{
     initializeProvinceLayers();
 
     quitButton.setOnAction(e -> stage.setScene(mainMenuScene));
+
+    // add a Listview to display recruitable soldiers
+    ListView<String> listView = new ListView<>();
+    for (int i = 0; i < 5; i++) {
+      listView.getItems().add("Unit " + i);
+    }
+    menu.getChildren().add(listView);
+
+    // new code
+    gameSystem = new GameSystem();
+    gameSystem.setPlayerNum(3);
+    gameSystem.allocateFaction();
+    // assume current player is the first faction in factions list
+    currFaction = gameSystem.getFactions().get(0);
+    turnTracker = gameSystem.getTurnTracker();
+    
+    factionLabel.setText("Faction: " + currFaction.getName());
+    yearLabel.setText(String.valueOf(gameSystem.getYear()));
+    // yearLabel.textProperty().bind(new SimpleIntegerProperty(gameSystem.getYear()).asString());
+    turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
+    victoryConditonLabel.setText("Victory Condition: " + gameSystem.getVictoryCondition().toString());
+
   }
 
   @FXML
@@ -455,5 +502,12 @@ public class GloriaRomanusController{
   
   public void setMainMenuScene(Scene mainMenuScene) {
     this.mainMenuScene = mainMenuScene;
+  }
+
+  @FXML
+  public void handleEndTurnButton(ActionEvent e) throws IOException {
+    gameSystem.NextTurn();
+    yearLabel.setText(String.valueOf(gameSystem.getYear()));
+    turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
   }
 }
