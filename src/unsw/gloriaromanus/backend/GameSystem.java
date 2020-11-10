@@ -460,7 +460,7 @@ public class GameSystem implements Observer {
         switch (VicConName) {
 
             case "CONQUEST":
-                return OccupiedNum == 52;
+                return OccupiedNum == 53;
 
             case "TREASURY":
                 return treasury >= 100000;
