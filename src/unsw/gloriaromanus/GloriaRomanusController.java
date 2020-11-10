@@ -98,7 +98,7 @@ public class GloriaRomanusController{
 
     // TODO = load this from a configuration file you create (user should be able to
     // select in loading screen)
-    humanFaction = "Rome";
+    humanFaction = "Romans";
 
     currentlySelectedHumanProvince = null;
     currentlySelectedEnemyProvince = null;
@@ -196,19 +196,90 @@ public class GloriaRomanusController{
             HorizontalAlignment.CENTER, VerticalAlignment.BOTTOM);
 
         switch (faction) {
-          case "Gaul":
+          case "Gauls":
             // note can instantiate a PictureMarkerSymbol using the JavaFX Image class - so could
             // construct it with custom-produced BufferedImages stored in Ram
             // http://jens-na.github.io/2013/11/06/java-how-to-concat-buffered-images/
             // then you could convert it to JavaFX image https://stackoverflow.com/a/30970114
 
             // you can pass in a filename to create a PictureMarkerSymbol...
-            s = new PictureMarkerSymbol(new Image((new File("images/Celtic_Druid.png")).toURI().toString()));
+            s = new PictureMarkerSymbol(new Image((new File("images/FactionFlags/Celtic_Druid.png")).toURI().toString()));
             break;
-          case "Rome":
+          case "Romans":
             // you can also pass in a javafx Image to create a PictureMarkerSymbol (different to BufferedImage)
-            s = new PictureMarkerSymbol("images/legionary.png");
+            s = new PictureMarkerSymbol("images/FactionFlags/legionary.png");
             break;
+          
+          case "Carthaginians":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Carthaginians.png");
+            break;
+
+          case "Celtic Britons":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Celtic_Britons.png");
+            break;
+            
+          case "Spanish":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Spanish.png");
+            break;
+
+          case "Numidians":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Numidians.png");
+            break;
+          
+          case "Egyptians":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Egyptians.png");
+            break;
+
+          case "Seleucid Empire":
+            
+            s = new PictureMarkerSymbol("images/FactionFlags/Seleucid_Empire.png");
+            break;
+
+          case "Pontus":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Pontus.png");
+            break;
+
+          case "Amenians":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Amenians.png");
+            break;
+
+          case "Parthians":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Parthians.png");
+            break;
+
+          case "Germanics":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Germanics.png");
+            break;
+
+          case "Greek City States":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/GreekCityStates.png");
+            break;
+
+          case "Macedonians":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Macedonians.png");
+            break;
+          
+          case "Thracians":
+
+            s = new PictureMarkerSymbol("images/FactionFlags/Thracians.png");
+            break;
+
+          case "Dacians":
+            s = new PictureMarkerSymbol("images/FactionFlags/Dacians.png");
+            break;
+
+
           // TODO = handle all faction names, and find a better structure...
         }
         t.setHaloColor(0xFFFFFFFF);
@@ -309,7 +380,7 @@ public class GloriaRomanusController{
   }
 
   private Map<String, String> getProvinceToOwningFactionMap() throws IOException {
-    String content = Files.readString(Paths.get("src/unsw/gloriaromanus/initial_province_ownership.json"));
+    String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/factions_list.json"));
     JSONObject ownership = new JSONObject(content);
     Map<String, String> m = new HashMap<String, String>();
     for (String key : ownership.keySet()) {
@@ -327,7 +398,7 @@ public class GloriaRomanusController{
   private ArrayList<String> getHumanProvincesList() throws IOException {
     // https://developers.arcgis.com/labs/java/query-a-feature-layer/
 
-    String content = Files.readString(Paths.get("src/unsw/gloriaromanus/initial_province_ownership.json"));
+    String content = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/factions_list.json"));
     JSONObject ownership = new JSONObject(content);
     return ArrayUtil.convert(ownership.getJSONArray(humanFaction));
   }
