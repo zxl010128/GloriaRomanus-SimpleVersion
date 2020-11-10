@@ -7,6 +7,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
+import java.io.File;
 
 public class MainMenuController {
     @FXML
@@ -14,12 +17,17 @@ public class MainMenuController {
 
     @FXML
     private Button loadButton;
+    
+    @FXML
+    public ImageView background;
 
     private Stage stage;
     private Scene gameScene;
 
     @FXML
     public void initialize() {
+        Image image = new Image(new File("images/Background.png").toURI().toString());
+        background.setImage(image);  
         startButton.setOnAction(e -> stage.setScene(gameScene));
 
     }
