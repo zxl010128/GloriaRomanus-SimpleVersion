@@ -562,6 +562,17 @@ public class GameSystem implements Observer {
         return "No valid Goal";
 
     }
+
+    public boolean checkStringinFaction(String faction) {
+
+        for (Faction f : this.factions) {
+            if (f.getName().equals(faction)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     /** 
      * @param obj
      * @return boolean
