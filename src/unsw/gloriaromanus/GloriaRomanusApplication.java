@@ -27,6 +27,8 @@ public class GloriaRomanusApplication extends Application {
     mainMenuController = mainMenuLoader.getController();
     mainMenuController.setStage(stage);
     mainMenuController.setGameScene(gameScene);
+    controller.setStage(stage);
+    controller.setMainMenuScene(mainMenuScene);
     
 
     // set up the stage

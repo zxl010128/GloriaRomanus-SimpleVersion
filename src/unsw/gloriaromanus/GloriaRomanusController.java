@@ -19,10 +19,13 @@ import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Stage;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.FeatureTable;
@@ -63,6 +66,8 @@ public class GloriaRomanusController{
   private TextField opponent_province;
   @FXML
   private TextArea output_terminal;
+  @FXML
+  private Button quitButton;
 
   private ArcGISMap map;
 
@@ -76,6 +81,9 @@ public class GloriaRomanusController{
   private Feature currentlySelectedEnemyProvince;
 
   private FeatureLayer featureLayer_provinces;
+
+  private Stage stage;
+  private Scene mainMenuScene;
 
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
@@ -96,6 +104,8 @@ public class GloriaRomanusController{
     currentlySelectedEnemyProvince = null;
 
     initializeProvinceLayers();
+
+    quitButton.setOnAction(e -> stage.setScene(mainMenuScene));
   }
 
   @FXML
@@ -361,5 +371,18 @@ public class GloriaRomanusController{
     if (mapView != null) {
       mapView.dispose();
     }
+  }
+
+  public void setStage(Stage stage) {
+    this.stage = stage;
+  }
+
+  @FXML
+  public void handleQuitButton(ActionEvent e) throws IOException {
+
+  }
+  
+  public void setMainMenuScene(Scene mainMenuScene) {
+    this.mainMenuScene = mainMenuScene;
   }
 }
