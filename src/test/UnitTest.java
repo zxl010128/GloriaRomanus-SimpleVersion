@@ -52,7 +52,7 @@ public class UnitTest{
         assertTrue(newGame.setPlayerNum(4));
         newGame.allocateFaction();
         assertEquals(newGame.getPlayerNum(), 4);
-        assertEquals(newGame.getProvinces().size(), 52);
+        assertEquals(newGame.getProvinces().size(), 53);
         assertEquals(newGame.getFactions().size(), 4);
     }
 
@@ -62,7 +62,7 @@ public class UnitTest{
         assertTrue(newGame.setPlayerNum(16));
         newGame.allocateFaction();
         assertEquals(newGame.getPlayerNum(), 16);
-        assertEquals(newGame.getProvinces().size(), 52);
+        assertEquals(newGame.getProvinces().size(), 53);
         assertEquals(newGame.getFactions().size(), 16);
     }
 
@@ -82,7 +82,7 @@ public class UnitTest{
         
         ConditionLeaf goal = new ConditionLeaf("CONQUEST");
         newGame.setVictoryCondtion(goal);
-        assertTrue(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 0));
+        assertTrue(newGame.VictoryCheck(newGame.getVictoryCondition(), 53, 0, 0));
         assertFalse(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 0, 0));
 
         ConditionLeaf goal1 = new ConditionLeaf("TREASURY");
@@ -107,7 +107,7 @@ public class UnitTest{
         newGame.setVictoryCondtion(comGoal);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 0, 0), false);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 200000, 0), false);
-        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 200000, 0), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 53, 200000, 0), true);
     }
 
     @Test
@@ -121,8 +121,8 @@ public class UnitTest{
         newGame.setVictoryCondtion(comGoal);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 0, 0), false);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 200000, 0), true);
-        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 99999, 0), false);
-        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 4399999), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 53, 99999, 0), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 53, 0, 4399999), true);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 17, 200000, 400001), true);
     }
 
@@ -141,10 +141,10 @@ public class UnitTest{
         newGame.setVictoryCondtion(comGoal1);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 0, 0), false);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 200000, 0), false);
-        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 99999, 0), false);
-        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 4399999), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 53, 99999, 0), false);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 53, 0, 4399999), false);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 17, 200000, 400001), false);
-        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 200000, 400001), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 53, 200000, 400001), true);
     }
 
     @Test
@@ -160,10 +160,10 @@ public class UnitTest{
         comGoal1.add(comGoal);
         comGoal1.add(goal2);
         newGame.setVictoryCondtion(comGoal1);
-        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 0), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 53, 0, 0), true);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 51, 200000, 0), false);
-        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 99999, 0), true);
-        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 52, 0, 4399999), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 53, 99999, 0), true);
+        assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 53, 0, 4399999), true);
         assertEquals(newGame.VictoryCheck(newGame.getVictoryCondition(), 17, 200000, 400001), true);
     }
 

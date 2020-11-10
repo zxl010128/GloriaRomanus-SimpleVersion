@@ -29,6 +29,7 @@
 {"type":"Feature","geometry":{"type":"Point","coordinates":[19.108785528330145,44.947711552450585]},"properties":{"name":"Pannonia Inferior"}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[18.005702968934713,43.737165067127705]},"properties":{"name":"Dalmatia"}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[15.529303387214782,41.36203302390351]},"properties":{"name":"II"}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[9.037586855195457,40.0837418398213]},"properties":{"name":"Sardinia et Corsica"}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[21.51964233667144,43.360382021140595]},"properties":{"name":"Moesia Superior"}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[23.85055989643945,45.82351771704003]},"properties":{"name":"Dacia"}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[26.47018122274818,43.63208316082199]},"properties":{"name":"Moesia Inferior"}},
