@@ -48,5 +48,6 @@
             <Label text="Output from interactions"/>
             <TextArea fx:id="output_terminal" text="" editable="false"/>
         </VBox>
+        <Button fx:id="quitButton" text="Quit Game" onAction="#handleQuitButton"/>
     </VBox>
 </StackPane>
