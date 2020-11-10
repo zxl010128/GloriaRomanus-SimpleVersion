@@ -129,8 +129,8 @@ public class GameSystem implements Observer {
         difficulty.add("Easy");
 
         List<String> relations = new ArrayList<String>();
-        relations.add("And");
-        relations.add("Or");
+        relations.add("AND");
+        relations.add("OR");
 
         List<String> conditions = new ArrayList<String>();
         conditions.add("CONQUEST");
@@ -501,7 +501,78 @@ public class GameSystem implements Observer {
         return playerNum;
     }
 
-    
+    public String conditionToString() {
+
+        if (this.victoryCondition == null) {
+            return "Condition Not Exist";
+        }
+
+        if (this.victoryCondition.length() == 1) {
+
+            String ConditionString = this.victoryCondition.getString("goal");
+            return ConditionString;
+
+        } else if (this.victoryCondition.length() == 2) {
+
+            String relation = this.victoryCondition.getString("goal");
+
+            boolean is_found = false;
+            String relation2 = null;
+            String subgoal1 = null;
+            String subgoal2 = null;
+
+            for (int i = 0; i < 2; i++) {
+                JSONObject Condition = this.victoryCondition.getJSONArray("subgoals").getJSONObject(i);
+                if (Condition.getString("goal").equals("AND") || Condition.getString("goal").equals("OR")) {
+                    is_found = true;
+                    relation2 = Condition.getString("goal");
+                    subgoal1 = Condition.getJSONArray("subgoals").getJSONObject(0).getString("goal");
+                    subgoal2 = Condition.getJSONArray("subgoals").getJSONObject(1).getString("goal");
+                    break;
+                }
+
+            }
+
+            if (!is_found) {
+
+                String goal1 = this.victoryCondition.getJSONArray("subgoals").getJSONObject(0).getString("goal");
+                String goal2 = this.victoryCondition.getJSONArray("subgoals").getJSONObject(1).getString("goal");
+
+                return goal1 + " " + relation + " " + goal2;
+
+            } else if (is_found) {
+
+                String subGoal = "(" + subgoal1 + " " + relation2 + " " + subgoal2 + ")";
+
+                String goal = null;
+
+                for (int i = 0; i < 2; i++) {
+                    JSONObject Condition = this.victoryCondition.getJSONArray("subgoals").getJSONObject(i);
+
+                    if (!Condition.getString("goal").equals("AND") && !Condition.getString("goal").equals("OR")) {
+                        goal = Condition.getString("goal");
+                    }
+                }
+
+                return goal + " " + relation + " " + subGoal;
+
+            }
+        }
+
+        return "No valid Goal";
+
+    }
+
+    public boolean checkStringinFaction(String faction) {
+
+        for (Faction f : this.factions) {
+            if (f.getName().equals(faction)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     /** 
      * @param obj
      * @return boolean

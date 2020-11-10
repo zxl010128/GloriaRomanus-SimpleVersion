@@ -20,7 +20,7 @@
 <StackPane fx:controller="unsw.gloriaromanus.GloriaRomanusController" xmlns:fx="http://javafx.com/fxml"
            stylesheets="/unsw/gloriaromanus/style.css">
     <MapView fx:id="mapView"/>
-    <VBox fx:id="menu" StackPane.alignment="TOP_LEFT" spacing="10" maxWidth="250" styleClass="panel-region">
+    <VBox fx:id="menu" StackPane.alignment="TOP_LEFT" spacing="10" maxWidth="300" styleClass="panel-region">
         <padding>
             <Insets topRightBottomLeft="10"/>
         </padding>
@@ -40,9 +40,14 @@
                 <Font size="16.0" />
             </font>
         </Label>
-        <Label fx:id="victoryConditonLabel" alignment="CENTER" text="Victory Condition: " textAlignment="CENTER">
+        <Label fx:id="victoryConditonLabel" alignment="CENTER" text="Victory Condition: " textAlignment="LEFT">
             <font>
                 <Font size="16.0" />
+            </font>
+        </Label>
+        <Label fx:id="victoryConditon" alignment="CENTER" text="Victory Condition: " textAlignment="LEFT">
+            <font>
+                <Font size="14.0" />
             </font>
         </Label>
         <Label fx:id="balanceLabel" alignment="CENTER" text="Treasury Balance: " textAlignment="CENTER">
@@ -76,12 +81,17 @@
                 <TextField fx:id="opponent_province" text="" editable="false"/>
             </VBox>
         </HBox>
-        <Button text="Invade" onAction="#clickedInvadeButton"/>
+        <Button fx:id="invadeButton" text="Invade" onAction="#clickedInvadeButton"/>
         <VBox>
             <Label text="Output from interactions"/>
             <TextArea fx:id="output_terminal" text="" editable="false"/>
         </VBox>
         <VBox>
+            <Button fx:id="playerNumButton" text="SelectPlayerNumber">
+                <VBox.margin>
+                    <Insets bottom="30.0" />
+                </VBox.margin>
+            </Button>
             <Button fx:id="endTurnButton" text="End Turn" onAction="#handleEndTurnButton">
                 <VBox.margin>
                     <Insets bottom="30.0" />
