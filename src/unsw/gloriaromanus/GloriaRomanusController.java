@@ -81,6 +81,8 @@ public class GloriaRomanusController{
   @FXML
   private Label victoryConditonLabel;
   @FXML
+  private Label victoryConditon;
+  @FXML
   private Label balanceLabel;
   @FXML
   private Label yearLabel;
@@ -151,7 +153,8 @@ public class GloriaRomanusController{
     yearLabel.setText(String.valueOf(gameSystem.getYear()));
     // yearLabel.textProperty().bind(new SimpleIntegerProperty(gameSystem.getYear()).asString());
     turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
-    victoryConditonLabel.setText("Victory Condition: " + gameSystem.getVictoryCondition().toString());
+    victoryConditonLabel.setText("Victory Condition:");
+    victoryConditon.setText(gameSystem.conditionToString());
 
   }
 
