@@ -32,7 +32,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.backend.GameSystem;
 import unsw.gloriaromanus.backend.TurnTracker;
-import unsw.gloriaromanus.backend.VictoryCondition;
 import unsw.gloriaromanus.backend.Faction;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
@@ -125,10 +124,19 @@ public class GloriaRomanusController{
 
     // TODO = load this from a configuration file you create (user should be able to
     // select in loading screen)
-    humanFaction = "Romans";
 
     currentlySelectedHumanProvince = null;
     currentlySelectedEnemyProvince = null;
+    
+    // new code
+    gameSystem = new GameSystem();
+    gameSystem.setPlayerNum(3);
+    gameSystem.allocateFaction();
+    // assume current player is the first faction in factions list
+    currFaction = gameSystem.getFactions().get(0);
+    turnTracker = gameSystem.getTurnTracker();
+
+    humanFaction = currFaction.getName();
 
     initializeProvinceLayers();
 
@@ -141,14 +149,6 @@ public class GloriaRomanusController{
     }
     menu.getChildren().add(listView);
 
-    // new code
-    gameSystem = new GameSystem();
-    gameSystem.setPlayerNum(3);
-    gameSystem.allocateFaction();
-    // assume current player is the first faction in factions list
-    currFaction = gameSystem.getFactions().get(0);
-    turnTracker = gameSystem.getTurnTracker();
-    
     factionLabel.setText("Faction: " + currFaction.getName());
     yearLabel.setText(String.valueOf(gameSystem.getYear()));
     // yearLabel.textProperty().bind(new SimpleIntegerProperty(gameSystem.getYear()).asString());
@@ -240,6 +240,10 @@ public class GloriaRomanusController{
         PictureMarkerSymbol s = null;
         String province = (String) f.getProperty("name");
         String faction = provinceToOwningFactionMap.get(province);
+        
+        if (!gameSystem.checkStringinFaction(faction)) {
+          continue;
+        }
 
         TextSymbol t = new TextSymbol(10,
             faction + "\n" + province + "\n" + provinceToNumberTroopsMap.get(province), 0xFFFF0000,
