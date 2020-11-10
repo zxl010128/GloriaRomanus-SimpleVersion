@@ -15,6 +15,8 @@
 <?import javafx.scene.layout.BackgroundFill?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
 <StackPane fx:controller="unsw.gloriaromanus.GloriaRomanusController" xmlns:fx="http://javafx.com/fxml"
            stylesheets="/unsw/gloriaromanus/style.css">
     <MapView fx:id="mapView"/>
@@ -33,6 +35,37 @@
                 </fills>
             </Background>
         </background>
+        <Label fx:id="factionLabel" alignment="CENTER" text="Faction: " textAlignment="CENTER">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <Label fx:id="victoryConditonLabel" alignment="CENTER" text="Victory Condition: " textAlignment="CENTER">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <Label fx:id="balanceLabel" alignment="CENTER" text="Treasury Balance: " textAlignment="CENTER">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <HBox>
+            <VBox>
+                <Label text="Current Year:">
+                    <VBox.margin>
+                        <Insets right="50.0" />
+                    </VBox.margin>
+                </Label>
+                <Label text="1000" />
+                
+            </VBox>
+            <VBox>
+                <Label text="Current Turn:" />
+                <Label text="0" />
+            </VBox>
+
+        </HBox>
         <HBox>
             <VBox>
                 <Label text="Your province"/>
@@ -48,6 +81,19 @@
             <Label text="Output from interactions"/>
             <TextArea fx:id="output_terminal" text="" editable="false"/>
         </VBox>
-        <Button fx:id="quitButton" text="Quit Game" onAction="#handleQuitButton"/>
+        <VBox>
+            <Button fx:id="endTurnButton" text="End Turn">
+                <VBox.margin>
+                    <Insets bottom="30.0" />
+                </VBox.margin>
+            </Button>
+            <Button fx:id="saveButton" text="Save Game">
+                <VBox.margin>
+                    <Insets bottom="30.0" />
+                </VBox.margin>
+            </Button>
+            <Button fx:id="quitButton" text="Quit Game" onAction="#handleQuitButton"/>
+                
+        </VBox>
     </VBox>
 </StackPane>
