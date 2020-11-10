@@ -81,12 +81,17 @@
                 <TextField fx:id="opponent_province" text="" editable="false"/>
             </VBox>
         </HBox>
-        <Button text="Invade" onAction="#clickedInvadeButton"/>
+        <Button fx:id="invadeButton" text="Invade" onAction="#clickedInvadeButton"/>
         <VBox>
             <Label text="Output from interactions"/>
             <TextArea fx:id="output_terminal" text="" editable="false"/>
         </VBox>
         <VBox>
+            <Button fx:id="playerNumButton" text="SelectPlayerNumber">
+                <VBox.margin>
+                    <Insets bottom="30.0" />
+                </VBox.margin>
+            </Button>
             <Button fx:id="endTurnButton" text="End Turn" onAction="#handleEndTurnButton">
                 <VBox.margin>
                     <Insets bottom="30.0" />

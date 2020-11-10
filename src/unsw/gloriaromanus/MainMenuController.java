@@ -1,22 +1,20 @@
 package unsw.gloriaromanus;
 
 import java.io.IOException;
-
+import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-
-import java.io.File;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class MainMenuController {
@@ -28,6 +26,9 @@ public class MainMenuController {
 
     @FXML
     private Button ok;
+
+    @FXML
+    private Button startGame;
     
     @FXML
     public ImageView background;
@@ -37,8 +38,12 @@ public class MainMenuController {
 
     @FXML
     public void initialize() {
+
+        // Set Background Picture
         Image image = new Image(new File("images/Background.png").toURI().toString());
         background.setImage(image);
+
+        // Set button
         startButton.setOnAction(e -> showStage());        
 
     }
@@ -56,6 +61,7 @@ public class MainMenuController {
         this.gameScene = gameScene;
     }
 
+    // A pop up window which shows the info of this game and a start playing button.
     public void showStage(){
         Stage newStage = new Stage();
 
@@ -81,7 +87,7 @@ public class MainMenuController {
         box.getChildren().addAll(title, text, condition, ok);
         box.setAlignment(Pos.CENTER);
         box.setSpacing(10.0);
-        box.setOpacity(0.95);
+        box.setOpacity(0.85);
 
         Scene stageScene = new Scene(box, 500, 300);
         stageScene.setFill(Color.TRANSPARENT);
@@ -89,4 +95,5 @@ public class MainMenuController {
         newStage.setScene(stageScene);
         newStage.show();
     }
+
 }
