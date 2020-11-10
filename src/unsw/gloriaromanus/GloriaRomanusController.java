@@ -32,7 +32,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.backend.GameSystem;
 import unsw.gloriaromanus.backend.TurnTracker;
-import unsw.gloriaromanus.backend.VictoryCondition;
 import unsw.gloriaromanus.backend.Faction;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
@@ -60,9 +59,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.paint.Color;
+import javafx.stage.StageStyle;
+import javafx.geometry.Pos;
 
 public class GloriaRomanusController{
 
@@ -77,9 +82,13 @@ public class GloriaRomanusController{
   @FXML
   private Button quitButton;
   @FXML
+  private Button playerNumButton;
+  @FXML
   private Label factionLabel;
   @FXML
   private Label victoryConditonLabel;
+  @FXML
+  private Label victoryConditon;
   @FXML
   private Label balanceLabel;
   @FXML
@@ -88,6 +97,13 @@ public class GloriaRomanusController{
   private Label turnLabel;
   @FXML
   private VBox menu;
+  @FXML
+  private Button endTurnButton;
+  @FXML
+  private Button saveButton;
+  @FXML
+  private Button invadeButton;
+
 
   private ArcGISMap map;
 
@@ -110,23 +126,89 @@ public class GloriaRomanusController{
   private TurnTracker turnTracker;
   public Faction currFaction;
 
+  
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
     // All factions will start with no soldiers
     provinceToOwningFactionMap = getProvinceToOwningFactionMap();
 
     provinceToNumberTroopsMap = new HashMap<String, Integer>();
-    Random r = new Random();
+
     for (String provinceName : provinceToOwningFactionMap.keySet()) {
       provinceToNumberTroopsMap.put(provinceName, 0);
     }
 
     // TODO = load this from a configuration file you create (user should be able to
     // select in loading screen)
-    humanFaction = "Romans";
 
     currentlySelectedHumanProvince = null;
     currentlySelectedEnemyProvince = null;
+
+    // Enable all the button except PlayerNumButton
+    endTurnButton.setDisable(true);
+    saveButton.setDisable(true);
+    invadeButton.setDisable(true);
+    quitButton.setDisable(true);
+
+    playerNumButton.setOnAction(e -> {
+      showStage(); 
+      playerNumButton.setDisable(true);
+      endTurnButton.setDisable(false);
+      saveButton.setDisable(false);
+      invadeButton.setDisable(false);
+      quitButton.setDisable(false);
+    });
+    
+  }
+
+  // A pop up window to be able for player to choose player number
+  public void showStage(){
+    
+    Stage newStage = new Stage();
+
+    VBox box = new VBox();
+
+    Label title = new Label();
+    title.setText("Please Select the player number!\n");
+    title.setTextAlignment(TextAlignment.CENTER);
+    title.setFont(new Font(20));
+    
+    ChoiceBox<Integer> cb = new ChoiceBox<>();
+    cb.getItems().addAll(2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+
+    Button ok = new Button();
+    ok.setText("Start Playing!");
+    ok.setOnAction(e -> {
+      try {
+        initialMap(cb.getSelectionModel().getSelectedItem());
+        newStage.close();
+    } catch (Exception exception) {
+      throw new RuntimeException(exception);
+
+    }});
+
+    box.getChildren().addAll(title, cb, ok);
+    box.setAlignment(Pos.CENTER);
+    box.setSpacing(10.0);
+    box.setOpacity(0.95);
+
+    Scene stageScene = new Scene(box, 500, 300);
+    stageScene.setFill(Color.TRANSPARENT);
+    newStage.initStyle(StageStyle.TRANSPARENT);
+    newStage.setScene(stageScene);
+    newStage.show();
+}
+
+  public void initialMap(Integer playerNumber) throws JsonParseException, JsonMappingException, IOException{
+    // new code
+    gameSystem = new GameSystem();
+    gameSystem.setPlayerNum(playerNumber);
+    gameSystem.allocateFaction();
+    // assume current player is the first faction in factions list
+    currFaction = gameSystem.getFactions().get(0);
+    turnTracker = gameSystem.getTurnTracker();
+
+    humanFaction = currFaction.getName();
 
     initializeProvinceLayers();
 
@@ -139,20 +221,12 @@ public class GloriaRomanusController{
     }
     menu.getChildren().add(listView);
 
-    // new code
-    gameSystem = new GameSystem();
-    gameSystem.setPlayerNum(3);
-    gameSystem.allocateFaction();
-    // assume current player is the first faction in factions list
-    currFaction = gameSystem.getFactions().get(0);
-    turnTracker = gameSystem.getTurnTracker();
-    
     factionLabel.setText("Faction: " + currFaction.getName());
     yearLabel.setText(String.valueOf(gameSystem.getYear()));
     // yearLabel.textProperty().bind(new SimpleIntegerProperty(gameSystem.getYear()).asString());
     turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
-    victoryConditonLabel.setText("Victory Condition: " + gameSystem.getVictoryCondition().toString());
-
+    victoryConditonLabel.setText("Victory Condition:");
+    victoryConditon.setText(gameSystem.conditionToString());
   }
 
   @FXML
@@ -237,6 +311,10 @@ public class GloriaRomanusController{
         PictureMarkerSymbol s = null;
         String province = (String) f.getProperty("name");
         String faction = provinceToOwningFactionMap.get(province);
+        
+        if (!gameSystem.checkStringinFaction(faction)) {
+          continue;
+        }
 
         TextSymbol t = new TextSymbol(10,
             faction + "\n" + province + "\n" + provinceToNumberTroopsMap.get(province), 0xFFFF0000,
