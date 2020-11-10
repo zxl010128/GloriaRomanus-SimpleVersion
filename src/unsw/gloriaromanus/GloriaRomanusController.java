@@ -59,9 +59,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.paint.Color;
+import javafx.stage.StageStyle;
+import javafx.geometry.Pos;
 
 public class GloriaRomanusController{
 
@@ -76,6 +82,8 @@ public class GloriaRomanusController{
   @FXML
   private Button quitButton;
   @FXML
+  private Button playerNumButton;
+  @FXML
   private Label factionLabel;
   @FXML
   private Label victoryConditonLabel;
@@ -89,6 +97,13 @@ public class GloriaRomanusController{
   private Label turnLabel;
   @FXML
   private VBox menu;
+  @FXML
+  private Button endTurnButton;
+  @FXML
+  private Button saveButton;
+  @FXML
+  private Button invadeButton;
+
 
   private ArcGISMap map;
 
@@ -111,13 +126,14 @@ public class GloriaRomanusController{
   private TurnTracker turnTracker;
   public Faction currFaction;
 
+  
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
     // All factions will start with no soldiers
     provinceToOwningFactionMap = getProvinceToOwningFactionMap();
 
     provinceToNumberTroopsMap = new HashMap<String, Integer>();
-    Random r = new Random();
+
     for (String provinceName : provinceToOwningFactionMap.keySet()) {
       provinceToNumberTroopsMap.put(provinceName, 0);
     }
@@ -127,10 +143,66 @@ public class GloriaRomanusController{
 
     currentlySelectedHumanProvince = null;
     currentlySelectedEnemyProvince = null;
+
+    // Enable all the button except PlayerNumButton
+    endTurnButton.setDisable(true);
+    saveButton.setDisable(true);
+    invadeButton.setDisable(true);
+    quitButton.setDisable(true);
+
+    playerNumButton.setOnAction(e -> {
+      showStage(); 
+      playerNumButton.setDisable(true);
+      endTurnButton.setDisable(false);
+      saveButton.setDisable(false);
+      invadeButton.setDisable(false);
+      quitButton.setDisable(false);
+    });
     
+  }
+
+  // A pop up window to be able for player to choose player number
+  public void showStage(){
+    
+    Stage newStage = new Stage();
+
+    VBox box = new VBox();
+
+    Label title = new Label();
+    title.setText("Please Select the player number!\n");
+    title.setTextAlignment(TextAlignment.CENTER);
+    title.setFont(new Font(20));
+    
+    ChoiceBox<Integer> cb = new ChoiceBox<>();
+    cb.getItems().addAll(2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+
+    Button ok = new Button();
+    ok.setText("Start Playing!");
+    ok.setOnAction(e -> {
+      try {
+        initialMap(cb.getSelectionModel().getSelectedItem());
+        newStage.close();
+    } catch (Exception exception) {
+      throw new RuntimeException(exception);
+
+    }});
+
+    box.getChildren().addAll(title, cb, ok);
+    box.setAlignment(Pos.CENTER);
+    box.setSpacing(10.0);
+    box.setOpacity(0.95);
+
+    Scene stageScene = new Scene(box, 500, 300);
+    stageScene.setFill(Color.TRANSPARENT);
+    newStage.initStyle(StageStyle.TRANSPARENT);
+    newStage.setScene(stageScene);
+    newStage.show();
+}
+
+  public void initialMap(Integer playerNumber) throws JsonParseException, JsonMappingException, IOException{
     // new code
     gameSystem = new GameSystem();
-    gameSystem.setPlayerNum(3);
+    gameSystem.setPlayerNum(playerNumber);
     gameSystem.allocateFaction();
     // assume current player is the first faction in factions list
     currFaction = gameSystem.getFactions().get(0);
@@ -155,7 +227,6 @@ public class GloriaRomanusController{
     turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
     victoryConditonLabel.setText("Victory Condition:");
     victoryConditon.setText(gameSystem.conditionToString());
-
   }
 
   @FXML
