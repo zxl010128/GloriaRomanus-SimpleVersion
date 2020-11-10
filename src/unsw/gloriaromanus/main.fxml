@@ -57,12 +57,12 @@
                         <Insets right="50.0" />
                     </VBox.margin>
                 </Label>
-                <Label text="1000" />
+                <Label fx:id="yearLabel" />
                 
             </VBox>
             <VBox>
                 <Label text="Current Turn:" />
-                <Label text="0" />
+                <Label fx:id="turnLabel" />
             </VBox>
 
         </HBox>
@@ -82,7 +82,7 @@
             <TextArea fx:id="output_terminal" text="" editable="false"/>
         </VBox>
         <VBox>
-            <Button fx:id="endTurnButton" text="End Turn">
+            <Button fx:id="endTurnButton" text="End Turn" onAction="#handleEndTurnButton">
                 <VBox.margin>
                     <Insets bottom="30.0" />
                 </VBox.margin>

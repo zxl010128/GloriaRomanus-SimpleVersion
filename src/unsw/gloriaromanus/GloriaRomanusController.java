@@ -16,16 +16,22 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+import unsw.gloriaromanus.backend.GameSystem;
+import unsw.gloriaromanus.backend.TurnTracker;
+import unsw.gloriaromanus.backend.VictoryCondition;
+import unsw.gloriaromanus.backend.Faction;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.FeatureTable;
@@ -68,6 +74,16 @@ public class GloriaRomanusController{
   private TextArea output_terminal;
   @FXML
   private Button quitButton;
+  @FXML
+  private Label factionLabel;
+  @FXML
+  private Label victoryConditonLabel;
+  @FXML
+  private Label balanceLabel;
+  @FXML
+  private Label yearLabel;
+  @FXML
+  private Label turnLabel;
 
   private ArcGISMap map;
 
@@ -84,6 +100,11 @@ public class GloriaRomanusController{
 
   private Stage stage;
   private Scene mainMenuScene;
+
+  private GameSystem gameSystem;
+  private VictoryCondition victoryCondition;
+  private TurnTracker turnTracker;
+  public Faction currFaction;
 
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
@@ -106,6 +127,19 @@ public class GloriaRomanusController{
     initializeProvinceLayers();
 
     quitButton.setOnAction(e -> stage.setScene(mainMenuScene));
+    // new code
+    gameSystem = new GameSystem();
+    gameSystem.setPlayerNum(3);
+    gameSystem.allocateFaction();
+    // assume current player is the first faction in factions list
+    currFaction = gameSystem.getFactions().get(0);
+    turnTracker = gameSystem.getTurnTracker();
+    
+    factionLabel.setText("Faction: " + currFaction.getName());
+    // yearLabel.setText(String.valueOf(gameSystem.getYear()));
+    yearLabel.textProperty().bind(new SimpleIntegerProperty(gameSystem.getYear()).asString());
+    turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
+    victoryConditonLabel.setText("Victory Condition: " + gameSystem.getVictoryCondition().toString()); 
   }
 
   @FXML
@@ -455,5 +489,10 @@ public class GloriaRomanusController{
   
   public void setMainMenuScene(Scene mainMenuScene) {
     this.mainMenuScene = mainMenuScene;
+  }
+
+  @FXML
+  public void handleEndTurnButton(ActionEvent e) throws IOException {
+    gameSystem.NextTurn();
   }
 }
