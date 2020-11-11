@@ -118,6 +118,10 @@ public class GloriaRomanusController{
   private ChoiceBox<String> recruitableUnits;
   @FXML
   private Button recruitButton;
+  @FXML
+  private Button formArmyButton;
+  @FXML
+  private Button assignArmyButton;
 
   private String FirstPlayerFaction;
 
@@ -274,9 +278,9 @@ public class GloriaRomanusController{
     provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
 
     if (gameSystem.conditionToString().contains("WEALTH")) {
-      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getBalance()) + " / 400,000");
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
     } else {
-      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getBalance()));
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()));
     }
 
     if (gameSystem.conditionToString().contains("TREASURY")) {
