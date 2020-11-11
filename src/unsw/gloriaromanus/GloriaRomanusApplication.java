@@ -33,8 +33,10 @@ public class GloriaRomanusApplication extends Application {
 
     // set up the stage
     stage.setTitle("Gloria Romanus");
-    stage.setWidth(800);
-    stage.setHeight(700);
+    // stage.setWidth(800);
+    // stage.setHeight(700);
+    stage.setWidth(1000);
+    stage.setHeight(875);
     stage.setScene(mainMenuScene);
     stage.show();
 

@@ -16,6 +16,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ChoiceBox?>
 
 <StackPane fx:controller="unsw.gloriaromanus.GloriaRomanusController" xmlns:fx="http://javafx.com/fxml"
            stylesheets="/unsw/gloriaromanus/style.css">
@@ -50,7 +51,15 @@
                 <Font size="14.0" />
             </font>
         </Label>
-        <Label fx:id="balanceLabel" alignment="CENTER" text="Treasury Balance: " textAlignment="CENTER">
+        <HBox>
+            <Label text="Treasury Balance: "/>
+            <Label fx:id="balanceLabel" alignment="CENTER" textAlignment="CENTER">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+        </HBox>
+        <Label fx:id="provincesLabel" alignment="CENTER" text="Faction: " textAlignment="CENTER">
             <font>
                 <Font size="16.0" />
             </font>
@@ -89,21 +98,31 @@
         <VBox>
             <Button fx:id="playerNumButton" text="SelectPlayerNumber">
                 <VBox.margin>
-                    <Insets bottom="30.0" />
+                    <Insets bottom="0.0" />
                 </VBox.margin>
             </Button>
-            <Button fx:id="endTurnButton" text="End Turn" onAction="#handleEndTurnButton">
-                <VBox.margin>
-                    <Insets bottom="30.0" />
-                </VBox.margin>
-            </Button>
-            <Button fx:id="saveButton" text="Save Game">
-                <VBox.margin>
-                    <Insets bottom="30.0" />
-                </VBox.margin>
-            </Button>
-            <Button fx:id="quitButton" text="Quit Game" onAction="#handleQuitButton"/>
-                
+            <HBox>
+                <Button fx:id="endTurnButton" text="End Turn" onAction="#handleEndTurnButton">
+                    <HBox.margin>
+                        <Insets right="15.0" />
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="saveButton" text="Save Game">
+                    <HBox.margin>
+                        <Insets right="15.0" />
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="quitButton" text="Quit Game" onAction="#handleQuitButton"/>
+            </HBox>
+            <VBox>
+                <Label text="Occupied Provinces:" />
+                <ChoiceBox fx:id="occupiedProvinces" />
+            </VBox>
+            <VBox>
+                <Label text="Recruitable Units:" />
+                <ChoiceBox fx:id="recruitableUnits" />
+                <Button fx:id="recruitButton" text="Recruit" />
+            </VBox>
         </VBox>
     </VBox>
 </StackPane>

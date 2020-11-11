@@ -31,6 +31,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.backend.GameSystem;
+import unsw.gloriaromanus.backend.Province;
 import unsw.gloriaromanus.backend.TurnTracker;
 import unsw.gloriaromanus.backend.Faction;
 
@@ -96,6 +97,8 @@ public class GloriaRomanusController{
   @FXML
   private Label turnLabel;
   @FXML
+  private Label provincesLabel;
+  @FXML
   private VBox menu;
   @FXML
   private Button endTurnButton;
@@ -103,6 +106,12 @@ public class GloriaRomanusController{
   private Button saveButton;
   @FXML
   private Button invadeButton;
+  @FXML
+  private ChoiceBox<String> occupiedProvinces;
+  @FXML
+  private ChoiceBox<String> recruitableUnits;
+  @FXML
+  private Button recruitButton;
 
   private String FirstPlayerFaction;
 
@@ -125,10 +134,25 @@ public class GloriaRomanusController{
   private Scene mainMenuScene;
 
   private GameSystem gameSystem;
-  // private VictoryCondition victoryCondition;
   private TurnTracker turnTracker;
-  public Faction currFaction;
-
+  private Faction currFaction;
+  private String[] recruitableUnitsList = {
+    "Roman legionary",
+    "Gallic berserker",
+    "Celtic Briton berserker",
+    "Germanic berserker",
+    "melee cavalry",
+    "pikemen",
+    "hoplite",
+    "javelin-skirmisher",
+    "elephant",
+    "horse-archer",
+    "druid",
+    "melee infantry",
+    "heavy infantry",
+    "missile infantry",
+    "chariots"
+  };
   
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
@@ -152,6 +176,7 @@ public class GloriaRomanusController{
     saveButton.setDisable(true);
     invadeButton.setDisable(true);
     quitButton.setDisable(true);
+    recruitButton.setDisable(true);
 
     playerNumButton.setOnAction(e -> {
       showStage(); 
@@ -160,6 +185,7 @@ public class GloriaRomanusController{
       saveButton.setDisable(false);
       invadeButton.setDisable(false);
       quitButton.setDisable(false);
+      recruitButton.setDisable(false);
     });
     
   }
@@ -218,19 +244,29 @@ public class GloriaRomanusController{
 
     quitButton.setOnAction(e -> stage.setScene(mainMenuScene));
 
-    // add a Listview to display recruitable soldiers
-    ListView<String> listView = new ListView<>();
-    for (int i = 0; i < 5; i++) {
-      listView.getItems().add("Unit " + i);
-    }
-    menu.getChildren().add(listView);
-
     factionLabel.setText("Faction: " + currFaction.getName());
     yearLabel.setText(String.valueOf(gameSystem.getYear()));
-    // yearLabel.textProperty().bind(new SimpleIntegerProperty(gameSystem.getYear()).asString());
     turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
-    victoryConditonLabel.setText("Victory Condition:");
     victoryConditon.setText(gameSystem.conditionToString());
+    provincesLabel.setText("Provinces Conquered: " + "0/"+ gameSystem.getProvinces().size());
+    if (gameSystem.conditionToString().contains("WEALTH")) {
+      balanceLabel.setText(String.valueOf(currFaction.getBalance()) + "/100,000");
+    } else {
+      balanceLabel.setText(String.valueOf(currFaction.getBalance()));
+    }
+
+    // add a Listview to display occupied provinces
+    occupiedProvinces.setPrefWidth(250);
+    for (Province p : currFaction.getProvinces()) {
+      occupiedProvinces.getItems().add(p.getName());
+    }
+
+    // add a Listview to display recruitable soldiers
+    recruitableUnits.setPrefWidth(250);
+    for (String s : recruitableUnitsList) {
+      recruitableUnits.getItems().add(s);
+    }
+
   }
 
   @FXML
