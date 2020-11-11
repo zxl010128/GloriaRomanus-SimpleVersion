@@ -128,6 +128,18 @@
                 <ChoiceBox fx:id="recruitableUnits" />
                 <Button fx:id="recruitButton" text="Recruit" />
             </VBox>
+            <HBox spacing="15.0">
+                <VBox spacing="15.0" prefWidth="125">
+                    <Label text="Available Units" />
+                    <ChoiceBox fx:id="availableUnits" prefWidth="125"/>
+                    <Button fx:id="formArmyButton" text="Form Army" prefWidth="125"/>
+                </VBox>
+                <VBox spacing="15.0" prefWidth="125">
+                    <Label text="Available Armies" />
+                    <ChoiceBox fx:id="availableArmies" prefWidth="125" />
+                    <Button fx:id="assignArmyButton" text="Assign Army" prefWidth="125"/>
+                </VBox>
+            </HBox>
         </VBox>
     </VBox>
 </StackPane>
