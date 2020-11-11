@@ -71,6 +71,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 
 import static java.util.Map.entry;
 
@@ -212,6 +213,8 @@ public class GloriaRomanusController{
     quitButton.setDisable(true);
     recruitButton.setDisable(true);
     setTaxButton.setDisable(true);
+    formArmyButton.setDisable(true);
+    assignArmyButton.setDisable(true);
 
     playerNumButton.setOnAction(e -> {
       showStage();
@@ -222,6 +225,8 @@ public class GloriaRomanusController{
       invadeButton.setDisable(false);
       quitButton.setDisable(false);
       recruitButton.setDisable(false);
+      formArmyButton.setDisable(false);
+      assignArmyButton.setDisable(false);
     });
     
   }
@@ -237,6 +242,7 @@ public class GloriaRomanusController{
     title.setText("Please Select the player number!\n");
     title.setTextAlignment(TextAlignment.CENTER);
     title.setFont(new Font(20));
+    title.setStyle("-fx-text-fill: white");
     
     ChoiceBox<Integer> cb = new ChoiceBox<>();
     cb.getItems().addAll(2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
@@ -245,8 +251,12 @@ public class GloriaRomanusController{
     ok.setText("Confirm");
     ok.setOnAction(e -> {
       try {
-        initialMap(cb.getSelectionModel().getSelectedItem());
-        newStage.close();
+        if (cb.getSelectionModel().getSelectedItem() == null) {
+          printMessageToTerminal("Please select the player number!");         
+        } else {
+          initialMap(cb.getSelectionModel().getSelectedItem());
+          newStage.close();
+        }
     } catch (Exception exception) {
       throw new RuntimeException(exception);
 
@@ -254,11 +264,13 @@ public class GloriaRomanusController{
 
     box.getChildren().addAll(title, cb, ok);
     box.setAlignment(Pos.CENTER);
-    box.setSpacing(30.0);
+    box.setStyle("-fx-background-color: transparent");
+    box.setSpacing(40.0);
 
     Scene stageScene = new Scene(box, 500, 300);
-    stageScene.setFill(Color.TRANSPARENT);
+    stageScene.setFill(Color.BLACK);
     newStage.initStyle(StageStyle.TRANSPARENT);
+    newStage.setOpacity(0.85);
     newStage.setScene(stageScene);
     newStage.show();
 }
@@ -277,7 +289,10 @@ public class GloriaRomanusController{
     turnPlayerCount = 0;
     initializeProvinceLayers();
 
-    quitButton.setOnAction(e -> stage.setScene(mainMenuScene));
+    quitButton.setOnAction(e -> 
+    {stage.setScene(mainMenuScene);
+      
+    });
 
     factionLabel.setText("Faction: " + currFaction.getName());
     yearLabel.setText(String.valueOf(gameSystem.getYear()));
@@ -757,16 +772,19 @@ public class GloriaRomanusController{
     title.setText("Tax Rate Introduction\n");
     title.setTextAlignment(TextAlignment.CENTER);
     title.setFont(new Font(20));
+    title.setStyle("-fx-text-fill: white");
     
     Label intro = new Label();
     intro.setText(" Low tax = +10 town-wealth growth per turn for the province, tax rate = 10%\n Normal tax = No effect on per turn town-wealth growth, tax rate = 15%\n High tax = -10 town-wealth growth per turn for the province (i.e. 10 gold loss to wealth per turn), tax rate = 20%\n Very high tax = -30 town-wealth growth per turn for the province, tax rate = 25%, -1 morale for all soldiers residing in the province");
     intro.setWrapText(true);
     intro.setTextAlignment(TextAlignment.LEFT);
+    intro.setStyle("-fx-text-fill: white");
 
     Label status = new Label();
     status.setText("Currently, your province " + p +"'s" + " tax rate is " + String.valueOf(curr.getTaxRate()) + ". Please select the new tax rate below.");
     status.setWrapText(true);
     status.setTextAlignment(TextAlignment.LEFT);
+    status.setStyle("-fx-text-fill: white");
 
     ChoiceBox<Double> cb = new ChoiceBox<>();
     cb.getItems().addAll(0.1, 0.15, 0.2, 0.25);
@@ -782,8 +800,13 @@ public class GloriaRomanusController{
     box.getChildren().addAll(title, intro, status, cb, ok);
     box.setAlignment(Pos.CENTER);
     box.setSpacing(25.0);
+    box.setPadding(new Insets(10,10,10,10));
+    box.setStyle("-fx-background-color: transparent");
 
     Scene stageScene = new Scene(box, 600, 400);
+    stageScene.setFill(Color.BLACK);
+    newStage.initStyle(StageStyle.TRANSPARENT);
+    newStage.setOpacity(0.90);
     newStage.setScene(stageScene);
     newStage.show();
   }
@@ -801,6 +824,19 @@ public class GloriaRomanusController{
       turnPlayerCount = 0;
     }
 
+    if (currentlySelectedEnemyProvince != null){
+      featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedEnemyProvince));
+      currentlySelectedEnemyProvince = null;
+    }
+
+    if (currentlySelectedHumanProvince != null){
+      featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedHumanProvince));
+      currentlySelectedHumanProvince = null;
+    }
+  
+    invading_province.setText("");
+    opponent_province.setText("");
+
     currFaction = gameSystem.getFactions().get(turnPlayerCount);
     humanFaction = currFaction.getName();
     factionLabel.setText("Faction: " + humanFaction);
@@ -815,7 +851,28 @@ public class GloriaRomanusController{
       printMessageToTerminal(humanFaction + " " + "has already lost the game. Switch to next player!");
       endTurnButton.fire();
     }
+
+    occupiedProvinces.getItems().clear();
+    for (Province p : currFaction.getProvinces()) {
+      occupiedProvinces.getItems().add(p.getName());
+    }
+    
+    provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+
+    if (gameSystem.conditionToString().contains("WEALTH")) {
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
+    } else {
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()));
+    }
+
+    if (gameSystem.conditionToString().contains("TREASURY")) {
+      treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+    } else {
+      treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+    }
+
     printMessageToTerminal(String.format("Turn %d: %s's turn", turnTracker.getCurrTurn(), currFaction.getName()));
 
   }
+
 }
