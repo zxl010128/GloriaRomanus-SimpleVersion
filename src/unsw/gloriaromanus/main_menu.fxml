@@ -8,15 +8,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unsw.gloriaromanus.MainMenuController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="870.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unsw.gloriaromanus.MainMenuController">
    <children>
-      <ImageView fx:id="background" fitHeight="708.0" fitWidth="809.0" pickOnBounds="true" preserveRatio="true" />
-      <Label alignment="CENTER" layoutX="142.0" layoutY="193.0" text="Gloria Romanus" textAlignment="CENTER" textFill="#fffdfd">
+      <ImageView fx:id="background" fitHeight="870.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true" />
+      <Label alignment="CENTER" layoutX="225.0" layoutY="287.0" text="Gloria Romanus" textAlignment="CENTER" textFill="#fffdfd">
          <font>
             <Font size="83.0" />
          </font>
       </Label>
-      <VBox alignment="CENTER" layoutX="318.0" layoutY="426.0">
+      <VBox alignment="CENTER" layoutX="421.0" layoutY="449.0">
          <children>
             <Button fx:id="startButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleStartButton" prefHeight="33.0" prefWidth="157.0" text="Start Game">
                <font>

@@ -16,6 +16,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ChoiceBox?>
 
 <StackPane fx:controller="unsw.gloriaromanus.GloriaRomanusController" xmlns:fx="http://javafx.com/fxml"
            stylesheets="/unsw/gloriaromanus/style.css">
@@ -115,11 +116,11 @@
             </HBox>
             <VBox>
                 <Label text="Occupied Provinces:" />
-                <ListView fx:id="occupiedProvinces" />
+                <ChoiceBox fx:id="occupiedProvinces" />
             </VBox>
             <VBox>
                 <Label text="Recruitable Units:" />
-                <ListView fx:id="recruitableUnits" />
+                <ChoiceBox fx:id="recruitableUnits" />
                 <Button fx:id="recruitButton" text="Recruit" />
             </VBox>
         </VBox>
