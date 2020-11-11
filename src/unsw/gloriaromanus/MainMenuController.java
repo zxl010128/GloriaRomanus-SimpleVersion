@@ -77,7 +77,7 @@ public class MainMenuController {
         text.setWrapText(true);
 
         Label condition = new Label();
-        condition.setText("        Victory Conditions: 1. Conquering all territories (CONQUEST goal) 2. Accumulating a treasury balance of 100,000 gold (TREASURY goal) 3. Accumulating faction wealth of 400,000 gold (WEALTH goal)");
+        condition.setText("Victory Conditions:\n    1. Conquering all territories (CONQUEST goal)\n    2. Accumulating a treasury balance of 100,000 gold (TREASURY goal)\n    3. Accumulating faction wealth of 400,000 gold (WEALTH goal)");
         condition.setWrapText(true);
 
         Button ok = new Button();

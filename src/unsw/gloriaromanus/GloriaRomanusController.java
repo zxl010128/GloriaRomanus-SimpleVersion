@@ -107,9 +107,9 @@ public class GloriaRomanusController{
   @FXML
   private Button invadeButton;
   @FXML
-  private ListView<String> occupiedProvinces;
+  private ChoiceBox<String> occupiedProvinces;
   @FXML
-  private ListView<String> recruitableUnits;
+  private ChoiceBox<String> recruitableUnits;
   @FXML
   private Button recruitButton;
 
@@ -255,18 +255,18 @@ public class GloriaRomanusController{
       balanceLabel.setText(String.valueOf(currFaction.getBalance()));
     }
 
-     // add a Listview to display occupied provinces
-     occupiedProvinces.setPrefHeight(60);
-     for (Province p : currFaction.getProvinces()) {
-       occupiedProvinces.getItems().add(p.getName());
-     }
-     menu.getChildren().add(occupiedProvinces);
- 
-     // add a Listview to display recruitable soldiers
-     recruitableUnits.setPrefHeight(120);
-     for (String s : recruitableUnitsList) {
-       recruitableUnits.getItems().add(s);
-     }
+    // add a Listview to display occupied provinces
+    occupiedProvinces.setPrefWidth(250);
+    for (Province p : currFaction.getProvinces()) {
+      occupiedProvinces.getItems().add(p.getName());
+    }
+
+    // add a Listview to display recruitable soldiers
+    recruitableUnits.setPrefWidth(250);
+    for (String s : recruitableUnitsList) {
+      recruitableUnits.getItems().add(s);
+    }
+
   }
 
   @FXML
