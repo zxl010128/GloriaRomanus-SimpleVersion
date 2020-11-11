@@ -261,13 +261,29 @@ public class GloriaRomanusController{
       occupiedProvinces.getItems().add(p.getName());
     }
 
+    // recruit button won't be available until a province is selected
+    recruitButton.setDisable(true);
+    recruitableUnits.setDisable(true);
+    occupiedProvinces.setOnAction(e -> {
+      recruitableUnits.setDisable(false);
+    });
+
     // add a Listview to display recruitable soldiers
     recruitableUnits.setPrefWidth(250);
     for (String s : recruitableUnitsList) {
       recruitableUnits.getItems().add(s);
     }
+    recruitableUnits.setOnAction(e -> {
+      recruitButton.setDisable(false);
+    });
 
-    output_terminal.setWrapText(true);;
+    output_terminal.setWrapText(true);
+    recruitButton.setOnAction(e -> {
+      recruitButton.setDisable(true);
+      occupiedProvinces.getSelectionModel().clearSelection();
+      recruitableUnits.getSelectionModel().clearSelection();
+      recruitableUnits.setDisable(true);
+    });
 
     printMessageToTerminal("Hello, A new game started!");
     printMessageToTerminal("Your assigned faction is " + currFaction.getName());
