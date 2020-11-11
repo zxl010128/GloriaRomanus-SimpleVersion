@@ -91,7 +91,9 @@ public class GloriaRomanusController{
   @FXML
   private Label victoryConditon;
   @FXML
-  private Label balanceLabel;
+  private Label treasuryLabel;
+  @FXML
+  private Label wealthLabel;
   @FXML
   private Label yearLabel;
   @FXML
@@ -106,6 +108,8 @@ public class GloriaRomanusController{
   private Button saveButton;
   @FXML
   private Button invadeButton;
+  @FXML
+  private Button setTaxButton;
   @FXML
   private ChoiceBox<String> occupiedProvinces;
   @FXML
@@ -218,8 +222,7 @@ public class GloriaRomanusController{
 
     box.getChildren().addAll(title, cb, ok);
     box.setAlignment(Pos.CENTER);
-    box.setSpacing(10.0);
-    box.setOpacity(0.95);
+    box.setSpacing(30.0);
 
     Scene stageScene = new Scene(box, 500, 300);
     stageScene.setFill(Color.TRANSPARENT);
@@ -248,11 +251,18 @@ public class GloriaRomanusController{
     yearLabel.setText(String.valueOf(gameSystem.getYear()));
     turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
     victoryConditon.setText(gameSystem.conditionToString());
-    provincesLabel.setText("Provinces Conquered: " + "0/"+ gameSystem.getProvinces().size());
+    provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+
     if (gameSystem.conditionToString().contains("WEALTH")) {
-      balanceLabel.setText(String.valueOf(currFaction.getBalance()) + "/100,000");
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getBalance()) + " / 400,000");
     } else {
-      balanceLabel.setText(String.valueOf(currFaction.getBalance()));
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getBalance()));
+    }
+
+    if (gameSystem.conditionToString().contains("TREASURY")) {
+      treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+    } else {
+      treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
     }
 
     // add a Listview to display occupied provinces
@@ -617,7 +627,55 @@ public class GloriaRomanusController{
   public void handleQuitButton(ActionEvent e) throws IOException {
 
   }
-  
+
+  @FXML
+  public void handleSetTaxButton(ActionEvent e) throws IOException {
+    
+    Stage newStage = new Stage();
+
+    String p = occupiedProvinces.getSelectionModel().getSelectedItem();
+
+    Province curr = gameSystem.checkStringinProvince(p);
+    
+    VBox box = new VBox();
+
+    Label title = new Label();
+    title.setText("Tax Rate Introduction\n");
+    title.setTextAlignment(TextAlignment.CENTER);
+    title.setFont(new Font(20));
+    
+    Label intro = new Label();
+    intro.setText(" Low tax = +10 town-wealth growth per turn for the province, tax rate = 10%\n Normal tax = No effect on per turn town-wealth growth, tax rate = 15%\n High tax = -10 town-wealth growth per turn for the province (i.e. 10 gold loss to wealth per turn), tax rate = 20%\n Very high tax = -30 town-wealth growth per turn for the province, tax rate = 25%, -1 morale for all soldiers residing in the province");
+    intro.setWrapText(true);
+    intro.setTextAlignment(TextAlignment.LEFT);
+
+    Label status = new Label();
+    status.setText("Currently, your province " + p +"'s" + " tax rate is " + String.valueOf(curr.getTaxRate()) + ". Please select the new tax rate below.");
+    status.setWrapText(true);
+    status.setTextAlignment(TextAlignment.LEFT);
+
+    ChoiceBox<Double> cb = new ChoiceBox<>();
+    cb.getItems().addAll(0.1, 0.15, 0.2, 0.1);
+
+    Button ok = new Button();
+    ok.setText("Change Tax Rate");
+    ok.setOnAction(event -> {
+      curr.setTaxRate(cb.getSelectionModel().getSelectedItem());
+      newStage.close();
+    });
+
+    box.getChildren().addAll(title, intro, status, cb, ok);
+    box.setAlignment(Pos.CENTER);
+    box.setSpacing(15.0);
+    box.setOpacity(80.0);
+
+    Scene stageScene = new Scene(box, 500, 300);
+    stageScene.setFill(Color.TRANSPARENT);
+    newStage.initStyle(StageStyle.TRANSPARENT);
+    newStage.setScene(stageScene);
+    newStage.show();
+  }
+
   public void setMainMenuScene(Scene mainMenuScene) {
     this.mainMenuScene = mainMenuScene;
   }
