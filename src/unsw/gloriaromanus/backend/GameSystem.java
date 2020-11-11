@@ -645,7 +645,7 @@ public class GameSystem implements Observer {
             System.out.println(((Faction) obj).getName() + "has lost this game!");
             for(Faction faction: this.factions) {
                 if (faction.getName().equals(((Faction) obj).getName())) {
-                    this.factions.remove(faction);
+                    faction.setIs_defeat(true);
                     break;
                 }
             }
