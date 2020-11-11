@@ -333,10 +333,13 @@ public class GloriaRomanusController{
     });
 
     printMessageToTerminal("Hello, A new game started!");
-    printMessageToTerminal("Your assigned faction is " + currFaction.getName());
-    printMessageToTerminal("You have " + (gameSystem.getPlayerNum()-1) + " oppenents");
-    printMessageToTerminal("Utilise your turn to strengthen your faction so that you can win the game eventually");
+    // printMessageToTerminal("Your assigned faction is " + currFaction.getName());
+    printMessageToTerminal("There are " + gameSystem.getPlayerNum() + " players");
+    printMessageToTerminal("Fully utilise your turn to strengthen your faction so that you can win the game eventually");
     printMessageToTerminal("Have fun!");
+    // printMessageToTerminal(currFaction.getName() + "'s turn");
+    printMessageToTerminal(String.format("Turn %d: %s's turn", turnTracker.getCurrTurn(), currFaction.getName()));
+
   }
 
   @FXML
@@ -768,5 +771,7 @@ public class GloriaRomanusController{
       printMessageToTerminal(humanFaction + " " + "has already lost the game. Switch to next player!");
       endTurnButton.fire();
     }
+    printMessageToTerminal(String.format("Turn %d: %s's turn", turnTracker.getCurrTurn(), currFaction.getName()));
+
   }
 }
