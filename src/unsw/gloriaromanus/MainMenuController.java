@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.geometry.Insets;
 
 public class MainMenuController {
     @FXML
@@ -29,7 +30,7 @@ public class MainMenuController {
 
     @FXML
     private Button startGame;
-    
+
     @FXML
     public ImageView background;
 
@@ -44,11 +45,11 @@ public class MainMenuController {
         background.setImage(image);
 
         // Set button
-        startButton.setOnAction(e -> showStage());        
+        startButton.setOnAction(e -> showStage());
 
     }
 
-    @FXML 
+    @FXML
     public void handleStartButton(ActionEvent e) throws IOException {
         showStage();
     }
@@ -62,7 +63,7 @@ public class MainMenuController {
     }
 
     // A pop up window which shows the info of this game and a start playing button.
-    public void showStage(){
+    public void showStage() {
         Stage newStage = new Stage();
 
         VBox box = new VBox();
@@ -71,30 +72,40 @@ public class MainMenuController {
         title.setText("Notice!\n");
         title.setTextAlignment(TextAlignment.CENTER);
         title.setFont(new Font(24));
+        title.setStyle("-fx-text-fill: white");
 
         Label text = new Label();
         text.setText("        Welcome to Gloria Romanus! This a grand-strategy game, set in the time of Ancient Rome (around 200 BC), where the player can play as a faction of the time, with the overall goal of conquering all provinces in the game map (or succeeding at another grand victory objective). The game is also a turn-based game - each faction engages in actions during sequential turns, where they perform all actions to manage their armies and provinces for a single year in their turn, before clicking End turn, which will result in all other factions performing their turns sequentially.\n");
         text.setWrapText(true);
         text.setFont(new Font(15));
+        text.setStyle("-fx-text-fill: white");
 
         Label condition = new Label();
         condition.setText("    Victory Conditions:\n    1. Conquering all territories (CONQUEST goal)\n    2. Accumulating a treasury balance of 100,000 gold (TREASURY goal)\n    3. Accumulating faction wealth of 400,000 gold (WEALTH goal)");
         condition.setFont(new Font(15));
+        condition.setStyle("-fx-text-fill: white");
 
         Button ok = new Button();
         ok.setText("Start Playing!");
-        ok.setOnAction(e -> {stage.setScene(gameScene); newStage.close();});
+        ok.setOnAction(e -> {
+            stage.setScene(gameScene);
+            newStage.close();
+        });
+        ok.setStyle("-fx-background-color: white");
 
         box.getChildren().addAll(title, text, condition, ok);
         box.setAlignment(Pos.CENTER);
-        box.setSpacing(20.0);
-        box.setOpacity(0.98);
+        box.setSpacing(25.0);
+        box.setPadding(new Insets(10,10,10,10));
+        box.setStyle("-fx-background-color: transparent");
 
         Scene stageScene = new Scene(box, 600, 370);
-        stageScene.setFill(Color.TRANSPARENT);
+        stageScene.setFill(Color.BLACK);
         newStage.initStyle(StageStyle.TRANSPARENT);
+        newStage.setOpacity(0.95);
         newStage.setScene(stageScene);
         newStage.show();
     }
+
 
 }
