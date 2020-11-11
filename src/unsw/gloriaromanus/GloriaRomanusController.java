@@ -34,12 +34,14 @@ import unsw.gloriaromanus.backend.GameSystem;
 import unsw.gloriaromanus.backend.Province;
 import unsw.gloriaromanus.backend.TurnTracker;
 import unsw.gloriaromanus.backend.Faction;
+import unsw.gloriaromanus.backend.Unit;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.data.FeatureTable;
 import com.esri.arcgisruntime.data.GeoPackage;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
+// import com.esri.arcgisruntime.geometry.Unit;
 import com.esri.arcgisruntime.layers.FeatureLayer;
 import com.esri.arcgisruntime.loadable.LoadStatus;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -122,6 +124,10 @@ public class GloriaRomanusController{
   private Button formArmyButton;
   @FXML
   private Button assignArmyButton;
+  @FXML
+  private ChoiceBox<String> availableUnits;
+  @FXML
+  private ChoiceBox<String> availableArmies;
 
   private String FirstPlayerFaction;
 
@@ -300,8 +306,38 @@ public class GloriaRomanusController{
     // recruit button won't be available until a province is selected
     recruitButton.setDisable(true);
     recruitableUnits.setDisable(true);
+    availableUnits.setDisable(true);
+    availableArmies.setDisable(true);
+    formArmyButton.setDisable(true);
+    assignArmyButton.setDisable(true);
+
     occupiedProvinces.setOnAction(e -> {
+      // display units to availableUnits
+      String provinceName = occupiedProvinces.getValue();
+      Province selectedProvince = currFaction.getProvinceByName(provinceName);
+      List<Unit> provinceUnitList = selectedProvince.getUnits();
+      // availableUnits = new ChoiceBox<String>();
+      // availableUnits.setPrefWidth(125);
+      // TODO: How to update this choiceBox???????
+      if (provinceUnitList != null) {
+        for (Unit u : provinceUnitList) {
+          availableUnits.getItems().add(u.getName());
+        }
+      }
+
+      // TODO: Faction needs to store ARMY!!!!!
+
       recruitableUnits.setDisable(false);
+      availableUnits.setDisable(false);
+      availableArmies.setDisable(false);
+    });
+
+    availableUnits.setOnAction(e -> {
+      formArmyButton.setDisable(false);
+    });
+
+    availableArmies.setOnAction(e -> {
+      assignArmyButton.setDisable(false);
     });
 
     // add a Listview to display recruitable soldiers
