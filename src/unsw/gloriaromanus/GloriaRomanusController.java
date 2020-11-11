@@ -267,6 +267,13 @@ public class GloriaRomanusController{
       recruitableUnits.getItems().add(s);
     }
 
+    output_terminal.setWrapText(true);;
+
+    printMessageToTerminal("Hello, A new game started!");
+    printMessageToTerminal("Your assigned faction is " + currFaction.getName());
+    printMessageToTerminal("You have " + (gameSystem.getPlayerNum()-1) + " oppenents");
+    printMessageToTerminal("Utilise your turn to strengthen your faction so that you can win the game eventually");
+    printMessageToTerminal("Have fun!");
   }
 
   @FXML
@@ -512,13 +519,18 @@ public class GloriaRomanusController{
                 Feature f = features.get(0);
                 String province = (String)f.getAttributes().get("name");
 
-                if (provinceToOwningFactionMap.get(province).equals(humanFaction)){
+                // if (provinceToOwningFactionMap.get(province).equals(humanFaction)){
+                if (provinceToOwningFactionMap.get(province).equals(currFaction.getName())){
                   // province owned by human
                   if (currentlySelectedHumanProvince != null){
                     featureLayer.unselectFeature(currentlySelectedHumanProvince);
                   }
                   currentlySelectedHumanProvince = f;
                   invading_province.setText(province);
+
+                  // selected owned province will also be automatically selected in choicebox
+                  occupiedProvinces.getSelectionModel().select(province);
+
                 }
                 else{
                   if (currentlySelectedEnemyProvince != null){
