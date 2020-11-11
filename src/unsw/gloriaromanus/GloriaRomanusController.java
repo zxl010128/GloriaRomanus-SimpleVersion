@@ -322,7 +322,6 @@ public class GloriaRomanusController{
         printMessageToTerminal(String.format("%s: %s can't train a %s unit now)", 
           currFaction.getName(), provinceName, unitName));
       }
-      printMessageToTerminal(currFaction.getName() + " " );
 
       
 
