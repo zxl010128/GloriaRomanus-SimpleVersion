@@ -573,6 +573,18 @@ public class GameSystem implements Observer {
 
         return false;
     }
+
+    public Province checkStringinProvince(String pronvince) {
+
+        for (Province p : this.provinces) {
+            if (p.getName().equals(pronvince)) {
+                return p;
+            }
+        }
+
+        return null;
+    }
+
     /** 
      * @param obj
      * @return boolean
