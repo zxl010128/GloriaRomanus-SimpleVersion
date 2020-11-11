@@ -51,19 +51,23 @@
                 <Font size="14.0" />
             </font>
         </Label>
-        <HBox>
-            <Label text="Treasury Balance: "/>
-            <Label fx:id="balanceLabel" alignment="CENTER" textAlignment="CENTER">
+        <VBox spacing="5.0">
+            <Label fx:id="treasuryLabel" alignment="CENTER" textAlignment="CENTER">
                 <font>
                     <Font size="16.0" />
                 </font>
             </Label>
-        </HBox>
-        <Label fx:id="provincesLabel" alignment="CENTER" text="Faction: " textAlignment="CENTER">
+            <Label fx:id="wealthLabel" alignment="CENTER" textAlignment="CENTER">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+                <Label fx:id="provincesLabel" alignment="CENTER" text="Faction: " textAlignment="CENTER">
             <font>
                 <Font size="16.0" />
             </font>
         </Label>
+        </VBox>
         <HBox>
             <VBox>
                 <Label text="Current Year:">
@@ -95,8 +99,8 @@
             <Label text="Output from interactions"/>
             <TextArea fx:id="output_terminal" text="" editable="false"/>
         </VBox>
-        <VBox>
-            <Button fx:id="playerNumButton" text="SelectPlayerNumber">
+        <VBox spacing="15.0">
+            <Button fx:id="playerNumButton" text="SetPlayerNumber">
                 <VBox.margin>
                     <Insets bottom="0.0" />
                 </VBox.margin>
@@ -114,11 +118,12 @@
                 </Button>
                 <Button fx:id="quitButton" text="Quit Game" onAction="#handleQuitButton"/>
             </HBox>
-            <VBox>
+            <VBox spacing="15.0">
                 <Label text="Occupied Provinces:" />
                 <ChoiceBox fx:id="occupiedProvinces" />
+                <Button fx:id="setTaxButton" text="setTax" onAction="#handleSetTaxButton"/>
             </VBox>
-            <VBox>
+            <VBox spacing="15.0">
                 <Label text="Recruitable Units:" />
                 <ChoiceBox fx:id="recruitableUnits" />
                 <Button fx:id="recruitButton" text="Recruit" />
