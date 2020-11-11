@@ -125,6 +125,15 @@ public class Faction implements Subject{
         return provinces;
     }
 
+    public Province getProvinceByName(String name) {
+        for (Province p : provinces) {
+            if (p.getName().equals(name)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     public void setFactionsTracker(FactionsTracker factionsTracker) {
         this.factionsTracker = factionsTracker;
     }

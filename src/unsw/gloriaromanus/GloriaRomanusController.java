@@ -70,6 +70,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import javafx.geometry.Pos;
 
+import static java.util.Map.entry;
+
 public class GloriaRomanusController{
 
   @FXML
@@ -157,6 +159,24 @@ public class GloriaRomanusController{
     "missile infantry",
     "chariots"
   };
+
+  private Map<String, Integer> unitTurns = Map.ofEntries(
+    entry("Roman legionary", 3),
+    entry("Gallic berserker", 2),
+    entry("Celtic Briton berserker", 2),
+    entry("Germanic berserker", 2),
+    entry("melee cavalry", 1),
+    entry("pikemen", 1),
+    entry("hoplite", 1),
+    entry("javelin-skirmisher", 1),
+    entry("elephant", 3),
+    entry("horse-archer", 1),
+    entry("druid", 2),
+    entry("melee infantry", 1),
+    entry("heavy infantry", 1),
+    entry("missile infantry", 1),
+    entry("chariots", 2)
+  );
   
   @FXML
   private void initialize() throws JsonParseException, JsonMappingException, IOException {
@@ -289,6 +309,24 @@ public class GloriaRomanusController{
 
     output_terminal.setWrapText(true);
     recruitButton.setOnAction(e -> {
+      // recruit a selected unit to selected province
+      String provinceName = occupiedProvinces.getValue();
+      String unitName = recruitableUnits.getValue();
+      Province selectedProvince = currFaction.getProvinceByName(provinceName);
+      
+      if (selectedProvince.recruit(unitName, turnTracker.getCurrTurn())) {
+        int finishTurn = turnTracker.getCurrTurn() + unitTurns.get(unitName);
+        printMessageToTerminal(String.format("%s: %s trains a %s (will be available on %d)", 
+          currFaction.getName(), provinceName, unitName, finishTurn));
+      } else {
+        printMessageToTerminal(String.format("%s: %s can't train a %s unit now)", 
+          currFaction.getName(), provinceName, unitName));
+      }
+      printMessageToTerminal(currFaction.getName() + " " );
+
+      
+
+      // manage button and choicebox
       recruitButton.setDisable(true);
       occupiedProvinces.getSelectionModel().clearSelection();
       recruitableUnits.getSelectionModel().clearSelection();
