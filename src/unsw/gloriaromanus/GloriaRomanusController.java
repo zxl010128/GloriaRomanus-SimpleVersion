@@ -118,6 +118,10 @@ public class GloriaRomanusController{
   private ChoiceBox<String> recruitableUnits;
   @FXML
   private Button recruitButton;
+  @FXML
+  private Button formArmyButton;
+  @FXML
+  private Button assignArmyButton;
 
   private String FirstPlayerFaction;
 
@@ -276,9 +280,9 @@ public class GloriaRomanusController{
     provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
 
     if (gameSystem.conditionToString().contains("WEALTH")) {
-      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getBalance()) + " / 400,000");
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
     } else {
-      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getBalance()));
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()));
     }
 
     if (gameSystem.conditionToString().contains("TREASURY")) {
@@ -335,10 +339,13 @@ public class GloriaRomanusController{
     });
 
     printMessageToTerminal("Hello, A new game started!");
-    printMessageToTerminal("Your assigned faction is " + currFaction.getName());
-    printMessageToTerminal("You have " + (gameSystem.getPlayerNum()-1) + " oppenents");
-    printMessageToTerminal("Utilise your turn to strengthen your faction so that you can win the game eventually");
+    // printMessageToTerminal("Your assigned faction is " + currFaction.getName());
+    printMessageToTerminal("There are " + gameSystem.getPlayerNum() + " players");
+    printMessageToTerminal("Fully utilise your turn to strengthen your faction so that you can win the game eventually");
     printMessageToTerminal("Have fun!");
+    // printMessageToTerminal(currFaction.getName() + "'s turn");
+    printMessageToTerminal(String.format("Turn %d: %s's turn", turnTracker.getCurrTurn(), currFaction.getName()));
+
   }
 
   @FXML
@@ -772,5 +779,7 @@ public class GloriaRomanusController{
       printMessageToTerminal(humanFaction + " " + "has already lost the game. Switch to next player!");
       endTurnButton.fire();
     }
+    printMessageToTerminal(String.format("Turn %d: %s's turn", turnTracker.getCurrTurn(), currFaction.getName()));
+
   }
 }
