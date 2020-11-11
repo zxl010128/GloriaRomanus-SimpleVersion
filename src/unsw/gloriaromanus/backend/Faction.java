@@ -15,6 +15,7 @@ public class Faction implements Subject{
     private FactionsTracker factionsTracker;
     private GameSystem gamesys;
     private boolean is_win;
+    private boolean is_defeat;
 
     public Faction(String name, ProvincesTracker provincesTracker, FactionsTracker factionsTracker) {
         this.name = name;
@@ -23,6 +24,7 @@ public class Faction implements Subject{
         this.totalWealth = 0;
         this.gamesys = null;
         this.is_win = false;
+        this.is_defeat = false;
         this.provincesTracker = provincesTracker;
         this.factionsTracker = factionsTracker;
         factionsTracker.addFaction(this);
@@ -35,6 +37,7 @@ public class Faction implements Subject{
         this.totalWealth = 0;
         this.gamesys = null;
         this.is_win = false;
+        this.is_defeat = false;
         this.provincesTracker = provincesTracker;
         this.factionsTracker = factionsTracker;
         for (Province p : provinces) {
@@ -54,6 +57,7 @@ public class Faction implements Subject{
         this.provinces = new ArrayList<Province>();
         this.gamesys = null;
         this.is_win = json.getBoolean("is_win");
+        this.is_defeat = json.getBoolean("is_defeat");
         JSONArray provincesJSON = json.getJSONArray("provinces");
         for (int i = 0; i < provincesJSON.length(); i++) {
             this.provinces.add(new Province(provincesJSON.getJSONObject(i)));
@@ -135,6 +139,7 @@ public class Faction implements Subject{
         output.put("balance", balance);
         output.put("totalWealth", totalWealth);
         output.put("is_win", is_win);
+        output.put("is_defeat", is_defeat);
         JSONArray provincesJSON = new JSONArray();
         for (Province p : provinces) {
             provincesJSON.put(p.toJSON());
@@ -186,5 +191,13 @@ public class Faction implements Subject{
 
     public boolean isIs_win() {
         return is_win;
+    }
+
+    public boolean isIs_defeat() {
+        return is_defeat;
+    }
+
+    public void setIs_defeat(boolean is_defeat) {
+        this.is_defeat = is_defeat;
     }
 }
