@@ -25,3 +25,7 @@
   .color-picker .color-picker-label {
      -fx-text-fill: black;
   }
+
+  .choice-box .label {
+   -fx-text-fill: rgb(0, 0, 0); 
+}

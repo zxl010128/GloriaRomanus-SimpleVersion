@@ -10,7 +10,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="870.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="unsw.gloriaromanus.MainMenuController">
    <children>
-      <ImageView fx:id="background" fitHeight="870.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="background" fitHeight="900.0" fitWidth="1010.0" pickOnBounds="true" preserveRatio="true" />
       <Label alignment="CENTER" layoutX="225.0" layoutY="287.0" text="Gloria Romanus" textAlignment="CENTER" textFill="#fffdfd">
          <font>
             <Font size="83.0" />
