@@ -201,9 +201,11 @@ public class GloriaRomanusController{
     invadeButton.setDisable(true);
     quitButton.setDisable(true);
     recruitButton.setDisable(true);
+    setTaxButton.setDisable(true);
 
     playerNumButton.setOnAction(e -> {
-      showStage(); 
+      showStage();
+      setTaxButton.setDisable(false);
       playerNumButton.setDisable(true);
       endTurnButton.setDisable(false);
       saveButton.setDisable(false);
@@ -230,7 +232,7 @@ public class GloriaRomanusController{
     cb.getItems().addAll(2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
 
     Button ok = new Button();
-    ok.setText("Start Playing!");
+    ok.setText("Confirm");
     ok.setOnAction(e -> {
       try {
         initialMap(cb.getSelectionModel().getSelectedItem());
@@ -698,6 +700,10 @@ public class GloriaRomanusController{
     
     Stage newStage = new Stage();
 
+    if (occupiedProvinces.getSelectionModel().getSelectedItem() == null) {
+      printMessageToTerminal("You must select a province before pressing setTax.");
+      return;
+    }
     String p = occupiedProvinces.getSelectionModel().getSelectedItem();
 
     Province curr = gameSystem.checkStringinProvince(p);
@@ -720,23 +726,21 @@ public class GloriaRomanusController{
     status.setTextAlignment(TextAlignment.LEFT);
 
     ChoiceBox<Double> cb = new ChoiceBox<>();
-    cb.getItems().addAll(0.1, 0.15, 0.2, 0.1);
+    cb.getItems().addAll(0.1, 0.15, 0.2, 0.25);
 
     Button ok = new Button();
     ok.setText("Change Tax Rate");
     ok.setOnAction(event -> {
       curr.setTaxRate(cb.getSelectionModel().getSelectedItem());
+      printMessageToTerminal("Successfully set " + p + "'s" + " tax rate to " + String.valueOf(cb.getSelectionModel().getSelectedItem()) + ".");
       newStage.close();
     });
 
     box.getChildren().addAll(title, intro, status, cb, ok);
     box.setAlignment(Pos.CENTER);
-    box.setSpacing(15.0);
-    box.setOpacity(80.0);
+    box.setSpacing(25.0);
 
-    Scene stageScene = new Scene(box, 500, 300);
-    stageScene.setFill(Color.TRANSPARENT);
-    newStage.initStyle(StageStyle.TRANSPARENT);
+    Scene stageScene = new Scene(box, 600, 400);
     newStage.setScene(stageScene);
     newStage.show();
   }

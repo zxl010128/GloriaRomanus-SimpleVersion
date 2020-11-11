@@ -70,15 +70,16 @@ public class MainMenuController {
         Label title = new Label();
         title.setText("Notice!\n");
         title.setTextAlignment(TextAlignment.CENTER);
-        title.setFont(new Font(20));
+        title.setFont(new Font(24));
 
         Label text = new Label();
         text.setText("        Welcome to Gloria Romanus! This a grand-strategy game, set in the time of Ancient Rome (around 200 BC), where the player can play as a faction of the time, with the overall goal of conquering all provinces in the game map (or succeeding at another grand victory objective). The game is also a turn-based game - each faction engages in actions during sequential turns, where they perform all actions to manage their armies and provinces for a single year in their turn, before clicking End turn, which will result in all other factions performing their turns sequentially.\n");
         text.setWrapText(true);
+        text.setFont(new Font(15));
 
         Label condition = new Label();
-        condition.setText("Victory Conditions:\n    1. Conquering all territories (CONQUEST goal)\n    2. Accumulating a treasury balance of 100,000 gold (TREASURY goal)\n    3. Accumulating faction wealth of 400,000 gold (WEALTH goal)");
-        condition.setWrapText(true);
+        condition.setText("    Victory Conditions:\n    1. Conquering all territories (CONQUEST goal)\n    2. Accumulating a treasury balance of 100,000 gold (TREASURY goal)\n    3. Accumulating faction wealth of 400,000 gold (WEALTH goal)");
+        condition.setFont(new Font(15));
 
         Button ok = new Button();
         ok.setText("Start Playing!");
@@ -86,10 +87,10 @@ public class MainMenuController {
 
         box.getChildren().addAll(title, text, condition, ok);
         box.setAlignment(Pos.CENTER);
-        box.setSpacing(10.0);
-        box.setOpacity(0.85);
+        box.setSpacing(20.0);
+        box.setOpacity(0.98);
 
-        Scene stageScene = new Scene(box, 500, 300);
+        Scene stageScene = new Scene(box, 600, 370);
         stageScene.setFill(Color.TRANSPARENT);
         newStage.initStyle(StageStyle.TRANSPARENT);
         newStage.setScene(stageScene);
