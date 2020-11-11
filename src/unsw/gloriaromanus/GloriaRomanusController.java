@@ -113,6 +113,9 @@ public class GloriaRomanusController{
   @FXML
   private Button recruitButton;
 
+  private String FirstPlayerFaction;
+
+  private Integer turnPlayerCount;
 
   private ArcGISMap map;
 
@@ -235,7 +238,8 @@ public class GloriaRomanusController{
     turnTracker = gameSystem.getTurnTracker();
 
     humanFaction = currFaction.getName();
-
+    FirstPlayerFaction = currFaction.getName();
+    turnPlayerCount = 0;
     initializeProvinceLayers();
 
     quitButton.setOnAction(e -> stage.setScene(mainMenuScene));
@@ -620,8 +624,26 @@ public class GloriaRomanusController{
 
   @FXML
   public void handleEndTurnButton(ActionEvent e) throws IOException {
-    gameSystem.NextTurn();
-    yearLabel.setText(String.valueOf(gameSystem.getYear()));
-    turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
+    
+    turnPlayerCount += 1;
+
+    if (turnPlayerCount == gameSystem.getFactions().size()) {
+      turnPlayerCount = 0;
+    }
+
+    currFaction = gameSystem.getFactions().get(turnPlayerCount);
+    humanFaction = currFaction.getName();
+    factionLabel.setText("Faction: " + humanFaction);
+
+    if (humanFaction.equals(FirstPlayerFaction)) {
+      gameSystem.NextTurn();
+      yearLabel.setText(String.valueOf(gameSystem.getYear()));
+      turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));      
+    }
+    
+    if (currFaction.isIs_defeat() == true) {
+      printMessageToTerminal(humanFaction + " " + "has already lost the game. Switch to next player!");
+      endTurnButton.fire();
+    }
   }
 }
