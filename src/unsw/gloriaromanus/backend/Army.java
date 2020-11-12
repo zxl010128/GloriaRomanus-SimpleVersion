@@ -70,7 +70,7 @@ public class Army {
     /**
      * assign an army to invade a unoccupied province
      */
-    public void invade(Province destination) {
+    public int invade(Province destination) {
         // check if the destination is able to move to
 
         // move
@@ -83,14 +83,17 @@ public class Army {
         if (winner == null) {
             // Draw
             this.updateAfterDraw();
+            return 0;
 
         } else if (winner.getFactionName().equals(this.getFactionName())) {
             // Win
             this.updateAfterWin(destination);
+            return 1;
 
         } else {
             // Lose
             this.updateAfterLose();
+            return -1;
 
         }
     
