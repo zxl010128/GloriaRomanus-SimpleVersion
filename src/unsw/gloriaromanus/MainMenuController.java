@@ -4,15 +4,21 @@ import java.io.IOException;
 import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.print.PrintColor;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -35,7 +41,9 @@ public class MainMenuController {
     public ImageView background;
 
     private Stage stage;
+    private Scene scene;
     private Scene gameScene;
+    private GloriaRomanusController gameSceneController;
 
     @FXML
     public void initialize() {
@@ -46,6 +54,7 @@ public class MainMenuController {
 
         // Set button
         startButton.setOnAction(e -> showStage());
+        loadButton.setOnAction(e -> showLoadStage());
 
     }
 
@@ -60,6 +69,22 @@ public class MainMenuController {
 
     public void setGameScene(Scene gameScene) {
         this.gameScene = gameScene;
+    }
+
+    public void setGameSceneController(GloriaRomanusController gameSceneController) {
+        this.gameSceneController = gameSceneController;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
+    public Scene getScene() {
+        return scene;
     }
 
     // A pop up window which shows the info of this game and a start playing button.
@@ -89,6 +114,21 @@ public class MainMenuController {
         ok.setText("Start Playing!");
         ok.setOnAction(e -> {
             stage.setScene(gameScene);
+            // gameSceneController = new GloriaRomanusController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+            try {
+                Parent root = loader.load();
+                gameSceneController = loader.getController();
+                gameScene = new Scene(root);
+                this.setGameScene(gameScene);
+                this.setGameSceneController(gameSceneController);
+                gameSceneController.setStage(this.getStage());
+                gameSceneController.setMainMenuScene(this.getScene());
+
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+ 
             newStage.close();
         });
         ok.setStyle("-fx-background-color: white");
@@ -107,5 +147,49 @@ public class MainMenuController {
         newStage.show();
     }
 
+    public void showLoadStage() {
+        Stage newStage = new Stage();
+        // Pane pane = new Pane();
+        Label title = new Label();
+        VBox box = new VBox();
+        Button loadGameButton = new Button();
+        loadGameButton.setDisable(true);
+
+        // text: Saved games:
+        title.setText("Saved games:");
+        title.setAlignment(Pos.TOP_LEFT);
+        title.setFont(new Font(24));
+        title.setStyle("-fx-text-fill: white");
+        
+        // listview to store saved games
+        ListView<String> savedGames = new ListView<String>();
+        for (int i = 0; i < 5; i++) {
+            savedGames.getItems().add("Empty");
+        }
+        savedGames.setOnMouseClicked(e -> {
+            loadGameButton.setDisable(false);
+        });
+
+        // Load button
+        
+        // loadGameButton.setdis
+        loadGameButton.setText("Load");
+        loadGameButton.setPrefWidth(150);
+        loadGameButton.setOnAction(e -> {
+            // load the game
+        });
+
+        box.getChildren().addAll(title, savedGames, loadGameButton);
+        box.setSpacing(25.0);
+        box.setPadding(new Insets(10,10,10,10));
+        box.setStyle("-fx-background-color: transparent");
+
+        Scene stageScene = new Scene(box, 600, 370);
+        stageScene.setFill(Color.BLACK);
+        newStage.initStyle(StageStyle.TRANSPARENT);
+        newStage.setOpacity(0.95);
+        newStage.setScene(stageScene);
+        newStage.show();
+    }
 
 }

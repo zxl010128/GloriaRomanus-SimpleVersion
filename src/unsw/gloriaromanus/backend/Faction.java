@@ -209,4 +209,6 @@ public class Faction implements Subject{
     public void setIs_defeat(boolean is_defeat) {
         this.is_defeat = is_defeat;
     }
+
+    
 }
