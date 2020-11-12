@@ -126,6 +126,10 @@ public class GloriaRomanusController{
   @FXML
   private Button assignArmyButton;
   @FXML
+  private Button myProvinceButton;
+  @FXML
+  private Button destinationButton;
+  @FXML
   private ChoiceBox<String> availableUnits;
   @FXML
   private ChoiceBox<String> availableArmies;
@@ -144,6 +148,7 @@ public class GloriaRomanusController{
 
   private Feature currentlySelectedHumanProvince;
   private Feature currentlySelectedEnemyProvince;
+  private Feature currentlySelectedProvince;
 
   private FeatureLayer featureLayer_provinces;
 
@@ -215,7 +220,7 @@ public class GloriaRomanusController{
     setTaxButton.setDisable(true);
     formArmyButton.setDisable(true);
     assignArmyButton.setDisable(true);
-
+    
     playerNumButton.setOnAction(e -> {
       showStage();
       setTaxButton.setDisable(false);
@@ -313,7 +318,7 @@ public class GloriaRomanusController{
     }
 
     // add a Listview to display occupied provinces
-    occupiedProvinces.setPrefWidth(250);
+    occupiedProvinces.setPrefWidth(200);
     for (Province p : currFaction.getProvinces()) {
       occupiedProvinces.getItems().add(p.getName());
     }
@@ -356,7 +361,7 @@ public class GloriaRomanusController{
     });
 
     // add a Listview to display recruitable soldiers
-    recruitableUnits.setPrefWidth(250);
+    recruitableUnits.setPrefWidth(200);
     for (String s : recruitableUnitsList) {
       recruitableUnits.getItems().add(s);
     }
@@ -640,30 +645,14 @@ public class GloriaRomanusController{
               else if (features.size() == 1){
                 // note maybe best to track whether selected...
                 Feature f = features.get(0);
-                String province = (String)f.getAttributes().get("name");
 
-                // if (provinceToOwningFactionMap.get(province).equals(humanFaction)){
-                if (provinceToOwningFactionMap.get(province).equals(currFaction.getName())){
-                  // province owned by human
-                  if (currentlySelectedHumanProvince != null){
-                    featureLayer.unselectFeature(currentlySelectedHumanProvince);
-                  }
-                  currentlySelectedHumanProvince = f;
-                  invading_province.setText(province);
-
-                  // selected owned province will also be automatically selected in choicebox
-                  occupiedProvinces.getSelectionModel().select(province);
-
+                if (currentlySelectedProvince != null) {
+                  featureLayer.unselectFeature(currentlySelectedProvince);
                 }
-                else{
-                  if (currentlySelectedEnemyProvince != null){
-                    featureLayer.unselectFeature(currentlySelectedEnemyProvince);
-                  }
-                  currentlySelectedEnemyProvince = f;
-                  opponent_province.setText(province);
-                }
-
-                featureLayer.selectFeature(f);                
+                
+                currentlySelectedProvince = f;
+                featureLayer.selectFeature(f);
+                
               }
 
               
@@ -754,6 +743,39 @@ public class GloriaRomanusController{
   }
 
   @FXML
+  public void handleSetProvinceButton(ActionEvent e) throws IOException {
+
+    List<String> occupied = new ArrayList<String>();
+    for (Province p : currFaction.getProvinces()) {
+      occupied.add(p.getName());
+    }
+
+    if (currentlySelectedProvince == null) {
+      printMessageToTerminal("Please select a province.");
+      return;
+    }
+
+    String humanProvince = (String)currentlySelectedProvince.getAttributes().get("name");
+    if (!occupied.contains(humanProvince)) {
+      printMessageToTerminal("The province you selected is not your territory!");
+      return;
+    }
+
+    currentlySelectedHumanProvince = currentlySelectedProvince;
+    invading_province.setText((String)currentlySelectedProvince.getAttributes().get("name"));
+  }
+
+  @FXML
+  public void handleDestinationButton(ActionEvent e) throws IOException {
+    if (currentlySelectedProvince == null) {
+      printMessageToTerminal("Please select a province.");
+      return;
+    }
+    currentlySelectedEnemyProvince = currentlySelectedProvince;
+    opponent_province.setText((String)currentlySelectedProvince.getAttributes().get("name"));
+  }
+
+  @FXML
   public void handleSetTaxButton(ActionEvent e) throws IOException {
     
     Stage newStage = new Stage();
@@ -832,6 +854,11 @@ public class GloriaRomanusController{
     if (currentlySelectedHumanProvince != null){
       featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedHumanProvince));
       currentlySelectedHumanProvince = null;
+    }
+
+    if (currentlySelectedProvince != null){
+      featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedProvince));
+      currentlySelectedProvince = null;
     }
   
     invading_province.setText("");
