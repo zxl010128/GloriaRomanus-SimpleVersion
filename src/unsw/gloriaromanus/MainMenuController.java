@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.print.PrintColor;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
@@ -35,6 +38,7 @@ public class MainMenuController {
     public ImageView background;
 
     private Stage stage;
+    private Scene scene;
     private Scene gameScene;
     private GloriaRomanusController gameSceneController;
 
@@ -61,6 +65,10 @@ public class MainMenuController {
 
     public void setGameScene(Scene gameScene) {
         this.gameScene = gameScene;
+    }
+
+    public void setGameSceneController(GloriaRomanusController gameSceneController) {
+        this.gameSceneController = gameSceneController;
     }
 
     // A pop up window which shows the info of this game and a start playing button.
@@ -90,6 +98,21 @@ public class MainMenuController {
         ok.setText("Start Playing!");
         ok.setOnAction(e -> {
             stage.setScene(gameScene);
+            // gameSceneController = new GloriaRomanusController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+            try {
+                Parent root = loader.load();
+                gameSceneController = loader.getController();
+                gameScene = new Scene(root);
+                this.setGameScene(gameScene);
+                this.setGameSceneController(gameSceneController);
+                gameSceneController.setStage(this.getStage());
+                gameSceneController.setMainMenuScene(this.getScene());
+
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+ 
             newStage.close();
         });
         ok.setStyle("-fx-background-color: white");
@@ -108,5 +131,16 @@ public class MainMenuController {
         newStage.show();
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
 
 }
