@@ -33,6 +33,7 @@ import javafx.stage.Stage;
 import unsw.gloriaromanus.backend.GameSystem;
 import unsw.gloriaromanus.backend.Province;
 import unsw.gloriaromanus.backend.TurnTracker;
+import unsw.gloriaromanus.backend.Army;
 import unsw.gloriaromanus.backend.Faction;
 import unsw.gloriaromanus.backend.Unit;
 
@@ -153,6 +154,8 @@ public class GloriaRomanusController{
   private GameSystem gameSystem;
   private TurnTracker turnTracker;
   private Faction currFaction;
+  private Army userSelectedArmy;
+
   private String[] recruitableUnitsList = {
     "Roman legionary",
     "Gallic berserker",
@@ -205,6 +208,8 @@ public class GloriaRomanusController{
 
     currentlySelectedHumanProvince = null;
     currentlySelectedEnemyProvince = null;
+
+    userSelectedArmy = null;
 
     // Enable all the button except PlayerNumButton
     endTurnButton.setDisable(true);
@@ -404,24 +409,43 @@ public class GloriaRomanusController{
     if (currentlySelectedHumanProvince != null && currentlySelectedEnemyProvince != null){
       String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
       String enemyProvince = (String)currentlySelectedEnemyProvince.getAttributes().get("name");
+      Faction enemyFaction = gameSystem.getFactionByProvinceName(enemyProvince);
+
       if (confirmIfProvincesConnected(humanProvince, enemyProvince)){
-        // TODO = have better battle resolution than 50% chance of winning
-        Random r = new Random();
-        int choice = r.nextInt(2);
-        if (choice == 0){
-          // human won. Transfer 40% of troops of human over. No casualties by human, but enemy loses all troops
-          int numTroopsToTransfer = provinceToNumberTroopsMap.get(humanProvince)*2/5;
-          provinceToNumberTroopsMap.put(enemyProvince, numTroopsToTransfer);
-          provinceToNumberTroopsMap.put(humanProvince, provinceToNumberTroopsMap.get(humanProvince)-numTroopsToTransfer);
-          provinceToOwningFactionMap.put(enemyProvince, humanFaction);
-          printMessageToTerminal("Won battle!");
+        int invadeResult = userSelectedArmy.invade(enemyFaction.getProvinceByName(enemyProvince));
+        switch (invadeResult) {
+          case -1:
+            // fail
+            printMessageToTerminal(String.format("DEFEATED: %s: %s failed to invade %s", currFaction.getName(), humanProvince, enemyProvince));
+            break;
+          case 0:
+            // draw
+            printMessageToTerminal(String.format("DRAW: %s: %s failed to invade %s", currFaction.getName(), humanProvince, enemyProvince));
+            break;
+          case 1:
+            printMessageToTerminal(String.format("Win: %s: %s just invaded %s successfully", currFaction.getName(), humanProvince, enemyProvince));
+            // win
+            break;
         }
-        else{
-          // enemy won. Human loses 60% of soldiers in the province
-          int numTroopsLost = provinceToNumberTroopsMap.get(humanProvince)*3/5;
-          provinceToNumberTroopsMap.put(humanProvince, provinceToNumberTroopsMap.get(humanProvince)-numTroopsLost);
-          printMessageToTerminal("Lost battle!");
-        }
+
+
+        // // TODO = have better battle resolution than 50% chance of winning
+        // Random r = new Random();
+        // int choice = r.nextInt(2);
+        // if (choice == 0){
+        //   // human won. Transfer 40% of troops of human over. No casualties by human, but enemy loses all troops
+        //   int numTroopsToTransfer = provinceToNumberTroopsMap.get(humanProvince)*2/5;
+        //   provinceToNumberTroopsMap.put(enemyProvince, numTroopsToTransfer);
+        //   provinceToNumberTroopsMap.put(humanProvince, provinceToNumberTroopsMap.get(humanProvince)-numTroopsToTransfer);
+        //   provinceToOwningFactionMap.put(enemyProvince, humanFaction);
+        //   printMessageToTerminal("Won battle!");
+        // }
+        // else{
+        //   // enemy won. Human loses 60% of soldiers in the province
+        //   int numTroopsLost = provinceToNumberTroopsMap.get(humanProvince)*3/5;
+        //   provinceToNumberTroopsMap.put(humanProvince, provinceToNumberTroopsMap.get(humanProvince)-numTroopsLost);
+        //   printMessageToTerminal("Lost battle!");
+        // }
         resetSelections();  // reset selections in UI
         addAllPointGraphics(); // reset graphics
       }
