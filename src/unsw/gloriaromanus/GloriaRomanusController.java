@@ -148,7 +148,7 @@ public class GloriaRomanusController{
   private String humanFaction;
 
   private Feature currentlySelectedHumanProvince;
-  private Feature currentlySelectedEnemyProvince;
+  private Feature currentlySelectedDestination;
   private Feature currentlySelectedProvince;
 
   private FeatureLayer featureLayer_provinces;
@@ -212,7 +212,7 @@ public class GloriaRomanusController{
     // select in loading screen)
 
     currentlySelectedHumanProvince = null;
-    currentlySelectedEnemyProvince = null;
+    currentlySelectedDestination = null;
 
     userSelectedArmy = null;
 
@@ -229,6 +229,8 @@ public class GloriaRomanusController{
     recruitableUnits.setDisable(true);
     availableUnits.setDisable(true);
     availableArmies.setDisable(true);
+    myProvinceButton.setDisable(true);
+    destinationButton.setDisable(true);
 
     playerNumButton.setOnAction(e -> {
       showStage();
@@ -245,6 +247,8 @@ public class GloriaRomanusController{
       recruitableUnits.setDisable(false);
       availableUnits.setDisable(false);
       availableArmies.setDisable(false);
+      myProvinceButton.setDisable(false);
+      destinationButton.setDisable(false);
     });
     
   }
@@ -419,9 +423,9 @@ public class GloriaRomanusController{
 
   @FXML
   public void clickedInvadeButton(ActionEvent e) throws IOException {
-    if (currentlySelectedHumanProvince != null && currentlySelectedEnemyProvince != null){
+    if (currentlySelectedHumanProvince != null && currentlySelectedDestination != null){
       String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
-      String enemyProvince = (String)currentlySelectedEnemyProvince.getAttributes().get("name");
+      String enemyProvince = (String)currentlySelectedDestination.getAttributes().get("name");
       Faction enemyFaction = gameSystem.getFactionByProvinceName(enemyProvince);
 
       if (confirmIfProvincesConnected(humanProvince, enemyProvince)){
@@ -744,8 +748,8 @@ public class GloriaRomanusController{
   }
 
   private void resetSelections(){
-    featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedEnemyProvince, currentlySelectedHumanProvince));
-    currentlySelectedEnemyProvince = null;
+    featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedDestination, currentlySelectedHumanProvince));
+    currentlySelectedDestination = null;
     currentlySelectedHumanProvince = null;
     invading_province.setText("");
     opponent_province.setText("");
@@ -803,7 +807,7 @@ public class GloriaRomanusController{
       printMessageToTerminal("Please select a province.");
       return;
     }
-    currentlySelectedEnemyProvince = currentlySelectedProvince;
+    currentlySelectedDestination = currentlySelectedProvince;
     opponent_province.setText((String)currentlySelectedProvince.getAttributes().get("name"));
   }
 
@@ -878,9 +882,9 @@ public class GloriaRomanusController{
       turnPlayerCount = 0;
     }
 
-    if (currentlySelectedEnemyProvince != null){
-      featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedEnemyProvince));
-      currentlySelectedEnemyProvince = null;
+    if (currentlySelectedDestination != null){
+      featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedDestination));
+      currentlySelectedDestination = null;
     }
 
     if (currentlySelectedHumanProvince != null){

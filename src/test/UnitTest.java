@@ -220,7 +220,7 @@ public class UnitTest{
             newF.removeProvince(provinces.get(0));
             newF.removeProvince(provinces.get(0));
         }
-        assertEquals(newGame.getFactions().size(), 3);
+        assertEquals(newGame.getFactions().size(), 4);
     }
 
     @Test
@@ -468,18 +468,20 @@ public class UnitTest{
             units1.add(u5);
 
             assertEquals(units1.size(), 3);
-            Army army1 = p1.generateArmy(units1);
+            p1.addToArmy(u1);
+            p1.addToArmy(u3);
+            p1.addToArmy(u5);
             assertEquals(p2.getFactionName(), "Carthaginians");
             assertEquals(p2.getUnits().size(), 3);
 
-            assertEquals(army1.getUnits().size(), 3);
-            assertTrue(army1.getUnits().contains(u1));
-            assertTrue(army1.getUnits().contains(u3));
-            assertTrue(army1.getUnits().contains(u5));
-            assertFalse(army1.getUnits().contains(u2));
+            assertEquals(p1.getArmy().getUnits().size(), 3);
+            assertTrue(p1.getArmy().getUnits().contains(u1));
+            assertTrue(p1.getArmy().getUnits().contains(u3));
+            assertTrue(p1.getArmy().getUnits().contains(u5));
+            assertFalse(p1.getArmy().getUnits().contains(u2));
 
-            army1.invade(p2);
-            assertTrue(army1.containAvalUnits());
+            p1.getArmy().invade(p2);
+            assertTrue(p1.getArmy().containAvalUnits());
         } catch (IOException e) {
             assertEquals(1, 2);
             e.printStackTrace();
@@ -516,7 +518,11 @@ public class UnitTest{
             units1.add(u3);
 
             assertEquals(units1.size(), 3);
-            Army army1 = p1.generateArmy(units1);
+            p1.addToArmy(u1);
+            p1.addToArmy(u2);
+            p1.addToArmy(u3);
+
+            Army army1 = p1.getArmy();
 
             assertEquals(army1.isReachable(p2), true);
         } catch (IOException e) {
@@ -560,19 +566,21 @@ public class UnitTest{
             units1.add(u3);
 
             assertEquals(units1.size(), 3);
-            Army army1 = p1.generateArmy(units1);
+            p1.addToArmy(u1);
+            p1.addToArmy(u2);
+            p1.addToArmy(u3);
 
-            assertEquals(army1.isReachable(p2), true);
-            assertEquals(army1.isReachable(p4), true);
-            assertEquals(army1.isReachable(p5), true);
+            assertEquals(p1.getArmy().isReachable(p2), true);
+            assertEquals(p1.getArmy().isReachable(p4), true);
+            assertEquals(p1.getArmy().isReachable(p5), true);
 
             Faction f2 = new Faction("Romans2", game.getProvincesTracker(), game.getFactionsTracker());
             f2.setGamesys(game);
             f2.addProvince(p5);  
 
-            assertEquals(army1.isReachable(p5), true);
+            assertEquals(p1.getArmy().isReachable(p5), true);
 
-            army1.moveToOccupied(p2);
+            p1.getArmy().moveToOccupied(p2);
             assertEquals(p2.getUnits().size(), 3);
 
         } catch (IOException e) {
