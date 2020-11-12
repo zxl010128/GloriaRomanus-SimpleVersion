@@ -663,7 +663,17 @@ public class GameSystem implements Observer {
             }
         }
 
-	}
+    }
+    
+    public Faction getFactionByProvinceName(String name) {
+        for (Province p : provinces) {
+            if (p.getName().equals(name)) {
+                return factionsTracker.getFaction(p.getFactionName());
+            }
+        }
+
+        return null;
+    }
 
     
 }
