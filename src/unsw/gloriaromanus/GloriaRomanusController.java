@@ -225,15 +225,11 @@ public class GloriaRomanusController{
     setTaxButton.setDisable(true);
     formArmyButton.setDisable(true);
     assignArmyButton.setDisable(true);
-<<<<<<< HEAD
-    
-=======
     occupiedProvinces.setDisable(true);
     recruitableUnits.setDisable(true);
     availableUnits.setDisable(true);
     availableArmies.setDisable(true);
 
->>>>>>> master
     playerNumButton.setOnAction(e -> {
       showStage();
       setTaxButton.setDisable(false);
