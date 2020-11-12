@@ -85,13 +85,15 @@
 
         </HBox>
         <HBox>
-            <VBox>
+            <VBox spacing="15.0">
                 <Label text="Your province"/>
                 <TextField fx:id="invading_province" text="" editable="false"/>
+                <Button fx:id="myProvinceButton" text="SetMyProvince" prefWidth="125" onAction="#handleSetProvinceButton"/>
             </VBox>
-            <VBox>
+            <VBox spacing="15.0">
                 <Label text="Enemy province"/>
                 <TextField fx:id="opponent_province" text="" editable="false"/>
+                <Button fx:id="destinationButton" text="SetDestination" prefWidth="125" onAction="#handleDestinationButton"/>
             </VBox>
         </HBox>
         <Button fx:id="invadeButton" text="Invade" onAction="#clickedInvadeButton"/>
@@ -118,16 +120,16 @@
                 </Button>
                 <Button fx:id="quitButton" text="Quit Game" onAction="#handleQuitButton"/>
             </HBox>
-            <VBox spacing="15.0">
-                <Label text="Occupied Provinces:" />
+            <Label text="Occupied Provinces:" />
+            <HBox spacing="15.0">
                 <ChoiceBox fx:id="occupiedProvinces" />
                 <Button fx:id="setTaxButton" text="setTax" onAction="#handleSetTaxButton"/>
-            </VBox>
-            <VBox spacing="15.0">
-                <Label text="Recruitable Units:" />
+            </HBox>
+            <Label text="Recruitable Units:" />
+            <HBox spacing="15.0">
                 <ChoiceBox fx:id="recruitableUnits" />
                 <Button fx:id="recruitButton" text="Recruit" />
-            </VBox>
+            </HBox>
             <HBox spacing="15.0">
                 <VBox spacing="15.0" prefWidth="125">
                     <Label text="Available Units" />
