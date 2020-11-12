@@ -193,7 +193,7 @@ public class GloriaRomanusController{
   );
   
   @FXML
-  private void initialize() throws JsonParseException, JsonMappingException, IOException {
+  public void initialize() throws JsonParseException, JsonMappingException, IOException {
     // All factions will start with no soldiers
     provinceToOwningFactionMap = getProvinceToOwningFactionMap();
 
@@ -220,6 +220,10 @@ public class GloriaRomanusController{
     setTaxButton.setDisable(true);
     formArmyButton.setDisable(true);
     assignArmyButton.setDisable(true);
+    occupiedProvinces.setDisable(true);
+    recruitableUnits.setDisable(true);
+    availableUnits.setDisable(true);
+    availableArmies.setDisable(true);
 
     playerNumButton.setOnAction(e -> {
       showStage();
@@ -232,6 +236,10 @@ public class GloriaRomanusController{
       recruitButton.setDisable(false);
       formArmyButton.setDisable(false);
       assignArmyButton.setDisable(false);
+      occupiedProvinces.setDisable(false);
+      recruitableUnits.setDisable(false);
+      availableUnits.setDisable(false);
+      availableArmies.setDisable(false);
     });
     
   }
@@ -897,6 +905,11 @@ public class GloriaRomanusController{
 
     printMessageToTerminal(String.format("Turn %d: %s's turn", turnTracker.getCurrTurn(), currFaction.getName()));
 
+  }
+
+  public void clearScene() {
+    // output_terminal.clear();
+    
   }
 
 }
