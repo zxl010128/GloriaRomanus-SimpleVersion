@@ -2,7 +2,6 @@ package unsw.gloriaromanus.backend;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -19,6 +18,7 @@ public class Province{
     private TurnTracker turnTracker;
     private ProvincesTracker provincesTracker;
     private FactionsTracker factionsTracker;
+    private Army army;
 
     public Province(String name, Faction faction, TurnTracker turnTracker){
         this.name = name;
@@ -42,6 +42,7 @@ public class Province{
             this.provincesTracker = null;
             this.factionsTracker = null;
         }
+        this.army = new Army(this);
 
     }
 
@@ -132,9 +133,9 @@ public class Province{
      * @param units
      * @return Army
      */
-    public Army generateArmy(List<Unit> units) {
+    public void addToArmy(Unit unit) {
         // assume all Units in param is located at current province for now
-        return new Army(units, this);
+        this.army.getUnits().add(unit);
     }
 
     
@@ -287,6 +288,14 @@ public class Province{
 
             this.setUnitsInTraining(newUnitsInTraining);
         }
+    }
+
+    public Army getArmy() {
+        return army;
+    }
+
+    public void setArmy(Army army) {
+        this.army = army;
     }
 
 }

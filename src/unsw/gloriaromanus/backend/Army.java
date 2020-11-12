@@ -18,22 +18,23 @@ public class Army {
     private ProvincesTracker provincesTracker;
     private FactionsTracker factionsTracker;
 
-    public Army(List<Unit> units, Province province) {
-        this.units = units;
+    public Army(Province province) {
+        this.units = new ArrayList<Unit>();
+        this.movementPoints = 0;
+        this.provinceName = province.getName();
+        this.factionName = province.getFactionName();
+        this.provincesTracker = province.getProvincesTracker();
+        this.factionsTracker = province.getFactionsTracker();
+    }
+
+    public void setMovementPoint() {
         int minMovementPoints = units.get(0).getMovementPoints();
-        
         for (Unit s : units) {
             // this.units.add(s);
             if (s.getMovementPoints() < minMovementPoints) {
                 minMovementPoints = s.getMovementPoints();
             }
         }
-
-        this.movementPoints = minMovementPoints;
-        this.provinceName = province.getName();
-        this.factionName = province.getFactionName();
-        this.provincesTracker = province.getProvincesTracker();
-        this.factionsTracker = province.getFactionsTracker();
     }
 
     public Province getProvince() {
@@ -77,7 +78,7 @@ public class Army {
 
         // after arrivingm, start battle
         // Don't forget to update oldProvince after moving!
-        Army defenseArmy = new Army(destination.getUnits(), destination);
+        Army defenseArmy = new Army(destination);
         Battle battleResolver = new Battle(this, defenseArmy);
         Army winner = battleResolver.getWinner();
         if (winner == null) {
