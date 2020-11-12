@@ -296,6 +296,8 @@ public class Province{
 
     public void setArmy(Army army) {
         this.army = army;
+    public void setFactionName(String factionName) {
+        this.factionName = factionName;
     }
 
 }
