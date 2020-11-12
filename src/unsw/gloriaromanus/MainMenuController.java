@@ -36,6 +36,7 @@ public class MainMenuController {
 
     private Stage stage;
     private Scene gameScene;
+    private GloriaRomanusController gameSceneController;
 
     @FXML
     public void initialize() {
