@@ -35,6 +35,7 @@ public class Army {
                 minMovementPoints = s.getMovementPoints();
             }
         }
+        this.movementPoints = minMovementPoints;
     }
 
     public Province getProvince() {
