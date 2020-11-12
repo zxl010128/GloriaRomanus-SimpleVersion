@@ -229,6 +229,8 @@ public class GloriaRomanusController{
     recruitableUnits.setDisable(true);
     availableUnits.setDisable(true);
     availableArmies.setDisable(true);
+    myProvinceButton.setDisable(true);
+    destinationButton.setDisable(true);
 
     playerNumButton.setOnAction(e -> {
       showStage();
@@ -245,6 +247,8 @@ public class GloriaRomanusController{
       recruitableUnits.setDisable(false);
       availableUnits.setDisable(false);
       availableArmies.setDisable(false);
+      myProvinceButton.setDisable(false);
+      destinationButton.setDisable(false);
     });
     
   }

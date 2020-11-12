@@ -289,4 +289,8 @@ public class Province{
         }
     }
 
+    public void setFactionName(String factionName) {
+        this.factionName = factionName;
+    }
+
 }
