@@ -136,6 +136,7 @@ public class Province{
     public void addToArmy(Unit unit) {
         // assume all Units in param is located at current province for now
         this.army.getUnits().add(unit);
+        this.army.setMovementPoint();
     }
 
     
@@ -296,6 +297,8 @@ public class Province{
 
     public void setArmy(Army army) {
         this.army = army;
+    }
+
     public void setFactionName(String factionName) {
         this.factionName = factionName;
     }
