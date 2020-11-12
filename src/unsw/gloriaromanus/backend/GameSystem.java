@@ -284,8 +284,13 @@ public class GameSystem implements Observer {
      * @param game
      */
     public void saveCurrentGame() {
+        // TODO: Maybe a bug in creating a file here
         // saved game
-        String fileName = "GameBackUp.json";
+        int savedGamesNum = new File("SavedData/").list().length;
+        savedGamesNum += 1;
+        // String fileName = String.format("SavedData/GameBackUp.json", (savedGamesNum+1));
+        String fileName = "SavedData/GameBackup-" + String.valueOf(savedGamesNum) + ".json";
+        //String fileName = String.format("SavedData/GameBackUp-%d.json", 3);
         File BackUpFile = new File(fileName);
 
         try {
