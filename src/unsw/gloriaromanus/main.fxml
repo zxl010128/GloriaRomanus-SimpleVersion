@@ -138,7 +138,7 @@
                 </VBox>
                 <VBox spacing="15.0" prefWidth="125">
                     <Label fx:id="armyLabel" text="Army Status: Inactive" />
-                    <Button text="Army List" prefWidth="125" />
+                    <Button fx:id="unitListButton" text="UnitInArmy" prefWidth="125" onAction="#UnitInArmyButton"/>
                     <Button fx:id="ArmyDisbandButton" text="Army Disband" prefWidth="125" onAction="#armyDisbandButton"/>
                 </VBox>
             </HBox>
