@@ -107,6 +107,8 @@ public class GloriaRomanusController{
   @FXML
   private Label provincesLabel;
   @FXML
+  private Label armyLabel;
+  @FXML
   private VBox menu;
   @FXML
   private Button endTurnButton;
@@ -125,13 +127,15 @@ public class GloriaRomanusController{
   @FXML
   private Button formArmyButton;
   @FXML
-  private Button assignArmyButton;
+  private Button ArmyDisbandButton;
   @FXML
   private Button myProvinceButton;
   @FXML
   private Button destinationButton;
   @FXML
   private ChoiceBox<String> availableUnits;
+
+  private List<String> ArmyActiveProvince = new ArrayList<String>();
 
   private String FirstPlayerFaction;
 
@@ -222,7 +226,7 @@ public class GloriaRomanusController{
     recruitButton.setDisable(true);
     setTaxButton.setDisable(true);
     formArmyButton.setDisable(true);
-    assignArmyButton.setDisable(true);
+    ArmyDisbandButton.setDisable(true);
     occupiedProvinces.setDisable(true);
     recruitableUnits.setDisable(true);
     availableUnits.setDisable(true);
@@ -239,7 +243,6 @@ public class GloriaRomanusController{
       quitButton.setDisable(false);
       recruitButton.setDisable(false);
       formArmyButton.setDisable(false);
-      assignArmyButton.setDisable(false);
       occupiedProvinces.setDisable(false);
       recruitableUnits.setDisable(false);
       availableUnits.setDisable(false);
@@ -341,29 +344,39 @@ public class GloriaRomanusController{
     recruitableUnits.setDisable(true);
     availableUnits.setDisable(true);
     formArmyButton.setDisable(true);
-    assignArmyButton.setDisable(true);
+    ArmyDisbandButton.setDisable(true);
 
     occupiedProvinces.setOnAction(e -> {
-      // display units to availableUnits
-      String provinceName = occupiedProvinces.getSelectionModel().getSelectedItem();
-      // Province selectedProvince = gameSystem.getProvincesTracker().getProvince(provinceName);
-      Province selectedProvince = currFaction.getProvinceByName(provinceName);
-      List<Unit> provinceUnitList = selectedProvince.getUnits();
-      
-      // availableUnits = new ChoiceBox<String>();
-      // availableUnits.setPrefWidth(125);
-      // TODO: How to update this choiceBox???????
-      availableUnits.getItems().clear();
-      if (provinceUnitList != null) {
-        for (Unit u : provinceUnitList) {
-          availableUnits.getItems().add(u.getName());
+
+      if (occupiedProvinces.getSelectionModel().getSelectedItem() != null) {
+        // display units to availableUnits
+        String provinceName = occupiedProvinces.getSelectionModel().getSelectedItem();
+        // Province selectedProvince = gameSystem.getProvincesTracker().getProvince(provinceName);
+        Province selectedProvince = currFaction.getProvinceByName(provinceName);
+        List<Unit> provinceUnitList = selectedProvince.getUnits();
+        
+        // availableUnits = new ChoiceBox<String>();
+        // availableUnits.setPrefWidth(125);
+        // TODO: How to update this choiceBox???????
+        availableUnits.getItems().clear();
+        if (provinceUnitList != null) {
+          for (Unit u : provinceUnitList) {
+            availableUnits.getItems().add(u.getName());
+          }
         }
+
+        if (ArmyActiveProvince.contains(selectedProvince.getName())) {
+          armyLabel.setText("Army Status: active");
+          ArmyDisbandButton.setDisable(false);
+        } else {
+          armyLabel.setText("Army Status: Inactive");
+          ArmyDisbandButton.setDisable(true);
+        }
+        // TODO: Faction needs to store ARMY!!!!!
+
+        recruitableUnits.setDisable(false);
+        availableUnits.setDisable(false);
       }
-
-      // TODO: Faction needs to store ARMY!!!!!
-
-      recruitableUnits.setDisable(false);
-      availableUnits.setDisable(false);
     });
 
     availableUnits.setOnAction(e -> {
@@ -391,17 +404,20 @@ public class GloriaRomanusController{
         printMessageToTerminal(String.format("%s: %s trains a %s (will be available on %d)", 
           currFaction.getName(), provinceName, unitName, finishTurn));
       } else {
-        printMessageToTerminal(String.format("%s: %s can't train a %s unit now)", 
+        printMessageToTerminal(String.format("%s: %s can't train a %s unit now, because insuffient gold or full training)", 
           currFaction.getName(), provinceName, unitName));
       }
 
-      
-
+      if (gameSystem.conditionToString().contains("TREASURY")) {
+        treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+      } else {
+        treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+      }
       // manage button and choicebox
       recruitButton.setDisable(true);
-      // occupiedProvinces.getSelectionModel().clearSelection();
-      // recruitableUnits.getSelectionModel().clearSelection();
-      // recruitableUnits.setDisable(true);
+      //occupiedProvinces.getSelectionModel().clearSelection();
+      recruitableUnits.getSelectionModel().clearSelection();
+      //recruitableUnits.setDisable(true);
     });
 
     printMessageToTerminal("Hello, A new game started!");
@@ -903,6 +919,11 @@ public class GloriaRomanusController{
     invading_province.setText("");
     opponent_province.setText("");
 
+    occupiedProvinces.getSelectionModel().clearSelection();
+    for (Province p : currFaction.getProvinces()) {
+      occupiedProvinces.getItems().remove(p.getName());
+    }
+
     currFaction = gameSystem.getFactions().get(turnPlayerCount);
     humanFaction = currFaction.getName();
     factionLabel.setText("Faction: " + humanFaction);
@@ -918,11 +939,12 @@ public class GloriaRomanusController{
       endTurnButton.fire();
     }
 
-    occupiedProvinces.getItems().clear();
     for (Province p : currFaction.getProvinces()) {
       occupiedProvinces.getItems().add(p.getName());
     }
     
+    ArmyDisbandButton.setDisable(true);
+    availableUnits.getItems().clear();
     provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
 
     if (gameSystem.conditionToString().contains("WEALTH")) {
@@ -946,4 +968,41 @@ public class GloriaRomanusController{
     
   }
 
+  @FXML
+  public void armyDisbandButton(ActionEvent e) throws IOException {
+    
+    String selectedProvince = occupiedProvinces.getSelectionModel().getSelectedItem();
+    if (selectedProvince != null) {
+      Province p = gameSystem.checkStringinProvince(selectedProvince);
+      p.setArmy(new Army(p));
+      armyLabel.setText("Army Status: Inactive");
+      ArmyActiveProvince.remove(selectedProvince);
+      ArmyDisbandButton.setDisable(true);
+
+      if (ArmyActiveProvince.size() == 0) {
+        endTurnButton.setDisable(false);
+        saveButton.setDisable(false);
+      }
+    }
+  }
+
+  @FXML
+  public void armyButton(ActionEvent e) throws IOException {
+    
+    String Unit = availableUnits.getSelectionModel().getSelectedItem();
+    String selectedProvince = occupiedProvinces.getSelectionModel().getSelectedItem();
+    if (Unit != null && selectedProvince != null) {
+      Integer index = availableUnits.getSelectionModel().getSelectedIndex();
+      Province p = gameSystem.checkStringinProvince(selectedProvince);
+
+      p.addToArmy(p.getUnits().get(index));
+      armyLabel.setText("Army Status: active");
+      ArmyDisbandButton.setDisable(false);
+      if (ArmyActiveProvince.size() == 0) {
+        endTurnButton.setDisable(true);
+        saveButton.setDisable(true);
+      }
+      ArmyActiveProvince.add(selectedProvince);
+    }
+  }
 }

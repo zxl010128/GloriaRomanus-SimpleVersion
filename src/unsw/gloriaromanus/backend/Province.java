@@ -109,7 +109,12 @@ public class Province{
             if (!is_found) return false;
             JSONObject unitData = fullJSON.getJSONObject(name);
 
+            if (unitData.getInt("trainingCost") > this.getFaction(factionName).getBalance()) {
+                return false;
+            }
+
             Unit u = new Unit(unitData, this);
+            getFaction(factionName).setBalance(this.getFaction(factionName).getBalance() - unitData.getInt("trainingCost"));
             unitsInTraining.add(new TrainingRecord(u, turnTracker.getCurrTurn() + u.getTrainingTurns()));
             
             return true;
@@ -268,7 +273,7 @@ public class Province{
         }
 
         // check units in training
-        int nextTurn = turnTracker.getCurrTurn() + 1;
+        int nextTurn = turnTracker.getCurrTurn();
         if (!unitsInTraining.isEmpty()) {
             for (TrainingRecord r : unitsInTraining) {
                 if (r.getFinishTurn() ==  nextTurn) {
@@ -304,4 +309,8 @@ public class Province{
         this.factionName = factionName;
     }
 
+    public Faction getFaction(String f) {
+        Faction faction = factionsTracker.getFaction(f);
+        return faction;
+    }
 }
