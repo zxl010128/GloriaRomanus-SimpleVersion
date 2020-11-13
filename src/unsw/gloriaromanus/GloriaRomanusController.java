@@ -1005,4 +1005,8 @@ public class GloriaRomanusController{
       ArmyActiveProvince.add(selectedProvince);
     }
   }
+
+  public void loadFile(String fileName) {
+    gameSystem.reloadSavedGame(fileName);
+  }
 }

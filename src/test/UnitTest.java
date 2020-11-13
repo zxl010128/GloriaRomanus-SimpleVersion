@@ -197,7 +197,7 @@ public class UnitTest{
 
         newGame.saveCurrentGame();
         GameSystem newGame1 = new GameSystem();
-        newGame1.reloadSavedGame();
+        newGame1.reloadSavedGame("GameBackup-1.json");
 
         System.out.println(newGame);
         System.out.println(newGame1);
