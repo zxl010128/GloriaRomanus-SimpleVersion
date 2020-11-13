@@ -30,6 +30,7 @@ public class ProvincesTracker {
     public void addProvince(Province p) {
         if (!provinces.contains(p)) {
             provinces.add(p);
+            // p.setProvincesTracker(this);
         }
     }
 

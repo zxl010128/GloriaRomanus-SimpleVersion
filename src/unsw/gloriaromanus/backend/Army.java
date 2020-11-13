@@ -79,7 +79,13 @@ public class Army {
         // Don't forget to update oldProvince after moving!
         Army defenseArmy = new Army(destination.getUnits(), destination);
         Battle battleResolver = new Battle(this, defenseArmy);
-        Army winner = battleResolver.getWinner();
+        Army winner;
+        if (destination.getFactionName().equals("null")) {
+            winner = this;
+        } else {
+            winner = battleResolver.getWinner();
+        }
+        
         if (winner == null) {
             // Draw
             this.updateAfterDraw();
