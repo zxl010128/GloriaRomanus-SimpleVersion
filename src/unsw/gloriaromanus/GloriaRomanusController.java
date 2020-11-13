@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -165,6 +166,7 @@ public class GloriaRomanusController{
   private TurnTracker turnTracker;
   private Faction currFaction;
   private Army userSelectedArmy;
+  private int playerNum;
 
   private String[] recruitableUnitsList = {
     "Roman legionary",
@@ -278,7 +280,8 @@ public class GloriaRomanusController{
         if (cb.getSelectionModel().getSelectedItem() == null) {
           printMessageToTerminal("Please select the player number!");         
         } else {
-          initialMap(cb.getSelectionModel().getSelectedItem());
+          playerNum = cb.getSelectionModel().getSelectedItem();
+          initialMap(playerNum);
           newStage.close();
         }
     } catch (Exception exception) {
@@ -316,6 +319,11 @@ public class GloriaRomanusController{
     quitButton.setOnAction(e -> 
     {stage.setScene(mainMenuScene);
       
+    });
+
+    saveButton.setOnAction(e -> {
+      this.save();
+      printMessageToTerminal("Game has been saved!");
     });
 
     factionLabel.setText("Faction: " + currFaction.getName());
@@ -1050,4 +1058,51 @@ public class GloriaRomanusController{
       availableUnits.getSelectionModel().clearSelection();
     }
   }
+
+  public void loadFile(String fileName) {
+    gameSystem.reloadSavedGame(fileName);
+  }
+
+  public GameSystem getGameSystem() {
+    return gameSystem;
+  }
+
+  public Button getPlayerNumButton() {
+    return playerNumButton;
+  }
+
+  public void save() {
+    int savedGamesNum = new File("SavedData/").list().length;
+    savedGamesNum += 1;
+    // String fileName = String.format("SavedData/GameBackUp.json", (savedGamesNum+1));
+    String fileName = "SavedData/GameBackup-" + String.valueOf(savedGamesNum) + ".json";
+    //String fileName = String.format("SavedData/GameBackUp-%d.json", 3);
+    File backUpFile = new File(fileName);
+
+    try {
+      backUpFile.createNewFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    JSONObject data = new JSONObject();
+    data.put("currFaction", factionLabel.getText());
+    data.put("currYear", yearLabel.getText());
+    data.put("currTurn", turnLabel.getText());
+    data.put("victoryCondition", victoryConditonLabel.getText());
+    data.put("outputs", output_terminal.getText());
+    data.put("firstPlayerFaction", FirstPlayerFaction);
+    data.put("turnPlayerCount", turnPlayerCount);
+    data.put("gameSystem", gameSystem.toJSON());
+
+    try {
+      PrintWriter myFile = new PrintWriter(backUpFile, "UTF-8");
+      myFile.println(data);
+      myFile.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+  }
+
 }

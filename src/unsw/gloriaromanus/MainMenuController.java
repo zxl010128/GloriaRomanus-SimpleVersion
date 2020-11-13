@@ -122,11 +122,12 @@ public class MainMenuController {
                 gameScene = new Scene(root);
                 this.setGameScene(gameScene);
                 this.setGameSceneController(gameSceneController);
+                int playerNum = gameSceneController.getGameSystem().getPlayerNum();
                 gameSceneController.setStage(this.getStage());
                 gameSceneController.setMainMenuScene(this.getScene());
 
-            } catch (IOException exception) {
-                exception.printStackTrace();
+            } catch (Exception exception) {
+                // exception.printStackTrace();
             }
  
             newStage.close();
@@ -163,20 +164,44 @@ public class MainMenuController {
         
         // listview to store saved games
         ListView<String> savedGames = new ListView<String>();
-        for (int i = 0; i < 5; i++) {
-            savedGames.getItems().add("Empty");
+        String[] savedFiles = new File("SavedData/").list();
+        int savedGamesNum = savedFiles.length;
+        
+        for (int i = 0; i < savedGamesNum; i++) {
+            savedGames.getItems().add(savedFiles[i]);
         }
+
         savedGames.setOnMouseClicked(e -> {
             loadGameButton.setDisable(false);
         });
 
         // Load button
-        
-        // loadGameButton.setdis
         loadGameButton.setText("Load");
         loadGameButton.setPrefWidth(150);
         loadGameButton.setOnAction(e -> {
             // load the game
+            stage.setScene(gameScene);
+            String fileToLoad = savedGames.getSelectionModel().getSelectedItem();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+            try {
+                Parent root = loader.load();
+                gameSceneController = loader.getController(); 
+                
+                gameScene = new Scene(root);
+                this.setGameScene(gameScene);
+                this.setGameSceneController(gameSceneController);
+                // activate all disabled buttons
+                gameSceneController.setStage(this.getStage());
+                gameSceneController.setMainMenuScene(this.getScene());
+
+                gameSceneController.loadFile(fileToLoad);
+                gameSceneController.getPlayerNumButton().fire();
+                gameSceneController.initialMap(gameSceneController.getGameSystem().getPlayerNum());
+                
+                newStage.close();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
         });
 
         box.getChildren().addAll(title, savedGames, loadGameButton);
