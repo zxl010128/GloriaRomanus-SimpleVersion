@@ -199,6 +199,8 @@ public class UnitTest{
         GameSystem newGame1 = new GameSystem();
         newGame1.reloadSavedGame();
 
+        System.out.println(newGame);
+        System.out.println(newGame1);
         assertEquals(newGame.equals(newGame1), true);
     }
 

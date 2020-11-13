@@ -308,5 +308,13 @@ public class Army {
         return movementPoints;
     }
 
+    public ProvincesTracker getProvincesTracker() {
+        return provincesTracker;
+    }
+
+    public void setProvincesTracker(ProvincesTracker provincesTracker) {
+        this.provincesTracker = provincesTracker;
+    }
+
     
 }
