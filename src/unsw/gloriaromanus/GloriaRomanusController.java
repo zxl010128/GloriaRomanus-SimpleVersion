@@ -132,8 +132,6 @@ public class GloriaRomanusController{
   private Button destinationButton;
   @FXML
   private ChoiceBox<String> availableUnits;
-  @FXML
-  private ChoiceBox<String> availableArmies;
 
   private String FirstPlayerFaction;
 
@@ -228,7 +226,6 @@ public class GloriaRomanusController{
     occupiedProvinces.setDisable(true);
     recruitableUnits.setDisable(true);
     availableUnits.setDisable(true);
-    availableArmies.setDisable(true);
     myProvinceButton.setDisable(true);
     destinationButton.setDisable(true);
 
@@ -246,7 +243,6 @@ public class GloriaRomanusController{
       occupiedProvinces.setDisable(false);
       recruitableUnits.setDisable(false);
       availableUnits.setDisable(false);
-      availableArmies.setDisable(false);
       myProvinceButton.setDisable(false);
       destinationButton.setDisable(false);
     });
@@ -344,7 +340,6 @@ public class GloriaRomanusController{
     recruitButton.setDisable(true);
     recruitableUnits.setDisable(true);
     availableUnits.setDisable(true);
-    availableArmies.setDisable(true);
     formArmyButton.setDisable(true);
     assignArmyButton.setDisable(true);
 
@@ -366,15 +361,10 @@ public class GloriaRomanusController{
 
       recruitableUnits.setDisable(false);
       availableUnits.setDisable(false);
-      availableArmies.setDisable(false);
     });
 
     availableUnits.setOnAction(e -> {
       formArmyButton.setDisable(false);
-    });
-
-    availableArmies.setOnAction(e -> {
-      assignArmyButton.setDisable(false);
     });
 
     // add a Listview to display recruitable soldiers
