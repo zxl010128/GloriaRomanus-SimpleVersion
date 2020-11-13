@@ -32,6 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.backend.GameSystem;
 import unsw.gloriaromanus.backend.Province;
+import unsw.gloriaromanus.backend.TrainingRecord;
 import unsw.gloriaromanus.backend.TurnTracker;
 import unsw.gloriaromanus.backend.Army;
 import unsw.gloriaromanus.backend.Faction;
@@ -136,6 +137,8 @@ public class GloriaRomanusController{
   private ChoiceBox<String> availableUnits;
 
   private List<String> ArmyActiveProvince = new ArrayList<String>();
+
+  private List<List<Unit>> unitCount = new ArrayList<List<Unit>>();
 
   private String FirstPlayerFaction;
 
@@ -359,9 +362,32 @@ public class GloriaRomanusController{
         // availableUnits.setPrefWidth(125);
         // TODO: How to update this choiceBox???????
         availableUnits.getItems().clear();
+        unitCount.clear();
         if (provinceUnitList != null) {
           for (Unit u : provinceUnitList) {
-            availableUnits.getItems().add(u.getName());
+            if (!availableUnits.getItems().contains(u.getName())) {
+              availableUnits.getItems().add(u.getName());
+            }
+            
+            if (unitCount.size() == 0) {
+              unitCount.add(new ArrayList<Unit>());
+              unitCount.get(0).add(u);
+            } else {
+
+              boolean is_found = false;
+              for (int i = 0; i < unitCount.size(); i++) {
+                if (unitCount.get(i).get(0).getName().equals(u.getName())) {
+                  unitCount.get(i).add(u);
+                  is_found = true;
+                } 
+              }
+
+              if (is_found == false) {
+                List<Unit> newUnit = new ArrayList<>();
+                newUnit.add(u);
+                unitCount.add(newUnit);
+              }
+            }
           }
         }
 
@@ -373,7 +399,7 @@ public class GloriaRomanusController{
           ArmyDisbandButton.setDisable(true);
         }
         // TODO: Faction needs to store ARMY!!!!!
-
+        System.out.println(unitCount);
         recruitableUnits.setDisable(false);
         availableUnits.setDisable(false);
       }
@@ -991,18 +1017,37 @@ public class GloriaRomanusController{
     
     String Unit = availableUnits.getSelectionModel().getSelectedItem();
     String selectedProvince = occupiedProvinces.getSelectionModel().getSelectedItem();
+
+
     if (Unit != null && selectedProvince != null) {
-      Integer index = availableUnits.getSelectionModel().getSelectedIndex();
       Province p = gameSystem.checkStringinProvince(selectedProvince);
 
-      p.addToArmy(p.getUnits().get(index));
+      for (int i = 0; i < unitCount.size(); i++) {
+        if (unitCount.get(i).get(0).getName().equals(Unit)) {
+          int unitSize = unitCount.get(i).size();
+          int armySize = p.getArmy().numberOfSpecificUnit(Unit);
+
+          if (armySize < unitSize) {
+            p.addToArmy(unitCount.get(i).get(armySize));
+          } else {
+            printMessageToTerminal("You don't have enough Unit.");
+          }
+        }
+      }
       armyLabel.setText("Army Status: active");
       ArmyDisbandButton.setDisable(false);
+      
       if (ArmyActiveProvince.size() == 0) {
         endTurnButton.setDisable(true);
         saveButton.setDisable(true);
       }
-      ArmyActiveProvince.add(selectedProvince);
+      
+      if (!ArmyActiveProvince.contains(selectedProvince)) {
+        ArmyActiveProvince.add(selectedProvince);
+      }
+
+      System.out.println(p.getArmy().getUnits());
+      availableUnits.getSelectionModel().clearSelection();
     }
   }
 }
