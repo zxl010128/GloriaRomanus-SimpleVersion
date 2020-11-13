@@ -345,13 +345,15 @@ public class GloriaRomanusController{
 
     occupiedProvinces.setOnAction(e -> {
       // display units to availableUnits
-      String provinceName = occupiedProvinces.getValue();
-      Province selectedProvince = gameSystem.getProvincesTracker().getProvince(provinceName);
+      String provinceName = occupiedProvinces.getSelectionModel().getSelectedItem();
+      // Province selectedProvince = gameSystem.getProvincesTracker().getProvince(provinceName);
+      Province selectedProvince = currFaction.getProvinceByName(provinceName);
       List<Unit> provinceUnitList = selectedProvince.getUnits();
       
       // availableUnits = new ChoiceBox<String>();
       // availableUnits.setPrefWidth(125);
       // TODO: How to update this choiceBox???????
+      availableUnits.getItems().clear();
       if (provinceUnitList != null) {
         for (Unit u : provinceUnitList) {
           availableUnits.getItems().add(u.getName());
@@ -380,7 +382,7 @@ public class GloriaRomanusController{
     output_terminal.setWrapText(true);
     recruitButton.setOnAction(e -> {
       // recruit a selected unit to selected province
-      String provinceName = occupiedProvinces.getValue();
+      String provinceName = occupiedProvinces.getSelectionModel().getSelectedItem();
       String unitName = recruitableUnits.getValue();
       Province selectedProvince = currFaction.getProvinceByName(provinceName);
       
@@ -397,9 +399,9 @@ public class GloriaRomanusController{
 
       // manage button and choicebox
       recruitButton.setDisable(true);
-      occupiedProvinces.getSelectionModel().clearSelection();
-      recruitableUnits.getSelectionModel().clearSelection();
-      recruitableUnits.setDisable(true);
+      // occupiedProvinces.getSelectionModel().clearSelection();
+      // recruitableUnits.getSelectionModel().clearSelection();
+      // recruitableUnits.setDisable(true);
     });
 
     printMessageToTerminal("Hello, A new game started!");
