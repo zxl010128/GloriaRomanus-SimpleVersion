@@ -839,7 +839,7 @@ public class GloriaRomanusController{
     intro.setStyle("-fx-text-fill: white");
 
     Label status = new Label();
-    status.setText("Currently, your province " + p +"'s" + " tax rate is " + String.valueOf(curr.getTaxRate()) + ". Please select the new tax rate below.");
+    status.setText("Currently, your province " + p +"'s" + " tax rate is " + String.valueOf(curr.getTaxRate()) + ". Current wealth of this province is " + String.valueOf(curr.getWealth()) + ". Please select the new tax rate below.");
     status.setWrapText(true);
     status.setTextAlignment(TextAlignment.LEFT);
     status.setStyle("-fx-text-fill: white");

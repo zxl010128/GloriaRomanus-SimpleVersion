@@ -96,7 +96,10 @@
                 <Button fx:id="destinationButton" text="SetDestination" prefWidth="125" onAction="#handleDestinationButton"/>
             </VBox>
         </HBox>
-        <Button fx:id="invadeButton" text="Invade" onAction="#clickedInvadeButton"/>
+        <HBox spacing="20.0">
+            <Button fx:id="invadeButton" text="Invade" onAction="#clickedInvadeButton"/>
+            <Button text="Army List"/>
+        </HBox>
         <VBox>
             <Label text="Output from interactions"/>
             <TextArea fx:id="output_terminal" text="" editable="false"/>

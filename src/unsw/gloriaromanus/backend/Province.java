@@ -66,6 +66,7 @@ public class Province{
         this.turnTracker = new TurnTracker(json.getJSONObject("turnTracker"));
         this.factionsTracker = null;
         this.provincesTracker = null;
+        this.army = new Army(this);
     }
 
     public void setProvincesTracker(ProvincesTracker provincesTracker) {
