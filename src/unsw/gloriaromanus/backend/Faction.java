@@ -217,5 +217,9 @@ public class Faction implements Subject{
         this.is_defeat = is_defeat;
     }
 
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
     
 }
