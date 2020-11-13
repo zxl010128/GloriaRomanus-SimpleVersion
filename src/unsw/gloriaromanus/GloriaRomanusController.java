@@ -351,8 +351,9 @@ public class GloriaRomanusController{
     occupiedProvinces.setOnAction(e -> {
       // display units to availableUnits
       String provinceName = occupiedProvinces.getValue();
-      Province selectedProvince = currFaction.getProvinceByName(provinceName);
+      Province selectedProvince = gameSystem.getProvincesTracker().getProvince(provinceName);
       List<Unit> provinceUnitList = selectedProvince.getUnits();
+      
       // availableUnits = new ChoiceBox<String>();
       // availableUnits.setPrefWidth(125);
       // TODO: How to update this choiceBox???????
@@ -427,6 +428,16 @@ public class GloriaRomanusController{
       String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
       String enemyProvince = (String)currentlySelectedDestination.getAttributes().get("name");
       Faction enemyFaction = gameSystem.getFactionByProvinceName(enemyProvince);
+
+      if (gameSystem.getProvincesTracker().getProvince(humanProvince).getNumOfSoldiers() == 0) {
+        printMessageToTerminal("You don't have any units to use to invade");
+        return;
+      }
+
+      if (enemyFaction == null) {
+        printMessageToTerminal(String.format("Win: %s: %s just invaded %s successfully", currFaction.getName(), humanProvince, enemyProvince));
+        return;
+      }
 
       if (confirmIfProvincesConnected(humanProvince, enemyProvince)){
         int invadeResult = userSelectedArmy.invade(enemyFaction.getProvinceByName(enemyProvince));

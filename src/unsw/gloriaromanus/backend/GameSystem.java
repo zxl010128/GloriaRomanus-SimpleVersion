@@ -45,7 +45,8 @@ public class GameSystem implements Observer {
         this.provincesTracker = new ProvincesTracker();
         this.factionsTracker = new FactionsTracker();
         this.factions = factionsTracker.getFactions();
-        this.provinces = provincesTracker.getProvinces();
+        // this.factions = new ArrayList<Faction>();
+        this.provinces = new ArrayList<Province>();
 
         try {
             String allfactions = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/factions_list.json"));
@@ -674,6 +675,16 @@ public class GameSystem implements Observer {
         for (Province p : provinces) {
             if (p.getName().equals(name)) {
                 return factionsTracker.getFaction(p.getFactionName());
+            }
+        }
+
+        return null;
+    }
+
+    public Province getProvinceByName(String name) {
+        for (Province p : provinces) {
+            if (p.getName().equals(name)) {
+                return p;
             }
         }
 
