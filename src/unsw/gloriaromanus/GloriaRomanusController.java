@@ -475,35 +475,81 @@ public class GloriaRomanusController{
       String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
       String enemyProvince = (String)currentlySelectedDestination.getAttributes().get("name");
       Faction enemyFaction = gameSystem.getFactionByProvinceName(enemyProvince);
+      Province myProvince = gameSystem.checkStringinProvince(humanProvince);
+      Province destProvince = gameSystem.checkStringinProvince(enemyProvince);
 
-      if (gameSystem.getProvincesTracker().getProvince(humanProvince).getNumOfSoldiers() == 0) {
+
+      if (gameSystem.getProvincesTracker().getProvince(humanProvince).getArmy().getUnits().size() == 0) {
         printMessageToTerminal("You don't have any units to use to invade");
         return;
       }
 
-      if (enemyFaction == null) {
-        printMessageToTerminal(String.format("Win: %s: %s just invaded %s successfully", currFaction.getName(), humanProvince, enemyProvince));
-        return;
-      }
+      myProvince.getArmy().setMovementPoint();
 
-      if (confirmIfProvincesConnected(humanProvince, enemyProvince)){
-        int invadeResult = userSelectedArmy.invade(enemyFaction.getProvinceByName(enemyProvince));
-        switch (invadeResult) {
-          case -1:
-            // fail
-            printMessageToTerminal(String.format("DEFEATED: %s: %s failed to invade %s", currFaction.getName(), humanProvince, enemyProvince));
-            break;
-          case 0:
-            // draw
-            printMessageToTerminal(String.format("DRAW: %s: %s failed to invade %s", currFaction.getName(), humanProvince, enemyProvince));
-            break;
-          case 1:
-            printMessageToTerminal(String.format("Win: %s: %s just invaded %s successfully", currFaction.getName(), humanProvince, enemyProvince));
-            // win
-            break;
+      if (invadeButton.getText().equals("Move")) {
+
+        if (destProvince.getArmy().getUnits().size() != 0) {
+          printMessageToTerminal(String.format("%s has already formed a Army, please disband it firstly", enemyProvince));
+          return;
         }
 
+        if (myProvince.getArmy().isReachable(destProvince) == true) {
 
+          int currentMovePts = myProvince.getArmy().getMovementPoints();
+          int movementCons = myProvince.getArmy().movementConsumption(destProvince);
+
+          System.out.println(currentMovePts);
+          System.out.println(movementCons);
+          for (Unit u : myProvince.getArmy().getUnits()) {
+            destProvince.addUnit(u);
+            myProvince.removeUnit(u);
+          }
+
+          destProvince.setArmy(myProvince.getArmy());
+          destProvince.getArmy().setProvinceName(enemyProvince);
+
+          if (currentMovePts == movementCons) {
+            destProvince.getArmy().setMovementPoints(-1);            
+          } else {
+            destProvince.getArmy().setMovementPoints(currentMovePts - movementCons);
+          }
+
+          myProvince.setArmy(new Army(myProvince));
+          armyLabel.setText("Army Status: Inactive");
+          ArmyActiveProvince.remove(humanProvince);
+          
+          ArmyActiveProvince.add(enemyProvince);
+
+          occupiedProvinces.getSelectionModel().clearSelection();
+
+          provinceToNumberTroopsMap.put(humanProvince, myProvince.getNumOfSoldiers());
+          provinceToNumberTroopsMap.put(enemyProvince, destProvince.getNumOfSoldiers());
+
+          printMessageToTerminal(String.format("You successfully move troops from %s to %s.", humanProvince, enemyProvince));
+        
+        } else {
+          printMessageToTerminal("You cannot reach this destination because of insufficient movement pts.");
+        }
+
+      } else {
+        if (confirmIfProvincesConnected(humanProvince, enemyProvince)){
+          int invadeResult = userSelectedArmy.invade(enemyFaction.getProvinceByName(enemyProvince));
+          switch (invadeResult) {
+            case -1:
+              // fail
+              printMessageToTerminal(String.format("DEFEATED: %s: %s failed to invade %s", currFaction.getName(), humanProvince, enemyProvince));
+              break;
+            case 0:
+              // draw
+              printMessageToTerminal(String.format("DRAW: %s: %s failed to invade %s", currFaction.getName(), humanProvince, enemyProvince));
+              break;
+            case 1:
+              printMessageToTerminal(String.format("Win: %s: %s just invaded %s successfully", currFaction.getName(), humanProvince, enemyProvince));
+              // win
+              break;
+          }
+        }
+      }
         // // TODO = have better battle resolution than 50% chance of winning
         // Random r = new Random();
         // int choice = r.nextInt(2);
@@ -523,10 +569,6 @@ public class GloriaRomanusController{
         // }
         resetSelections();  // reset selections in UI
         addAllPointGraphics(); // reset graphics
-      }
-      else{
-        printMessageToTerminal("Provinces not adjacent, cannot invade!");
-      }
 
     }
   }
@@ -806,9 +848,6 @@ public class GloriaRomanusController{
   }
 
   private void resetSelections(){
-    featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedDestination, currentlySelectedHumanProvince));
-    currentlySelectedDestination = null;
-    currentlySelectedHumanProvince = null;
     invading_province.setText("");
     opponent_province.setText("");
   }
@@ -861,12 +900,27 @@ public class GloriaRomanusController{
 
   @FXML
   public void handleDestinationButton(ActionEvent e) throws IOException {
+    
     if (currentlySelectedProvince == null) {
       printMessageToTerminal("Please select a province.");
       return;
     }
     currentlySelectedDestination = currentlySelectedProvince;
-    opponent_province.setText((String)currentlySelectedProvince.getAttributes().get("name"));
+
+    String province = (String)currentlySelectedDestination.getAttributes().get("name");
+    Province p = gameSystem.checkStringinProvince(province);
+
+    if (p.getFactionName().equals("null")) {
+      invadeButton.setText("Occupy");
+
+    } else if (p.getFactionName().equals(currFaction.getName())) {
+      invadeButton.setText("Move");
+    
+    } else {
+      invadeButton.setText("Invade");      
+    }
+
+    opponent_province.setText(province);
   }
 
   @FXML
@@ -940,23 +994,12 @@ public class GloriaRomanusController{
       turnPlayerCount = 0;
     }
 
-    if (currentlySelectedDestination != null){
-      featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedDestination));
-      currentlySelectedDestination = null;
-    }
-
-    if (currentlySelectedHumanProvince != null){
-      featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedHumanProvince));
-      currentlySelectedHumanProvince = null;
-    }
-
     if (currentlySelectedProvince != null){
       featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedProvince));
       currentlySelectedProvince = null;
     }
   
-    invading_province.setText("");
-    opponent_province.setText("");
+    resetSelections();
     unitListButton.setDisable(true);
     occupiedProvinces.getSelectionModel().clearSelection();
     for (Province p : currFaction.getProvinces()) {
@@ -980,6 +1023,7 @@ public class GloriaRomanusController{
 
     for (Province p : currFaction.getProvinces()) {
       occupiedProvinces.getItems().add(p.getName());
+      provinceToNumberTroopsMap.put(p.getName(), p.getNumOfSoldiers());
     }
     
     ArmyDisbandButton.setDisable(true);
@@ -1000,6 +1044,7 @@ public class GloriaRomanusController{
 
     printMessageToTerminal(String.format("Turn %d: %s's turn", turnTracker.getCurrTurn(), currFaction.getName()));
 
+    addAllPointGraphics();
   }
 
   public void clearScene() {
