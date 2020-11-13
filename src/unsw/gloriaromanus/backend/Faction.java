@@ -44,6 +44,9 @@ public class Faction implements Subject{
             totalWealth += p.getWealth();
             this.provincesTracker.addProvince(p);
             p.setProvincesTracker(provincesTracker);
+            p.getArmy().setProvincesTracker(provincesTracker);
+            p.getArmy().setFactionsTracker(factionsTracker);
+            p.getArmy().setFactionName(this.name);
             p.setFaction(this);
         }
 
