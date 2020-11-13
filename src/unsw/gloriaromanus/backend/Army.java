@@ -316,5 +316,15 @@ public class Army {
         this.provincesTracker = provincesTracker;
     }
 
-    
+    public int numberOfSpecificUnit(String unit) {
+        
+        int count = 0;
+        for (Unit u: this.units) {
+            if(u.getName().equals(unit)) {
+                count += 1;
+            }
+        }
+
+        return count;
+    }
 }
