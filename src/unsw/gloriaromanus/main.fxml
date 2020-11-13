@@ -134,12 +134,12 @@
                 <VBox spacing="15.0" prefWidth="125">
                     <Label text="Available Units" />
                     <ChoiceBox fx:id="availableUnits" prefWidth="125"/>
-                    <Button fx:id="formArmyButton" text="Add to Army" prefWidth="125"/>
+                    <Button fx:id="formArmyButton" text="Add to Army" prefWidth="125" onAction="#armyButton"/>
                 </VBox>
                 <VBox spacing="15.0" prefWidth="125">
-                    <Label text="Army Status: Inactive" />
+                    <Label fx:id="armyLabel" text="Army Status: Inactive" />
                     <Button text="Army List" prefWidth="125" />
-                    <Button fx:id="assignArmyButton" text="Army Disband" prefWidth="125"/>
+                    <Button fx:id="ArmyDisbandButton" text="Army Disband" prefWidth="125" onAction="#armyDisbandButton"/>
                 </VBox>
             </HBox>
         </VBox>
