@@ -75,6 +75,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 
 import static java.util.Map.entry;
 
@@ -134,6 +136,8 @@ public class GloriaRomanusController{
   private Button myProvinceButton;
   @FXML
   private Button destinationButton;
+  @FXML
+  private Button unitListButton;
   @FXML
   private ChoiceBox<String> availableUnits;
 
@@ -237,6 +241,7 @@ public class GloriaRomanusController{
     availableUnits.setDisable(true);
     myProvinceButton.setDisable(true);
     destinationButton.setDisable(true);
+    unitListButton.setDisable(true);
 
     playerNumButton.setOnAction(e -> {
       showStage();
@@ -407,7 +412,7 @@ public class GloriaRomanusController{
           ArmyDisbandButton.setDisable(true);
         }
         // TODO: Faction needs to store ARMY!!!!!
-        System.out.println(unitCount);
+        unitListButton.setDisable(false);
         recruitableUnits.setDisable(false);
         availableUnits.setDisable(false);
       }
@@ -952,7 +957,7 @@ public class GloriaRomanusController{
   
     invading_province.setText("");
     opponent_province.setText("");
-
+    unitListButton.setDisable(true);
     occupiedProvinces.getSelectionModel().clearSelection();
     for (Province p : currFaction.getProvinces()) {
       occupiedProvinces.getItems().remove(p.getName());
@@ -1038,7 +1043,7 @@ public class GloriaRomanusController{
           if (armySize < unitSize) {
             p.addToArmy(unitCount.get(i).get(armySize));
           } else {
-            printMessageToTerminal("You don't have enough Unit.");
+            printMessageToTerminal("This type of Unit is insufficient to add in army.");
           }
         }
       }
@@ -1054,7 +1059,6 @@ public class GloriaRomanusController{
         ArmyActiveProvince.add(selectedProvince);
       }
 
-      System.out.println(p.getArmy().getUnits());
       availableUnits.getSelectionModel().clearSelection();
     }
   }
@@ -1103,6 +1107,73 @@ public class GloriaRomanusController{
         e.printStackTrace();
     }
 
+  }
+
+  @FXML
+  public void UnitInArmyButton(ActionEvent e) throws IOException {
+    
+    if (occupiedProvinces.getSelectionModel().getSelectedItem() == null) {
+      printMessageToTerminal("Please select a province.");      
+      return;
+    }
+
+    if (!ArmyActiveProvince.contains(occupiedProvinces.getSelectionModel().getSelectedItem())) {
+      printMessageToTerminal("The army of this province is empty");
+      return;      
+    }
+    
+    Stage newStage = new Stage();
+
+    String p = occupiedProvinces.getSelectionModel().getSelectedItem();
+    Province curr = gameSystem.checkStringinProvince(p);
+    List<Unit> armyList = curr.getArmy().getUnits();
+    Map<String, Integer> unitsCount = new HashMap<String, Integer>();
+
+    VBox box = new VBox();
+
+    Label title = new Label();
+    title.setText(p + "'s Units In Current Army");
+    title.setTextAlignment(TextAlignment.CENTER);
+    title.setFont(new Font(18));
+    title.setStyle("-fx-text-fill: white");
+    
+    ObservableList<String> count = FXCollections.observableArrayList();
+
+    for (Unit u : armyList) {
+
+      if (!unitsCount.keySet().contains(u.getName())) {
+        unitsCount.put(u.getName(), 1);
+      } else {
+        unitsCount.replace(u.getName(), unitsCount.get(u.getName()) + 1);
+      }
+
+    }
+
+    for (String unit : unitsCount.keySet()) {
+      
+      count.add(unit + "  X  " + String.valueOf(unitsCount.get(unit)));
+    }
+
+    ListView<String> listView = new ListView<String>(count);
+
+    Button ok = new Button();
+    ok.setText("GOT IT");
+    ok.setOnAction(event -> {
+      newStage.close();
+    });
+
+    box.getChildren().addAll(title, listView, ok);
+    box.setAlignment(Pos.CENTER);
+    box.setSpacing(20.0);
+    box.setPadding(new Insets(10,10,10,10));
+    box.setStyle("-fx-background-color: transparent");
+
+    Scene stageScene = new Scene(box, 400, 400);
+    stageScene.setFill(Color.BLACK);
+    newStage.initStyle(StageStyle.TRANSPARENT);
+    newStage.setOpacity(0.90);
+    newStage.setScene(stageScene);
+    newStage.show();
   }
 
 }
