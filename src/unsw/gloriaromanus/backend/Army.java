@@ -28,12 +28,21 @@ public class Army {
     }
 
     public void setMovementPoint() {
-        int minMovementPoints = units.get(0).getMovementPoints();
-        for (Unit s : units) {
-            // this.units.add(s);
-            if (s.getMovementPoints() < minMovementPoints) {
-                minMovementPoints = s.getMovementPoints();
+
+        int minMovementPoints = 0;
+        if (movementPoints == 0) {
+            minMovementPoints = units.get(0).getMovementPoints();
+            for (Unit s : units) {
+                // this.units.add(s);
+                if (s.getMovementPoints() < minMovementPoints) {
+                    minMovementPoints = s.getMovementPoints();
+                }
             }
+             
+        } else if (movementPoints == -1) {
+            minMovementPoints = 0;
+        } else {
+            minMovementPoints = getMovementPoints();
         }
         this.movementPoints = minMovementPoints;
     }
@@ -247,7 +256,125 @@ public class Army {
         return false;
     }
 
-    
+    public Integer movementConsumption(Province destination){
+        
+        int Path_length = 0;
+        // read a json file and check the adjecent
+        try {
+
+            String content = Files.readString(Paths.get("src/unsw/gloriaromanus/province_adjacency_matrix_fully_connected.json"));
+            JSONObject Matrix = new JSONObject(content);
+            String provinces = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/provinces_list.json"));
+            JSONArray proList = new JSONArray(provinces);
+
+            List<String> province_list = new ArrayList<String>();
+            for(int i = 0; i < proList.length(); i++) {
+                province_list.add(proList.getString(i));
+            }
+
+            String startPoint = this.getProvince().getName();  
+
+            String temp_city;
+
+            // if visited, it will show 1 of this place ID
+            Map<String, Integer> visited = new HashMap<String, Integer>();
+
+            for(String province: province_list){
+                visited.put(province, 0);
+            }
+
+            // this array will record the connected place ID
+
+            Map<String, String> last_position = new HashMap<String, String>();
+
+            for(String province: province_list){
+                last_position.put(province, "-1");
+            }
+
+            // Queue created
+            Queue<String> q = new LinkedList<>();
+            q.add(startPoint);
+
+            // check whether the dest is founded
+            boolean is_Found = false;
+            
+            List<String> OccupiedProvince = new ArrayList<String>();
+            
+            for(Province province : this.getFaction().getProvinces()) {
+                OccupiedProvince.add(province.getName());
+            }
+
+            while (!q.isEmpty() && !is_Found) {
+	
+                temp_city = q.remove();
+        
+                // if we have visited this city, we need to skip it
+                // there should be the situation the place connect more than once
+                if (visited.get(temp_city) == 1) {
+                    continue;
+                }
+        
+                // set visited of this city
+                visited.put(temp_city, 1);
+        
+                // get all the reachable locations
+                int num_locs = 0;
+                JSONObject connectList = Matrix.getJSONObject(temp_city);
+
+
+                List<String> TotalConnectedProvince = new ArrayList<String>();
+
+                for(String key : connectList.keySet()) {
+                    if(connectList.get(key).equals(true)){
+                        TotalConnectedProvince.add(key);
+                    }
+                }
+
+                List<String> ConnectedProvince = new ArrayList<String>();
+
+                for(String province: TotalConnectedProvince){
+                    if (!destination.getName().equals(province) && !OccupiedProvince.contains(province)) {
+                        continue;
+                    } else {
+                        ConnectedProvince.add(province);
+                        num_locs += 1;
+                    }
+                }
+
+                // join the reachable place to Queue
+                for (int i = 0; i < num_locs; i++) {
+                    
+                    // the place must be non-visted
+                    if (visited.get(ConnectedProvince.get(i)) == 0 && last_position.get(ConnectedProvince.get(i)) == "-1") {
+                        
+                        last_position.put(ConnectedProvince.get(i), temp_city);
+                        // if this location is the dest, break the loop
+                        if (destination.getName().equals(ConnectedProvince.get(i))) {
+                            is_Found = true;
+                            break;
+                        }
+        
+                        // Join this place to the Queue
+                        q.add(ConnectedProvince.get(i));
+
+                    }
+        
+                }
+        
+            }
+
+            q.clear();
+
+            // count the length of the path
+            for (String position = destination.getName(); position != startPoint; position = last_position.get(position)) Path_length++;
+        
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return Path_length;
+    }
+
     /** 
      * @return List<Unit>
      */
@@ -316,5 +443,31 @@ public class Army {
         this.provincesTracker = provincesTracker;
     }
 
-    
+    public int numberOfSpecificUnit(String unit) {
+        
+        int count = 0;
+        for (Unit u: this.units) {
+            if(u.getName().equals(unit)) {
+                count += 1;
+            }
+        }
+
+        return count;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public void setMovementPoints(int movementPoints) {
+        this.movementPoints = movementPoints;
+    }
+
+    public void setFactionName(String factionName) {
+        this.factionName = factionName;
+    }
+
+    public void setFactionsTracker(FactionsTracker factionsTracker) {
+        this.factionsTracker = factionsTracker;
+    }
 }

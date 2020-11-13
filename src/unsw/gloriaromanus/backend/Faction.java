@@ -44,6 +44,9 @@ public class Faction implements Subject{
             totalWealth += p.getWealth();
             this.provincesTracker.addProvince(p);
             p.setProvincesTracker(provincesTracker);
+            p.getArmy().setProvincesTracker(provincesTracker);
+            p.getArmy().setFactionsTracker(factionsTracker);
+            p.getArmy().setFactionName(this.name);
             p.setFaction(this);
         }
 
@@ -89,12 +92,12 @@ public class Faction implements Subject{
     public void addProvince(Province p) {
         provinces.add(p);
         totalWealth += p.getWealth();
-        provincesTracker.addProvince(p);
         if (!provincesTracker.getProvinces().contains(p)) {
             p.setFactionsTracker(factionsTracker);
             p.setProvincesTracker(provincesTracker);
             p.setFactionName(this.getName());
             p.getArmy().setProvincesTracker(provincesTracker);
+            provincesTracker.addProvince(p);
         }
         notifyObservers();
     }
