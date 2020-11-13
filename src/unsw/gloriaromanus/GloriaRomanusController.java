@@ -474,6 +474,7 @@ public class GloriaRomanusController{
     if (currentlySelectedHumanProvince != null && currentlySelectedDestination != null){
       String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
       String enemyProvince = (String)currentlySelectedDestination.getAttributes().get("name");
+      Faction myFaction = gameSystem.getFactionByProvinceName(humanProvince);
       Faction enemyFaction = gameSystem.getFactionByProvinceName(enemyProvince);
       Province myProvince = gameSystem.checkStringinProvince(humanProvince);
       Province destProvince = gameSystem.checkStringinProvince(enemyProvince);
@@ -498,11 +499,10 @@ public class GloriaRomanusController{
           int currentMovePts = myProvince.getArmy().getMovementPoints();
           int movementCons = myProvince.getArmy().movementConsumption(destProvince);
 
-          System.out.println(currentMovePts);
-          System.out.println(movementCons);
           for (Unit u : myProvince.getArmy().getUnits()) {
             destProvince.addUnit(u);
             myProvince.removeUnit(u);
+            u.setProvince(destProvince);
           }
 
           destProvince.setArmy(myProvince.getArmy());
@@ -529,9 +529,67 @@ public class GloriaRomanusController{
         
         } else {
           printMessageToTerminal("You cannot reach this destination because of insufficient movement pts.");
+          myProvince.getArmy().setMovementPoints(-1);
         }
 
-      } else {
+      } else if (invadeButton.getText().equals("Occupy")) { 
+        
+        if (myProvince.getArmy().isReachable(destProvince) == true) {
+
+          int currentMovePts = myProvince.getArmy().getMovementPoints();
+          int movementCons = myProvince.getArmy().movementConsumption(destProvince);
+
+          System.out.println(currentMovePts);
+          System.out.println(movementCons);
+          System.out.println(myFaction);
+          System.out.println(destProvince);
+          myFaction.addProvince(destProvince);
+
+          for (Unit u : myProvince.getArmy().getUnits()) {
+            destProvince.addUnit(u);
+            myProvince.removeUnit(u);
+            u.setProvince(destProvince);
+          }
+
+          destProvince.setArmy(myProvince.getArmy());
+          destProvince.getArmy().setProvinceName(enemyProvince);
+
+          if (currentMovePts == movementCons) {
+            destProvince.getArmy().setMovementPoints(-1);            
+          } else {
+            destProvince.getArmy().setMovementPoints(currentMovePts - movementCons);
+          }
+
+          myProvince.setArmy(new Army(myProvince));
+          armyLabel.setText("Army Status: Inactive");
+          ArmyActiveProvince.remove(humanProvince);
+          
+          ArmyActiveProvince.add(enemyProvince);
+
+          occupiedProvinces.getItems().add(enemyProvince);
+          occupiedProvinces.getSelectionModel().clearSelection();
+
+          provinceToNumberTroopsMap.put(humanProvince, myProvince.getNumOfSoldiers());
+          provinceToNumberTroopsMap.put(enemyProvince, destProvince.getNumOfSoldiers());
+
+          provinceToOwningFactionMap.put(enemyProvince, humanFaction);
+
+          provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+
+          if (gameSystem.conditionToString().contains("TREASURY")) {
+            treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+          } else {
+            treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+          }
+
+          printMessageToTerminal(String.format("You successfully move troops from %s to %s and occupy this province.", humanProvince, enemyProvince));
+        
+        } else {
+          printMessageToTerminal("You cannot reach this destination because of insufficient movement pts.");
+          myProvince.getArmy().setMovementPoints(-1);
+        }
+
+      }else {
         if (confirmIfProvincesConnected(humanProvince, enemyProvince)){
           int invadeResult = userSelectedArmy.invade(enemyFaction.getProvinceByName(enemyProvince));
           switch (invadeResult) {
