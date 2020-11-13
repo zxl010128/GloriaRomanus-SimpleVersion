@@ -96,10 +96,7 @@
                 <Button fx:id="destinationButton" text="SetDestination" prefWidth="125" onAction="#handleDestinationButton"/>
             </VBox>
         </HBox>
-        <HBox spacing="20.0">
-            <Button fx:id="invadeButton" text="Invade" onAction="#clickedInvadeButton"/>
-            <Button text="Army List"/>
-        </HBox>
+        <Button fx:id="invadeButton" text="Invade" onAction="#clickedInvadeButton"/>
         <VBox>
             <Label text="Output from interactions"/>
             <TextArea fx:id="output_terminal" text="" editable="false"/>
@@ -140,9 +137,9 @@
                     <Button fx:id="formArmyButton" text="Add to Army" prefWidth="125"/>
                 </VBox>
                 <VBox spacing="15.0" prefWidth="125">
-                    <Label text="Available Armies" />
-                    <ChoiceBox fx:id="availableArmies" prefWidth="125" />
-                    <Button fx:id="assignArmyButton" text="Assign Army" prefWidth="125"/>
+                    <Label text="Army Status: Inactive" />
+                    <Button text="Army List" prefWidth="125" />
+                    <Button fx:id="assignArmyButton" text="Army Disband" prefWidth="125"/>
                 </VBox>
             </HBox>
         </VBox>
