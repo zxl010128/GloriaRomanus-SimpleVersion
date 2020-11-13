@@ -122,11 +122,12 @@ public class MainMenuController {
                 gameScene = new Scene(root);
                 this.setGameScene(gameScene);
                 this.setGameSceneController(gameSceneController);
+                int playerNum = gameSceneController.getGameSystem().getPlayerNum();
                 gameSceneController.setStage(this.getStage());
                 gameSceneController.setMainMenuScene(this.getScene());
 
-            } catch (IOException exception) {
-                exception.printStackTrace();
+            } catch (Exception exception) {
+                // exception.printStackTrace();
             }
  
             newStage.close();
@@ -184,13 +185,18 @@ public class MainMenuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
             try {
                 Parent root = loader.load();
-                gameSceneController = loader.getController();
-                gameSceneController.loadFile(fileToLoad);
+                gameSceneController = loader.getController(); 
+                
                 gameScene = new Scene(root);
                 this.setGameScene(gameScene);
                 this.setGameSceneController(gameSceneController);
+                // activate all disabled buttons
                 gameSceneController.setStage(this.getStage());
                 gameSceneController.setMainMenuScene(this.getScene());
+
+                gameSceneController.loadFile(fileToLoad);
+                gameSceneController.getPlayerNumButton().fire();
+                gameSceneController.initialMap(gameSceneController.getGameSystem().getPlayerNum());
                 
                 newStage.close();
             } catch (IOException exception) {
