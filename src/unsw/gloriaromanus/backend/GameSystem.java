@@ -269,10 +269,11 @@ public class GameSystem implements Observer {
         return true;
     }
 
-    public void reloadSavedGame() {
+    public void reloadSavedGame(String fileToLoad) {
 
         try {
-            String Backup = Files.readString(Paths.get("GameBackUp.json"));
+            // String Backup = Files.readString(Paths.get("GameBackUp.json"));
+            String Backup = Files.readString(Paths.get("SavedData/" + fileToLoad));
             JSONObject dataSaved = new JSONObject(Backup);
 
             this.loadJSON(dataSaved);
