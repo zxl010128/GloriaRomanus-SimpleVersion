@@ -113,16 +113,18 @@ public class MainMenuController {
         Button ok = new Button();
         ok.setText("Start Playing!");
         ok.setOnAction(e -> {
-            stage.setScene(gameScene);
             // gameSceneController = new GloriaRomanusController();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
             try {
+                // set up the controller for loader
+                gameSceneController = new GloriaRomanusController("NEWGAME", null);
+                loader.setController(gameSceneController);
                 Parent root = loader.load();
-                gameSceneController = loader.getController();
+
                 gameScene = new Scene(root);
+                stage.setScene(gameScene);
                 this.setGameScene(gameScene);
                 this.setGameSceneController(gameSceneController);
-                int playerNum = gameSceneController.getGameSystem().getPlayerNum();
                 gameSceneController.setStage(this.getStage());
                 gameSceneController.setMainMenuScene(this.getScene());
 
@@ -180,23 +182,24 @@ public class MainMenuController {
         loadGameButton.setPrefWidth(150);
         loadGameButton.setOnAction(e -> {
             // load the game
-            stage.setScene(gameScene);
+            
             String fileToLoad = savedGames.getSelectionModel().getSelectedItem();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
             try {
+                // setup the controller for loader
+                gameSceneController = new GloriaRomanusController("LOADGAME", fileToLoad);
+                loader.setController(gameSceneController);
                 Parent root = loader.load();
-                gameSceneController = loader.getController(); 
                 
+
                 gameScene = new Scene(root);
+                stage.setScene(gameScene);
                 this.setGameScene(gameScene);
                 this.setGameSceneController(gameSceneController);
-                // activate all disabled buttons
+
+                
                 gameSceneController.setStage(this.getStage());
                 gameSceneController.setMainMenuScene(this.getScene());
-
-                gameSceneController.loadFile(fileToLoad);
-                gameSceneController.getPlayerNumButton().fire();
-                gameSceneController.initialMap(gameSceneController.getGameSystem().getPlayerNum());
                 
                 newStage.close();
             } catch (IOException exception) {
