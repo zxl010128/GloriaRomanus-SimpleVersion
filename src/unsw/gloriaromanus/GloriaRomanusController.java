@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,9 +98,9 @@ public class GloriaRomanusController{
   @FXML
   private Label factionLabel;
   @FXML
-  private Label victoryConditonLabel;
+  private Label victoryConditionLabel;
   @FXML
-  private Label victoryConditon;
+  private Label victoryCondition;
   @FXML
   private Label treasuryLabel;
   @FXML
@@ -172,6 +173,11 @@ public class GloriaRomanusController{
   private Army userSelectedArmy;
   private int playerNum;
 
+  private static String NEWGAME = "NEWGAME";
+  private static String LOADGAME = "LOADGAME";
+  private String gameType;
+  private String fileToLoad = null;
+
   private String[] recruitableUnitsList = {
     "Roman legionary",
     "Gallic berserker",
@@ -207,58 +213,224 @@ public class GloriaRomanusController{
     entry("missile infantry", 1),
     entry("chariots", 2)
   );
+
+  public GloriaRomanusController(String gameType, String fileToLoad) {
+    this.gameType = gameType;
+    if (gameType.equals("LOADGAME")) {
+      this.fileToLoad = fileToLoad;
+    }
+  }
+
+  public void setGameType(String gameType) {
+    this.gameType = gameType;
+  }
   
   @FXML
   public void initialize() throws JsonParseException, JsonMappingException, IOException {
-    // All factions will start with no soldiers
-    provinceToOwningFactionMap = getProvinceToOwningFactionMap();
+    if (gameType.equals(NEWGAME)) {
+      // All factions will start with no soldiers
+      provinceToOwningFactionMap = getProvinceToOwningFactionMap();
 
-    provinceToNumberTroopsMap = new HashMap<String, Integer>();
+      provinceToNumberTroopsMap = new HashMap<String, Integer>();
 
-    for (String provinceName : provinceToOwningFactionMap.keySet()) {
-      provinceToNumberTroopsMap.put(provinceName, 0);
-    }
+      for (String provinceName : provinceToOwningFactionMap.keySet()) {
+        provinceToNumberTroopsMap.put(provinceName, 0);
+      }
 
-    // TODO = load this from a configuration file you create (user should be able to
-    // select in loading screen)
+      // TODO = load this from a configuration file you create (user should be able to
+      // select in loading screen)
 
-    currentlySelectedHumanProvince = null;
-    currentlySelectedDestination = null;
+      currentlySelectedHumanProvince = null;
+      currentlySelectedDestination = null;
 
-    userSelectedArmy = null;
+      userSelectedArmy = null;
 
-    // Enable all the button except PlayerNumButton
-    endTurnButton.setDisable(true);
-    saveButton.setDisable(true);
-    invadeButton.setDisable(true);
-    quitButton.setDisable(true);
-    recruitButton.setDisable(true);
-    setTaxButton.setDisable(true);
-    formArmyButton.setDisable(true);
-    ArmyDisbandButton.setDisable(true);
-    occupiedProvinces.setDisable(true);
-    recruitableUnits.setDisable(true);
-    availableUnits.setDisable(true);
-    myProvinceButton.setDisable(true);
-    destinationButton.setDisable(true);
-    unitListButton.setDisable(true);
+      // Enable all the button except PlayerNumButton
+      endTurnButton.setDisable(true);
+      saveButton.setDisable(true);
+      invadeButton.setDisable(true);
+      quitButton.setDisable(true);
+      recruitButton.setDisable(true);
+      setTaxButton.setDisable(true);
+      formArmyButton.setDisable(true);
+      ArmyDisbandButton.setDisable(true);
+      occupiedProvinces.setDisable(true);
+      recruitableUnits.setDisable(true);
+      availableUnits.setDisable(true);
+      myProvinceButton.setDisable(true);
+      destinationButton.setDisable(true);
+      unitListButton.setDisable(true);
 
-    playerNumButton.setOnAction(e -> {
-      showStage();
-      setTaxButton.setDisable(false);
+      playerNumButton.setOnAction(e -> {
+        showStage();
+        setTaxButton.setDisable(false);
+        playerNumButton.setDisable(true);
+        endTurnButton.setDisable(false);
+        saveButton.setDisable(false);
+        invadeButton.setDisable(false);
+        quitButton.setDisable(false);
+        recruitButton.setDisable(false);
+        formArmyButton.setDisable(false);
+        occupiedProvinces.setDisable(false);
+        recruitableUnits.setDisable(false);
+        availableUnits.setDisable(false);
+        myProvinceButton.setDisable(false);
+        destinationButton.setDisable(false);
+      });
+    } else if (gameType.equals(LOADGAME)) {
+      provinceToOwningFactionMap = getProvinceToOwningFactionMap();
+
+      provinceToNumberTroopsMap = new HashMap<String, Integer>();
+
+      for (String provinceName : provinceToOwningFactionMap.keySet()) {
+        provinceToNumberTroopsMap.put(provinceName, 0);
+      }
+
+      currentlySelectedHumanProvince = null;
+      currentlySelectedDestination = null;
+
+      userSelectedArmy = null;
+
+      gameSystem = new GameSystem();
+      // load the previously saved file
+      this.loadFile(fileToLoad);
+
       playerNumButton.setDisable(true);
-      endTurnButton.setDisable(false);
-      saveButton.setDisable(false);
-      invadeButton.setDisable(false);
-      quitButton.setDisable(false);
-      recruitButton.setDisable(false);
-      formArmyButton.setDisable(false);
-      occupiedProvinces.setDisable(false);
-      recruitableUnits.setDisable(false);
-      availableUnits.setDisable(false);
-      myProvinceButton.setDisable(false);
-      destinationButton.setDisable(false);
-    });
+
+      initializeProvinceLayers();
+
+
+      quitButton.setOnAction(e -> {
+        stage.setScene(mainMenuScene);
+      });
+
+      saveButton.setOnAction(e -> {
+        this.save();
+        printMessageToTerminal("Game has been saved!");
+      });
+
+      provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+      if (gameSystem.conditionToString().contains("WEALTH")) {
+        wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
+      } else {
+        wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()));
+      }
+  
+      if (gameSystem.conditionToString().contains("TREASURY")) {
+        treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+      } else {
+        treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+      }
+
+      // add a Listview to display occupied provinces
+      occupiedProvinces.setPrefWidth(200);
+      for (Province p : currFaction.getProvinces()) {
+        occupiedProvinces.getItems().add(p.getName());
+      }
+
+      // recruit button won't be available until a province is selected
+      recruitButton.setDisable(true);
+      recruitableUnits.setDisable(true);
+      availableUnits.setDisable(true);
+      formArmyButton.setDisable(true);
+      ArmyDisbandButton.setDisable(true);
+      occupiedProvinces.setOnAction(e -> {
+        if (occupiedProvinces.getSelectionModel().getSelectedItem() != null) {
+          // display units to availableUnits
+          String provinceName = occupiedProvinces.getSelectionModel().getSelectedItem();
+          // Province selectedProvince = gameSystem.getProvincesTracker().getProvince(provinceName);
+          Province selectedProvince = currFaction.getProvinceByName(provinceName);
+          List<Unit> provinceUnitList = selectedProvince.getUnits();
+          
+          // availableUnits = new ChoiceBox<String>();
+          // availableUnits.setPrefWidth(125);
+          // TODO: How to update this choiceBox???????
+          availableUnits.getItems().clear();
+          unitCount.clear();
+          if (provinceUnitList != null) {
+            for (Unit u : provinceUnitList) {
+              if (!availableUnits.getItems().contains(u.getName())) {
+                availableUnits.getItems().add(u.getName());
+              }
+              
+              if (unitCount.size() == 0) {
+                unitCount.add(new ArrayList<Unit>());
+                unitCount.get(0).add(u);
+              } else {
+  
+                boolean is_found = false;
+                for (int i = 0; i < unitCount.size(); i++) {
+                  if (unitCount.get(i).get(0).getName().equals(u.getName())) {
+                    unitCount.get(i).add(u);
+                    is_found = true;
+                  } 
+                }
+  
+                if (is_found == false) {
+                  List<Unit> newUnit = new ArrayList<>();
+                  newUnit.add(u);
+                  unitCount.add(newUnit);
+                }
+              }
+            }
+          }
+  
+          if (ArmyActiveProvince.contains(selectedProvince.getName())) {
+            armyLabel.setText("Army Status: active");
+            ArmyDisbandButton.setDisable(false);
+          } else {
+            armyLabel.setText("Army Status: Inactive");
+            ArmyDisbandButton.setDisable(true);
+          }
+          // TODO: Faction needs to store ARMY!!!!!
+          unitListButton.setDisable(false);
+          recruitableUnits.setDisable(false);
+          availableUnits.setDisable(false);
+        }
+      });
+  
+      availableUnits.setOnAction(e -> {
+        formArmyButton.setDisable(false);
+      });
+  
+      // add a Listview to display recruitable soldiers
+      recruitableUnits.setPrefWidth(200);
+      for (String s : recruitableUnitsList) {
+        recruitableUnits.getItems().add(s);
+      }
+      recruitableUnits.setOnAction(e -> {
+        recruitButton.setDisable(false);
+      });
+  
+      output_terminal.setWrapText(true);
+      recruitButton.setOnAction(e -> {
+        // recruit a selected unit to selected province
+        String provinceName = occupiedProvinces.getSelectionModel().getSelectedItem();
+        String unitName = recruitableUnits.getValue();
+        Province selectedProvince = currFaction.getProvinceByName(provinceName);
+        
+        if (selectedProvince.recruit(unitName, turnTracker.getCurrTurn())) {
+          int finishTurn = turnTracker.getCurrTurn() + unitTurns.get(unitName);
+          printMessageToTerminal(String.format("%s: %s trains a %s (will be available on %d)", 
+            currFaction.getName(), provinceName, unitName, finishTurn));
+        } else {
+          printMessageToTerminal(String.format("%s: %s can't train a %s unit now, because insuffient gold or full training)", 
+            currFaction.getName(), provinceName, unitName));
+        }
+  
+        if (gameSystem.conditionToString().contains("TREASURY")) {
+          treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+        } else {
+          treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+        }
+        // manage button and choicebox
+        recruitButton.setDisable(true);
+        //occupiedProvinces.getSelectionModel().clearSelection();
+        recruitableUnits.getSelectionModel().clearSelection();
+        //recruitableUnits.setDisable(true);
+      });
+
+    }
     
   }
 
@@ -321,9 +493,8 @@ public class GloriaRomanusController{
     turnPlayerCount = 0;
     initializeProvinceLayers();
 
-    quitButton.setOnAction(e -> 
-    {stage.setScene(mainMenuScene);
-      
+    quitButton.setOnAction(e -> {
+      stage.setScene(mainMenuScene);
     });
 
     saveButton.setOnAction(e -> {
@@ -334,7 +505,7 @@ public class GloriaRomanusController{
     factionLabel.setText("Faction: " + currFaction.getName());
     yearLabel.setText(String.valueOf(gameSystem.getYear()));
     turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
-    victoryConditon.setText(gameSystem.conditionToString());
+    victoryCondition.setText(gameSystem.conditionToString());
     provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
 
     if (gameSystem.conditionToString().contains("WEALTH")) {
@@ -363,7 +534,6 @@ public class GloriaRomanusController{
     ArmyDisbandButton.setDisable(true);
 
     occupiedProvinces.setOnAction(e -> {
-
       if (occupiedProvinces.getSelectionModel().getSelectedItem() != null) {
         // display units to availableUnits
         String provinceName = occupiedProvinces.getSelectionModel().getSelectedItem();
@@ -1245,7 +1415,28 @@ public class GloriaRomanusController{
   }
 
   public void loadFile(String fileName) {
-    gameSystem.reloadSavedGame(fileName);
+    // gameSystem.reloadSavedGame(fileName);
+    try {
+      String data = Files.readString(Paths.get("SavedData/" + fileName));
+      JSONObject json = new JSONObject(data);
+      this.factionLabel.setText(json.getString("currFaction"));
+      this.yearLabel.setText(json.getString("currYear"));
+      this.turnLabel.setText(json.getString("currTurn"));
+      this.victoryCondition.setText(json.getString("victoryCondition"));
+      this.output_terminal.setText(json.getString("outputs"));
+      this.FirstPlayerFaction = json.getString("firstPlayerFaction");
+      this.turnPlayerCount = json.getInt("turnPlayerCount");
+      this.gameSystem.loadJSON(json.getJSONObject("gameSystem"));
+
+      this.humanFaction = this.factionLabel.getText();
+      this.playerNum = this.gameSystem.getPlayerNum();
+      this.turnTracker = gameSystem.getTurnTracker();
+      this.currFaction = this.gameSystem.getFactionByName(this.factionLabel.getText().split("\\s+")[1]);
+    
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
   }
 
   public GameSystem getGameSystem() {
@@ -1274,7 +1465,7 @@ public class GloriaRomanusController{
     data.put("currFaction", factionLabel.getText());
     data.put("currYear", yearLabel.getText());
     data.put("currTurn", turnLabel.getText());
-    data.put("victoryCondition", victoryConditonLabel.getText());
+    data.put("victoryCondition", victoryCondition.getText());
     data.put("outputs", output_terminal.getText());
     data.put("firstPlayerFaction", FirstPlayerFaction);
     data.put("turnPlayerCount", turnPlayerCount);
