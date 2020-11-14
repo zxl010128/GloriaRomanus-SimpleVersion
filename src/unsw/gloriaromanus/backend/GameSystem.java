@@ -355,6 +355,32 @@ public class GameSystem implements Observer {
         for (Province p : provinces) {
             p.setProvincesTracker(provincesTracker);
             p.setFactionsTracker(factionsTracker);
+            p.getArmy().setProvincesTracker(provincesTracker);
+            p.getArmy().setFactionsTracker(factionsTracker);
+            p.getArmy().setFactionName(p.getFactionName());
+            p.getArmy().setProvinceName(p.getName());
+        }
+     
+        try {
+            String allprovinces = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/provinces_list.json"));
+            JSONArray proList = new JSONArray(allprovinces);
+            List<String> newList = new ArrayList<>();
+            for (int i = 0; i < proList.length(); i++) {
+                newList.add(proList.getString(i));
+            }
+            
+            for (Province p: this.provinces) {
+                if (newList.contains(p.getName())) {
+                    newList.remove(p.getName());
+                }
+            }
+
+            for (int i = 0; i < newList.size(); i++) {
+                Province newPro = new Province(newList.get(i), null, turnTracker);
+                this.provinces.add(newPro);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         this.factions = factionsTracker.getFactions();
         for (Faction f : factions) {

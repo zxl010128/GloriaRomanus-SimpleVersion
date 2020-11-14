@@ -10,7 +10,7 @@
         "morale": 10,
         "attackDamage": 50,
         "defense": 15,
-        "numOfTroops": 5
+        "numOfTroops": 3
     },
 
     "Gallic berserker": {
@@ -24,7 +24,7 @@
         "morale": 6,
         "attackDamage": 15,
         "defense": 15,
-        "numOfTroops": 5
+        "numOfTroops": 7
     },
 
     "Celtic Briton berserker": {
@@ -38,7 +38,7 @@
         "morale": 6,
         "attackDamage": 20,
         "defense": 10,
-        "numOfTroops": 5
+        "numOfTroops": 7
     },
 
     "Germanic berserker": {
@@ -52,7 +52,7 @@
         "morale": 6,
         "attackDamage": 25,
         "defense": 5,
-        "numOfTroops": 5
+        "numOfTroops": 7
     },
 
     "melee cavalry": {
@@ -66,7 +66,7 @@
         "morale": 3,
         "attackDamage": 10,
         "defense": 20,
-        "numOfTroops": 5
+        "numOfTroops": 10
     },
 
     "pikemen": {
@@ -80,7 +80,7 @@
         "morale": 4,
         "attackDamage": 15,
         "defense": 20,
-        "numOfTroops": 5
+        "numOfTroops": 3
     },
 
     "hoplite": {
@@ -94,7 +94,7 @@
         "morale": 4,
         "attackDamage": 20,
         "defense": 10,
-        "numOfTroops": 5
+        "numOfTroops": 8
     },
 
     "javelin-skirmisher": {
@@ -108,7 +108,7 @@
         "morale": 7,
         "attackDamage": 30,
         "defense": 5,
-        "numOfTroops": 5
+        "numOfTroops": 4
     },
 
     "elephant": {
@@ -122,7 +122,7 @@
         "morale": 2,
         "attackDamage": 10,
         "defense": 30,
-        "numOfTroops": 5
+        "numOfTroops": 2
     },
 
     "horse-archer": {
@@ -136,7 +136,7 @@
         "morale": 7,
         "attackDamage": 25,
         "defense": 5,
-        "numOfTroops": 5
+        "numOfTroops": 6
     },
 
     "druid": {
@@ -150,7 +150,7 @@
         "morale": 5,
         "attackDamage": 20,
         "defense": 15,
-        "numOfTroops": 5
+        "numOfTroops": 2
     },
 
     "melee infantry": {
@@ -164,7 +164,7 @@
         "morale": 6,
         "attackDamage": 30,
         "defense": 15,
-        "numOfTroops": 5
+        "numOfTroops": 10
     },
 
     "heavy infantry": {
@@ -178,7 +178,7 @@
         "morale":3,
         "attackDamage": 25,
         "defense": 10,
-        "numOfTroops": 5        
+        "numOfTroops": 10        
     },
 
     "missile infantry": {
@@ -192,7 +192,7 @@
         "morale":3,
         "attackDamage": 30,
         "defense": 5,
-        "numOfTroops": 5
+        "numOfTroops": 10
     },
 
     "chariots": {
@@ -206,7 +206,7 @@
         "morale": 4,
         "attackDamage": 50,
         "defense": 10,
-        "numOfTroops": 5
+        "numOfTroops": 3
     }
 }
 

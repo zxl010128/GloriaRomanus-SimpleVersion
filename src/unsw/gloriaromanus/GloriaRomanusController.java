@@ -17,11 +17,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -34,8 +29,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.backend.GameSystem;
 import unsw.gloriaromanus.backend.Province;
@@ -87,10 +80,12 @@ import javafx.collections.FXCollections;
 import static java.util.Map.entry;
 
 public class GloriaRomanusController{
+  
   @FXML
   private Button treasuryTest;
   @FXML
   private Button wealthTest;
+  
   @FXML
   private MapView mapView;
   @FXML
@@ -228,18 +223,6 @@ public class GloriaRomanusController{
       this.fileToLoad = fileToLoad;
     }
 
-    // Media sound = new Media(new File("/GameMusic.mp3").toURI().toString());
-    // MediaPlayer mp = new MediaPlayer(sound);
-    // mp.play();
-    // try
-    // {
-    //     Clip crit = AudioSystem.getClip();
-    //     AudioInputStream inputStream1 = AudioSystem.getAudioInputStream(this.getClass().getResource("GameMusic.mp3"));
-    //     crit.open(inputStream1);
-    //     crit.loop(Clip.LOOP_CONTINUOUSLY);
-    //     crit.start();
-
-    // } catch (Exception e){e.printStackTrace();}
   }
 
   public void setGameType(String gameType) {
@@ -257,9 +240,6 @@ public class GloriaRomanusController{
       for (String provinceName : provinceToOwningFactionMap.keySet()) {
         provinceToNumberTroopsMap.put(provinceName, 0);
       }
-
-      // TODO = load this from a configuration file you create (user should be able to
-      // select in loading screen)
 
       currentlySelectedHumanProvince = null;
       currentlySelectedDestination = null;
@@ -344,7 +324,7 @@ public class GloriaRomanusController{
         }
       });
 
-      provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+      provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / " + "53");
       if (gameSystem.conditionToString().contains("WEALTH")) {
         wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
       } else {
@@ -374,9 +354,11 @@ public class GloriaRomanusController{
           // display units to availableUnits
           String provinceName = occupiedProvinces.getSelectionModel().getSelectedItem();
           // Province selectedProvince = gameSystem.getProvincesTracker().getProvince(provinceName);
-          Province selectedProvince = currFaction.getProvinceByName(provinceName);
+          Province selectedProvince = gameSystem.checkStringinProvince(provinceName);
           List<Unit> provinceUnitList = selectedProvince.getUnits();
           
+          System.out.println(selectedProvince.getName());
+          System.out.println(selectedProvince.toString());
           // availableUnits = new ChoiceBox<String>();
           // availableUnits.setPrefWidth(125);
           // TODO: How to update this choiceBox???????
@@ -442,7 +424,7 @@ public class GloriaRomanusController{
         // recruit a selected unit to selected province
         String provinceName = occupiedProvinces.getSelectionModel().getSelectedItem();
         String unitName = recruitableUnits.getValue();
-        Province selectedProvince = currFaction.getProvinceByName(provinceName);
+        Province selectedProvince = gameSystem.checkStringinProvince(provinceName);
         
         if (selectedProvince.recruit(unitName, turnTracker.getCurrTurn())) {
           int finishTurn = turnTracker.getCurrTurn() + unitTurns.get(unitName);
@@ -545,7 +527,7 @@ public class GloriaRomanusController{
     yearLabel.setText(String.valueOf(gameSystem.getYear()));
     turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
     victoryCondition.setText(gameSystem.conditionToString());
-    provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+    provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / " + "53");
 
     if (gameSystem.conditionToString().contains("WEALTH")) {
       wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
@@ -752,12 +734,16 @@ public class GloriaRomanusController{
           int movementCons = myProvince.getArmy().movementConsumption(destProvince);
           myFaction.addProvince(destProvince);
 
+          System.out.println(myProvince.getName());
+          System.out.println(myProvince.getUnits().toString());
+          System.out.println(myProvince.getArmy().getUnits().toString());
           for (Unit u : myProvince.getArmy().getUnits()) {
             destProvince.addUnit(u);
             myProvince.removeUnit(u);
             u.setProvince(destProvince);
           }
-
+          System.out.println(myProvince.getUnits().toString());
+  
           destProvince.setArmy(myProvince.getArmy());
           destProvince.getArmy().setProvinceName(enemyProvince);
 
@@ -769,19 +755,20 @@ public class GloriaRomanusController{
 
           myProvince.setArmy(new Army(myProvince));
           armyLabel.setText("Army Status: Inactive");
-          ArmyActiveProvince.remove(humanProvince);
+          ArmyActiveProvince.remove(myFaction.getName());
           
           ArmyActiveProvince.add(enemyProvince);
 
           occupiedProvinces.getItems().add(enemyProvince);
           occupiedProvinces.getSelectionModel().clearSelection();
 
-          provinceToNumberTroopsMap.put(humanProvince, myProvince.getNumOfSoldiers());
+          provinceToNumberTroopsMap.put(myProvince.getName(), myProvince.getNumOfSoldiers());
           provinceToNumberTroopsMap.put(enemyProvince, destProvince.getNumOfSoldiers());
+          System.out.println(myProvince.getNumOfSoldiers());
+          System.out.println(destProvince.getNumOfSoldiers());
+          provinceToOwningFactionMap.put(enemyProvince, myFaction.getName());
 
-          provinceToOwningFactionMap.put(enemyProvince, humanFaction);
-
-          provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+          provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / " + "53");
 
           if (gameSystem.conditionToString().contains("WEALTH")) {
             wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
@@ -789,8 +776,10 @@ public class GloriaRomanusController{
             wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()));
           }      
           checkWinGame(myFaction);
-          printMessageToTerminal(String.format("You successfully move troops from %s to %s and occupy this province.", humanProvince, enemyProvince));
-        
+          printMessageToTerminal(String.format("You successfully move troops from %s to %s and occupy this province.", myFaction.getName(), enemyProvince));
+          
+          System.out.println(humanFaction);
+          System.out.println(myFaction.getName());
         } else {
           printMessageToTerminal("You cannot reach this destination because of insufficient movement pts.");
 
@@ -876,7 +865,7 @@ public class GloriaRomanusController{
               break;
           }
 
-          provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+          provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / " + "53");
 
           if (gameSystem.conditionToString().contains("WEALTH")) {
             wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
@@ -1375,7 +1364,7 @@ public class GloriaRomanusController{
         
         ArmyDisbandButton.setDisable(true);
         availableUnits.getItems().clear();
-        provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+        provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / " + "53");
     
         if (gameSystem.conditionToString().contains("WEALTH")) {
           wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
@@ -1465,7 +1454,7 @@ public class GloriaRomanusController{
       this.turnPlayerCount = json.getInt("turnPlayerCount");
       this.gameSystem.loadJSON(json.getJSONObject("gameSystem"));
 
-      this.humanFaction = this.factionLabel.getText();
+      this.humanFaction = this.factionLabel.getText().substring(this.factionLabel.getText().indexOf(' ')+1);
       this.playerNum = this.gameSystem.getPlayerNum();
       this.turnTracker = gameSystem.getTurnTracker();
       this.currFaction = this.gameSystem.getFactionByName(this.factionLabel.getText().substring(this.factionLabel.getText().indexOf(' ')+1));
@@ -1636,11 +1625,12 @@ public class GloriaRomanusController{
     }
   }
 
+  
   @FXML
   public void cheatingTreasury() {
     currFaction.setBalance(currFaction.getBalance() + 50000);
 
-    provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+      provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / " + "53");
     
     if (gameSystem.conditionToString().contains("WEALTH")) {
       wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
@@ -1659,7 +1649,7 @@ public class GloriaRomanusController{
   @FXML
   public void cheatingWealth() {
     currFaction.setTotalWealth(currFaction.getTotalWealth() + 200000);
-    provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+      provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / " + "53");
     
     if (gameSystem.conditionToString().contains("WEALTH")) {
       wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
@@ -1674,4 +1664,5 @@ public class GloriaRomanusController{
     }
     checkWinGame(currFaction);
   }
+  
 }
