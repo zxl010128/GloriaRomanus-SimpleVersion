@@ -357,8 +357,6 @@ public class GloriaRomanusController{
           Province selectedProvince = gameSystem.checkStringinProvince(provinceName);
           List<Unit> provinceUnitList = selectedProvince.getUnits();
           
-          System.out.println(selectedProvince.getName());
-          System.out.println(selectedProvince.toString());
           // availableUnits = new ChoiceBox<String>();
           // availableUnits.setPrefWidth(125);
           availableUnits.getItems().clear();
@@ -730,15 +728,11 @@ public class GloriaRomanusController{
           int movementCons = myProvince.getArmy().movementConsumption(destProvince);
           myFaction.addProvince(destProvince);
 
-          System.out.println(myProvince.getName());
-          System.out.println(myProvince.getUnits().toString());
-          System.out.println(myProvince.getArmy().getUnits().toString());
           for (Unit u : myProvince.getArmy().getUnits()) {
             destProvince.addUnit(u);
             myProvince.removeUnit(u);
             u.setProvince(destProvince);
           }
-          System.out.println(myProvince.getUnits().toString());
   
           destProvince.setArmy(myProvince.getArmy());
           destProvince.getArmy().setProvinceName(enemyProvince);
@@ -760,8 +754,6 @@ public class GloriaRomanusController{
 
           provinceToNumberTroopsMap.put(myProvince.getName(), myProvince.getNumOfSoldiers());
           provinceToNumberTroopsMap.put(enemyProvince, destProvince.getNumOfSoldiers());
-          System.out.println(myProvince.getNumOfSoldiers());
-          System.out.println(destProvince.getNumOfSoldiers());
           provinceToOwningFactionMap.put(enemyProvince, myFaction.getName());
 
           provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / " + "53");
@@ -774,8 +766,6 @@ public class GloriaRomanusController{
           checkWinGame(myFaction);
           printMessageToTerminal(String.format("You successfully move troops from %s to %s and occupy this province.", myFaction.getName(), enemyProvince));
           
-          System.out.println(humanFaction);
-          System.out.println(myFaction.getName());
         } else {
           printMessageToTerminal("You cannot reach this destination because of insufficient movement pts.");
 
