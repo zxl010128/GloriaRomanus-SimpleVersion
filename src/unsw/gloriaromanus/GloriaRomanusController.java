@@ -171,7 +171,6 @@ public class GloriaRomanusController{
   private GameSystem gameSystem;
   private TurnTracker turnTracker;
   private Faction currFaction;
-  private Army userSelectedArmy;
   private int playerNum;
 
   private static String NEWGAME = "NEWGAME";
@@ -244,8 +243,6 @@ public class GloriaRomanusController{
       currentlySelectedHumanProvince = null;
       currentlySelectedDestination = null;
 
-      userSelectedArmy = null;
-
       // Enable all the button except PlayerNumButton
       endTurnButton.setDisable(true);
       saveButton.setDisable(true);
@@ -289,8 +286,6 @@ public class GloriaRomanusController{
 
       currentlySelectedHumanProvince = null;
       currentlySelectedDestination = null;
-
-      userSelectedArmy = null;
 
       gameSystem = new GameSystem();
       // load the previously saved file
@@ -868,22 +863,7 @@ public class GloriaRomanusController{
         }
 
       }
-        // Random r = new Random();
-        // int choice = r.nextInt(2);
-        // if (choice == 0){
-        //   // human won. Transfer 40% of troops of human over. No casualties by human, but enemy loses all troops
-        //   int numTroopsToTransfer = provinceToNumberTroopsMap.get(humanProvince)*2/5;
-        //   provinceToNumberTroopsMap.put(enemyProvince, numTroopsToTransfer);
-        //   provinceToNumberTroopsMap.put(humanProvince, provinceToNumberTroopsMap.get(humanProvince)-numTroopsToTransfer);
-        //   provinceToOwningFactionMap.put(enemyProvince, humanFaction);
-        //   printMessageToTerminal("Won battle!");
-        // }
-        // else{
-        //   // enemy won. Human loses 60% of soldiers in the province
-        //   int numTroopsLost = provinceToNumberTroopsMap.get(humanProvince)*3/5;
-        //   provinceToNumberTroopsMap.put(humanProvince, provinceToNumberTroopsMap.get(humanProvince)-numTroopsLost);
-        //   printMessageToTerminal("Lost battle!");
-        // }
+
         resetSelections();  // reset selections in UI
         addAllPointGraphics(); // reset graphics
 
