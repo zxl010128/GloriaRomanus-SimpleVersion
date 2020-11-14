@@ -92,10 +92,10 @@ public class Faction implements Subject{
     public void addProvince(Province p) {
         provinces.add(p);
         totalWealth += p.getWealth();
+        p.setFactionName(this.getName());
         if (!provincesTracker.getProvinces().contains(p)) {
             p.setFactionsTracker(factionsTracker);
             p.setProvincesTracker(provincesTracker);
-            p.setFactionName(this.getName());
             p.getArmy().setProvincesTracker(provincesTracker);
             provincesTracker.addProvince(p);
         }

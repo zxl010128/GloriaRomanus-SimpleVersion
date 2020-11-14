@@ -360,4 +360,8 @@ public class Unit {
         }
     }
 
+    public void setFactionName(String factionName) {
+        this.factionName = factionName;
+    }
+
 }
