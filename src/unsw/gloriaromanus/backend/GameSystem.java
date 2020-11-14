@@ -286,7 +286,6 @@ public class GameSystem implements Observer {
      * @param game
      */
     public void saveCurrentGame() {
-        // TODO: Maybe a bug in creating a file here
         // saved game
         int savedGamesNum = new File("SavedData/").list().length;
         savedGamesNum += 1;
@@ -355,6 +354,32 @@ public class GameSystem implements Observer {
         for (Province p : provinces) {
             p.setProvincesTracker(provincesTracker);
             p.setFactionsTracker(factionsTracker);
+            p.getArmy().setProvincesTracker(provincesTracker);
+            p.getArmy().setFactionsTracker(factionsTracker);
+            p.getArmy().setFactionName(p.getFactionName());
+            p.getArmy().setProvinceName(p.getName());
+        }
+     
+        try {
+            String allprovinces = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/provinces_list.json"));
+            JSONArray proList = new JSONArray(allprovinces);
+            List<String> newList = new ArrayList<>();
+            for (int i = 0; i < proList.length(); i++) {
+                newList.add(proList.getString(i));
+            }
+            
+            for (Province p: this.provinces) {
+                if (newList.contains(p.getName())) {
+                    newList.remove(p.getName());
+                }
+            }
+
+            for (int i = 0; i < newList.size(); i++) {
+                Province newPro = new Province(newList.get(i), null, turnTracker);
+                this.provinces.add(newPro);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         this.factions = factionsTracker.getFactions();
         for (Faction f : factions) {
@@ -650,24 +675,9 @@ public class GameSystem implements Observer {
         if (VictoryCheck(this.victoryCondition, ((Faction) obj).getProvinces().size(), ((Faction) obj).getBalance(), ((Faction) obj).getTotalWealth()) == true) {
             System.out.println(((Faction) obj).getName() + "has won this game!");
 
-            for(Faction faction: this.factions) {
-                if (faction.getName().equals(((Faction) obj).getName())) {
-                    faction.setIs_win(true);
-                    break;
-                }
-            }
-
-            this.saveCurrentGame();
-        
         // If this Faction totallt lost
         } else if (((Faction) obj).getProvinces().size() == 0) {
             System.out.println(((Faction) obj).getName() + "has lost this game!");
-            for(Faction faction: this.factions) {
-                if (faction.getName().equals(((Faction) obj).getName())) {
-                    faction.setIs_defeat(true);
-                    break;
-                }
-            }
         }
 
     }
