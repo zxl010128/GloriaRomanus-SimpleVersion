@@ -692,5 +692,15 @@ public class GameSystem implements Observer {
         return null;
     }
 
+    public Faction getFactionByName(String name) {
+        for (Faction f : this.getFactions()) {
+            if (f.getName().equals(name)) {
+                return f;
+            }
+        }
+        
+        return null;
+    }
+
     
 }

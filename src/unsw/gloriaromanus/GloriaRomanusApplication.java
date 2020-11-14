@@ -16,7 +16,7 @@ public class GloriaRomanusApplication extends Application {
   public void start(Stage stage) throws IOException {
     // set up the scene
     FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
-    controller = new GloriaRomanusController("NEWGAME");
+    controller = new GloriaRomanusController("NEWGAME", null);
     loader.setController(controller);
     Parent root = loader.load();
     // controller = loader.getController();
