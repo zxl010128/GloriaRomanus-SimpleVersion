@@ -38,7 +38,7 @@
             "name": "CodeLens (Launch) - GloriaRomanusLauncher",
             "request": "launch",
             "mainClass": "unsw.gloriaromanus.GloriaRomanusLauncher",
-            "vmArgs": "--module-path \"./lib\" --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path \"./lib\" --add-modules javafx.controls,javafx.fxml,javafx.media"
         }
     ]
 }
