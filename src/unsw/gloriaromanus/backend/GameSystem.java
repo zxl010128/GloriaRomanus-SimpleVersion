@@ -286,7 +286,6 @@ public class GameSystem implements Observer {
      * @param game
      */
     public void saveCurrentGame() {
-        // TODO: Maybe a bug in creating a file here
         // saved game
         int savedGamesNum = new File("SavedData/").list().length;
         savedGamesNum += 1;
