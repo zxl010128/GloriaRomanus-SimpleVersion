@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,11 +16,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -34,12 +28,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.backend.GameSystem;
 import unsw.gloriaromanus.backend.Province;
-import unsw.gloriaromanus.backend.TrainingRecord;
 import unsw.gloriaromanus.backend.TurnTracker;
 import unsw.gloriaromanus.backend.Army;
 import unsw.gloriaromanus.backend.Faction;
@@ -255,7 +246,6 @@ public class GloriaRomanusController{
         provinceToNumberTroopsMap.put(provinceName, 0);
       }
 
-      // TODO = load this from a configuration file you create (user should be able to
       // select in loading screen)
 
       currentlySelectedHumanProvince = null;
@@ -372,7 +362,6 @@ public class GloriaRomanusController{
           
           // availableUnits = new ChoiceBox<String>();
           // availableUnits.setPrefWidth(125);
-          // TODO: How to update this choiceBox???????
           availableUnits.getItems().clear();
           unitCount.clear();
           if (provinceUnitList != null) {
@@ -410,7 +399,6 @@ public class GloriaRomanusController{
             armyLabel.setText("Army Status: Inactive");
             ArmyDisbandButton.setDisable(true);
           }
-          // TODO: Faction needs to store ARMY!!!!!
           unitListButton.setDisable(false);
           recruitableUnits.setDisable(false);
           availableUnits.setDisable(false);
@@ -571,7 +559,6 @@ public class GloriaRomanusController{
         
         // availableUnits = new ChoiceBox<String>();
         // availableUnits.setPrefWidth(125);
-        // TODO: How to update this choiceBox???????
         availableUnits.getItems().clear();
         unitCount.clear();
         if (provinceUnitList != null) {
@@ -609,7 +596,6 @@ public class GloriaRomanusController{
           armyLabel.setText("Army Status: Inactive");
           ArmyDisbandButton.setDisable(true);
         }
-        // TODO: Faction needs to store ARMY!!!!!
         unitListButton.setDisable(false);
         recruitableUnits.setDisable(false);
         availableUnits.setDisable(false);
@@ -886,7 +872,6 @@ public class GloriaRomanusController{
         }
 
       }
-        // // TODO = have better battle resolution than 50% chance of winning
         // Random r = new Random();
         // int choice = r.nextInt(2);
         // if (choice == 0){
@@ -1052,7 +1037,6 @@ public class GloriaRomanusController{
             break;
 
 
-          // TODO = handle all faction names, and find a better structure...
         }
         t.setHaloColor(0xFFFFFFFF);
         t.setHaloWidth(2);
