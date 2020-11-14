@@ -224,5 +224,9 @@ public class Faction implements Subject{
         this.balance = balance;
     }
 
+    public void setTotalWealth(int totalWealth) {
+        this.totalWealth = totalWealth;
+    }
+
     
 }

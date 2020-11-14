@@ -650,24 +650,9 @@ public class GameSystem implements Observer {
         if (VictoryCheck(this.victoryCondition, ((Faction) obj).getProvinces().size(), ((Faction) obj).getBalance(), ((Faction) obj).getTotalWealth()) == true) {
             System.out.println(((Faction) obj).getName() + "has won this game!");
 
-            for(Faction faction: this.factions) {
-                if (faction.getName().equals(((Faction) obj).getName())) {
-                    faction.setIs_win(true);
-                    break;
-                }
-            }
-
-            this.saveCurrentGame();
-        
         // If this Faction totallt lost
         } else if (((Faction) obj).getProvinces().size() == 0) {
             System.out.println(((Faction) obj).getName() + "has lost this game!");
-            for(Faction faction: this.factions) {
-                if (faction.getName().equals(((Faction) obj).getName())) {
-                    faction.setIs_defeat(true);
-                    break;
-                }
-            }
         }
 
     }
