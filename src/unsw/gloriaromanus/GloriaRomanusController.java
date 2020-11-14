@@ -17,6 +17,11 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -29,6 +34,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.backend.GameSystem;
 import unsw.gloriaromanus.backend.Province;
@@ -217,6 +224,19 @@ public class GloriaRomanusController{
     if (gameType.equals("LOADGAME")) {
       this.fileToLoad = fileToLoad;
     }
+
+    // Media sound = new Media(new File("/GameMusic.mp3").toURI().toString());
+    // MediaPlayer mp = new MediaPlayer(sound);
+    // mp.play();
+    // try
+    // {
+    //     Clip crit = AudioSystem.getClip();
+    //     AudioInputStream inputStream1 = AudioSystem.getAudioInputStream(this.getClass().getResource("GameMusic.mp3"));
+    //     crit.open(inputStream1);
+    //     crit.loop(Clip.LOOP_CONTINUOUSLY);
+    //     crit.start();
+
+    // } catch (Exception e){e.printStackTrace();}
   }
 
   public void setGameType(String gameType) {
