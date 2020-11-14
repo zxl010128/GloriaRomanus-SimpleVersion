@@ -297,6 +297,16 @@ public class GloriaRomanusController{
 
       playerNumButton.setDisable(true);
 
+      // update province info on map
+      for (Province p : gameSystem.getProvinces()) {
+        provinceToOwningFactionMap.put(p.getName(), p.getFactionName());
+      }
+
+      // update unit number on map
+      for (Province p : gameSystem.getProvinces()) {
+        provinceToNumberTroopsMap.put(p.getName(), p.getNumOfSoldiers());
+      }
+
       initializeProvinceLayers();
 
 
@@ -1431,7 +1441,7 @@ public class GloriaRomanusController{
       this.humanFaction = this.factionLabel.getText();
       this.playerNum = this.gameSystem.getPlayerNum();
       this.turnTracker = gameSystem.getTurnTracker();
-      this.currFaction = this.gameSystem.getFactionByName(this.factionLabel.getText().split("\\s+")[1]);
+      this.currFaction = this.gameSystem.getFactionByName(this.factionLabel.getText().substring(this.factionLabel.getText().indexOf(' ')+1));
     
     } catch (IOException e) {
       e.printStackTrace();
