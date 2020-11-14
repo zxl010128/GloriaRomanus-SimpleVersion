@@ -18,7 +18,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.ChoiceBox?>
 
-<StackPane fx:controller="unsw.gloriaromanus.GloriaRomanusController" xmlns:fx="http://javafx.com/fxml"
+<!-- fx:controller="unsw.gloriaromanus.GloriaRomanusController" -->
+<StackPane  xmlns:fx="http://javafx.com/fxml"
            stylesheets="/unsw/gloriaromanus/style.css">
     <MapView fx:id="mapView"/>
     <VBox fx:id="menu" StackPane.alignment="TOP_LEFT" spacing="10" maxWidth="300" styleClass="panel-region">
