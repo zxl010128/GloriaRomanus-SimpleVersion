@@ -117,8 +117,11 @@ public class MainMenuController {
             // gameSceneController = new GloriaRomanusController();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
             try {
+                // set up the controller for loader
+                gameSceneController = new GloriaRomanusController("NEWGAME");
+                loader.setController(gameSceneController);
                 Parent root = loader.load();
-                gameSceneController = loader.getController();
+
                 gameScene = new Scene(root);
                 this.setGameScene(gameScene);
                 this.setGameSceneController(gameSceneController);
@@ -184,19 +187,23 @@ public class MainMenuController {
             String fileToLoad = savedGames.getSelectionModel().getSelectedItem();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
             try {
+                // setup the controller for loader
+                gameSceneController = new GloriaRomanusController("LOADGAME");
+                loader.setController(gameSceneController);
                 Parent root = loader.load();
-                gameSceneController = loader.getController(); 
                 
+
                 gameScene = new Scene(root);
                 this.setGameScene(gameScene);
                 this.setGameSceneController(gameSceneController);
+
                 // activate all disabled buttons
                 gameSceneController.setStage(this.getStage());
                 gameSceneController.setMainMenuScene(this.getScene());
 
-                gameSceneController.loadFile(fileToLoad);
-                gameSceneController.getPlayerNumButton().fire();
-                gameSceneController.initialMap(gameSceneController.getGameSystem().getPlayerNum());
+                // gameSceneController.loadFile(fileToLoad);
+                // gameSceneController.getPlayerNumButton().fire();
+                // gameSceneController.initialMap(gameSceneController.getGameSystem().getPlayerNum());
                 
                 newStage.close();
             } catch (IOException exception) {

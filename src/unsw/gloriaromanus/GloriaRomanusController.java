@@ -172,6 +172,10 @@ public class GloriaRomanusController{
   private Army userSelectedArmy;
   private int playerNum;
 
+  private static String NEWGAME = "NEWGAME";
+  private static String LOADGAME = "LOADGAME";
+  private String gameType;
+
   private String[] recruitableUnitsList = {
     "Roman legionary",
     "Gallic berserker",
@@ -207,58 +211,119 @@ public class GloriaRomanusController{
     entry("missile infantry", 1),
     entry("chariots", 2)
   );
+
+  public GloriaRomanusController(String gameType) {
+    this.gameType = gameType;
+  }
+
+  public void setGameType(String gameType) {
+    this.gameType = gameType;
+  }
   
   @FXML
   public void initialize() throws JsonParseException, JsonMappingException, IOException {
-    // All factions will start with no soldiers
-    provinceToOwningFactionMap = getProvinceToOwningFactionMap();
+    if (gameType.equals(NEWGAME)) {
+      // All factions will start with no soldiers
+      provinceToOwningFactionMap = getProvinceToOwningFactionMap();
 
-    provinceToNumberTroopsMap = new HashMap<String, Integer>();
+      provinceToNumberTroopsMap = new HashMap<String, Integer>();
 
-    for (String provinceName : provinceToOwningFactionMap.keySet()) {
-      provinceToNumberTroopsMap.put(provinceName, 0);
+      for (String provinceName : provinceToOwningFactionMap.keySet()) {
+        provinceToNumberTroopsMap.put(provinceName, 0);
+      }
+
+      // TODO = load this from a configuration file you create (user should be able to
+      // select in loading screen)
+
+      currentlySelectedHumanProvince = null;
+      currentlySelectedDestination = null;
+
+      userSelectedArmy = null;
+
+      // Enable all the button except PlayerNumButton
+      endTurnButton.setDisable(true);
+      saveButton.setDisable(true);
+      invadeButton.setDisable(true);
+      quitButton.setDisable(true);
+      recruitButton.setDisable(true);
+      setTaxButton.setDisable(true);
+      formArmyButton.setDisable(true);
+      ArmyDisbandButton.setDisable(true);
+      occupiedProvinces.setDisable(true);
+      recruitableUnits.setDisable(true);
+      availableUnits.setDisable(true);
+      myProvinceButton.setDisable(true);
+      destinationButton.setDisable(true);
+      unitListButton.setDisable(true);
+
+      playerNumButton.setOnAction(e -> {
+        showStage();
+        setTaxButton.setDisable(false);
+        playerNumButton.setDisable(true);
+        endTurnButton.setDisable(false);
+        saveButton.setDisable(false);
+        invadeButton.setDisable(false);
+        quitButton.setDisable(false);
+        recruitButton.setDisable(false);
+        formArmyButton.setDisable(false);
+        occupiedProvinces.setDisable(false);
+        recruitableUnits.setDisable(false);
+        availableUnits.setDisable(false);
+        myProvinceButton.setDisable(false);
+        destinationButton.setDisable(false);
+      });
+    } else {
+      // load game
+      // All factions will start with no soldiers
+      provinceToOwningFactionMap = getProvinceToOwningFactionMap();
+
+      provinceToNumberTroopsMap = new HashMap<String, Integer>();
+
+      for (String provinceName : provinceToOwningFactionMap.keySet()) {
+        provinceToNumberTroopsMap.put(provinceName, 1000);
+      }
+
+      // TODO = load this from a configuration file you create (user should be able to
+      // select in loading screen)
+
+      currentlySelectedHumanProvince = null;
+      currentlySelectedDestination = null;
+
+      userSelectedArmy = null;
+
+      // Enable all the button except PlayerNumButton
+      // endTurnButton.setDisable(true);
+      // saveButton.setDisable(true);
+      // invadeButton.setDisable(true);
+      // quitButton.setDisable(true);
+      // recruitButton.setDisable(true);
+      // setTaxButton.setDisable(true);
+      // formArmyButton.setDisable(true);
+      // ArmyDisbandButton.setDisable(true);
+      // occupiedProvinces.setDisable(true);
+      // recruitableUnits.setDisable(true);
+      // availableUnits.setDisable(true);
+      // myProvinceButton.setDisable(true);
+      // destinationButton.setDisable(true);
+      // unitListButton.setDisable(true);
+
+      // playerNumButton.setOnAction(e -> {
+      //   showStage();
+      //   setTaxButton.setDisable(false);
+      //   playerNumButton.setDisable(true);
+      //   endTurnButton.setDisable(false);
+      //   saveButton.setDisable(false);
+      //   invadeButton.setDisable(false);
+      //   quitButton.setDisable(false);
+      //   recruitButton.setDisable(false);
+      //   formArmyButton.setDisable(false);
+      //   occupiedProvinces.setDisable(false);
+      //   recruitableUnits.setDisable(false);
+      //   availableUnits.setDisable(false);
+      //   myProvinceButton.setDisable(false);
+      //   destinationButton.setDisable(false);
+      // });
     }
-
-    // TODO = load this from a configuration file you create (user should be able to
-    // select in loading screen)
-
-    currentlySelectedHumanProvince = null;
-    currentlySelectedDestination = null;
-
-    userSelectedArmy = null;
-
-    // Enable all the button except PlayerNumButton
-    endTurnButton.setDisable(true);
-    saveButton.setDisable(true);
-    invadeButton.setDisable(true);
-    quitButton.setDisable(true);
-    recruitButton.setDisable(true);
-    setTaxButton.setDisable(true);
-    formArmyButton.setDisable(true);
-    ArmyDisbandButton.setDisable(true);
-    occupiedProvinces.setDisable(true);
-    recruitableUnits.setDisable(true);
-    availableUnits.setDisable(true);
-    myProvinceButton.setDisable(true);
-    destinationButton.setDisable(true);
-    unitListButton.setDisable(true);
-
-    playerNumButton.setOnAction(e -> {
-      showStage();
-      setTaxButton.setDisable(false);
-      playerNumButton.setDisable(true);
-      endTurnButton.setDisable(false);
-      saveButton.setDisable(false);
-      invadeButton.setDisable(false);
-      quitButton.setDisable(false);
-      recruitButton.setDisable(false);
-      formArmyButton.setDisable(false);
-      occupiedProvinces.setDisable(false);
-      recruitableUnits.setDisable(false);
-      availableUnits.setDisable(false);
-      myProvinceButton.setDisable(false);
-      destinationButton.setDisable(false);
-    });
     
   }
 
@@ -363,7 +428,6 @@ public class GloriaRomanusController{
     ArmyDisbandButton.setDisable(true);
 
     occupiedProvinces.setOnAction(e -> {
-
       if (occupiedProvinces.getSelectionModel().getSelectedItem() != null) {
         // display units to availableUnits
         String provinceName = occupiedProvinces.getSelectionModel().getSelectedItem();
