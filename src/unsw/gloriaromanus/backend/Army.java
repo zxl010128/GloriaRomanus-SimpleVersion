@@ -104,7 +104,7 @@ public class Army {
 
         } else if (winner.getFactionName().equals(this.getFactionName())) {
             // Win
-            this.updateAfterWin(destination);
+            //this.updateAfterWin(destination);
             return 1;
 
         } else {
