@@ -47,7 +47,7 @@
                 <Font size="16.0" />
             </font>
         </Label>
-        <Label fx:id="victoryConditon" alignment="CENTER" text="Victory Condition: " textAlignment="LEFT">
+        <Label fx:id="victoryCondition" alignment="CENTER" text="Victory Condition: " textAlignment="LEFT">
             <font>
                 <Font size="14.0" />
             </font>
