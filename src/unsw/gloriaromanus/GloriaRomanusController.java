@@ -78,12 +78,12 @@ import javafx.collections.FXCollections;
 import static java.util.Map.entry;
 
 public class GloriaRomanusController{
-  
+  /*
   @FXML
   private Button treasuryTest;
   @FXML
   private Button wealthTest;
-  
+  */
   @FXML
   private MapView mapView;
   @FXML
@@ -1619,7 +1619,7 @@ public class GloriaRomanusController{
     }
   }
 
-  
+  /*
   @FXML
   public void cheatingTreasury() {
     currFaction.setBalance(currFaction.getBalance() + 50000);
@@ -1658,5 +1658,5 @@ public class GloriaRomanusController{
     }
     checkWinGame(currFaction);
   }
-  
+  */
 }
