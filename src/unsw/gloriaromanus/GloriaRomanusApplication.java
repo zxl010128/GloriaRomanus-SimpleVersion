@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.media.Media;
+import javafx.util.Duration;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
@@ -17,10 +18,15 @@ public class GloriaRomanusApplication extends Application {
   private static MainMenuController mainMenuController;
   @Override
   public void start(Stage stage) throws IOException {
+
     Media sound = new Media(new File("GameMusic.mp3").toURI().toString());
     MediaPlayer mp = new MediaPlayer(sound);
     
-    
+    mp.setOnEndOfMedia(new Runnable() {
+      public void run() {
+        mp.seek(Duration.ZERO);
+      }
+    });
     // set up the scene
     FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
     controller = new GloriaRomanusController("NEWGAME", null);

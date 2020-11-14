@@ -144,5 +144,9 @@
                 </VBox>
             </HBox>
         </VBox>
+        <HBox spacing="5.0">
+            <Button fx:id="treasuryTest" onAction="#cheatingTreasury"/>
+            <Button fx:id="wealthTest" onAction="#cheatingWealth"/>
+        </HBox>
     </VBox>
 </StackPane>

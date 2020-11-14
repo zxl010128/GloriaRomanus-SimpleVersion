@@ -87,7 +87,10 @@ import javafx.collections.FXCollections;
 import static java.util.Map.entry;
 
 public class GloriaRomanusController{
-
+  @FXML
+  private Button treasuryTest;
+  @FXML
+  private Button wealthTest;
   @FXML
   private MapView mapView;
   @FXML
@@ -333,8 +336,12 @@ public class GloriaRomanusController{
       });
 
       saveButton.setOnAction(e -> {
-        this.save();
-        printMessageToTerminal("Game has been saved!");
+        if (ArmyActiveProvince.size() != 0) {
+          printMessageToTerminal(String.format("You could not end your turn because you have active army in the province %s", ArmyActiveProvince.toString()));
+        } else {
+          this.save();
+          printMessageToTerminal("Game has been saved!");
+        }
       });
 
       provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
@@ -526,8 +533,12 @@ public class GloriaRomanusController{
     });
 
     saveButton.setOnAction(e -> {
-      this.save();
-      printMessageToTerminal("Game has been saved!");
+      if (ArmyActiveProvince.size() != 0) {
+        printMessageToTerminal(String.format("You could not end your turn because you have active army in the province %s", ArmyActiveProvince.toString()));
+      } else {
+        this.save();
+        printMessageToTerminal("Game has been saved!");
+      }
     });
 
     factionLabel.setText("Faction: " + currFaction.getName());
@@ -739,8 +750,6 @@ public class GloriaRomanusController{
 
           int currentMovePts = myProvince.getArmy().getMovementPoints();
           int movementCons = myProvince.getArmy().movementConsumption(destProvince);
-          System.out.println(currentMovePts);
-          System.out.println(movementCons);
           myFaction.addProvince(destProvince);
 
           for (Unit u : myProvince.getArmy().getUnits()) {
@@ -779,7 +788,7 @@ public class GloriaRomanusController{
           } else {
             wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()));
           }      
-
+          checkWinGame(myFaction);
           printMessageToTerminal(String.format("You successfully move troops from %s to %s and occupy this province.", humanProvince, enemyProvince));
         
         } else {
@@ -797,8 +806,6 @@ public class GloriaRomanusController{
           int currentMovePts = myProvince.getArmy().getMovementPoints();
           int movementCons = myProvince.getArmy().movementConsumption(destProvince);
 
-          System.out.println(currentMovePts);
-          System.out.println(movementCons);
           int invadeResult = myProvince.getArmy().invade(destProvince);
           
           switch (invadeResult) {
@@ -1324,65 +1331,72 @@ public class GloriaRomanusController{
   @FXML
   public void handleEndTurnButton(ActionEvent e) throws IOException {
     
-    turnPlayerCount += 1;
-
-    if (turnPlayerCount == gameSystem.getFactions().size()) {
-      turnPlayerCount = 0;
-    }
-
-    if (currentlySelectedProvince != null){
-      featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedProvince));
-      currentlySelectedProvince = null;
-    }
-  
-    resetSelections();
-    unitListButton.setDisable(true);
-    occupiedProvinces.getSelectionModel().clearSelection();
-    occupiedProvinces.getItems().clear();
-
-    currFaction = gameSystem.getFactions().get(turnPlayerCount);
-    humanFaction = currFaction.getName();
-    factionLabel.setText("Faction: " + humanFaction);
-
-    if (humanFaction.equals(FirstPlayerFaction)) {
-      gameSystem.NextTurn();
-      yearLabel.setText(String.valueOf(gameSystem.getYear()));
-      turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));      
-    }
+    if (ArmyActiveProvince.size() != 0) {
+      printMessageToTerminal(String.format("You could not end your turn because you have active army in the province %s", ArmyActiveProvince.toString()));
     
-    if (currFaction.isIs_defeat() == true) {
-      printMessageToTerminal(humanFaction + " " + "has already lost the game. Switch to next player!");
-      endTurnButton.fire();
-
     } else {
 
-      for (Province p : currFaction.getProvinces()) {
-        occupiedProvinces.getItems().add(p.getName());
-        provinceToNumberTroopsMap.put(p.getName(), p.getNumOfSoldiers());
+      turnPlayerCount += 1;
+
+      if (turnPlayerCount == gameSystem.getFactions().size()) {
+        turnPlayerCount = 0;
+      }
+
+      if (currentlySelectedProvince != null){
+        featureLayer_provinces.unselectFeatures(Arrays.asList(currentlySelectedProvince));
+        currentlySelectedProvince = null;
+      }
+    
+      resetSelections();
+      unitListButton.setDisable(true);
+      occupiedProvinces.getSelectionModel().clearSelection();
+      occupiedProvinces.getItems().clear();
+
+      currFaction = gameSystem.getFactions().get(turnPlayerCount);
+      humanFaction = currFaction.getName();
+      factionLabel.setText("Faction: " + humanFaction);
+
+      if (humanFaction.equals(FirstPlayerFaction)) {
+        gameSystem.NextTurn();
+        yearLabel.setText(String.valueOf(gameSystem.getYear()));
+        turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));      
       }
       
-      ArmyDisbandButton.setDisable(true);
-      availableUnits.getItems().clear();
-      provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
-  
-      if (gameSystem.conditionToString().contains("WEALTH")) {
-        wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
+      if (currFaction.isIs_defeat() == true) {
+        printMessageToTerminal(humanFaction + " " + "has already lost the game. Switch to next player!");
+        endTurnButton.fire();
+
       } else {
-        wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()));
+
+        for (Province p : currFaction.getProvinces()) {
+          occupiedProvinces.getItems().add(p.getName());
+          provinceToNumberTroopsMap.put(p.getName(), p.getNumOfSoldiers());
+        }
+        
+        ArmyDisbandButton.setDisable(true);
+        availableUnits.getItems().clear();
+        provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+    
+        if (gameSystem.conditionToString().contains("WEALTH")) {
+          wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
+        } else {
+          wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()));
+        }
+    
+        if (gameSystem.conditionToString().contains("TREASURY")) {
+          treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+        } else {
+          treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+        }
+        checkWinGame(currFaction);
+        printMessageToTerminal(String.format("Turn %d: %s's turn", turnTracker.getCurrTurn(), currFaction.getName()));
       }
-  
-      if (gameSystem.conditionToString().contains("TREASURY")) {
-        treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
-      } else {
-        treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
-      }
-      checkWinGame(currFaction);
-      printMessageToTerminal(String.format("Turn %d: %s's turn", turnTracker.getCurrTurn(), currFaction.getName()));
+
+
+
+      addAllPointGraphics();
+
     }
-
-
-
-    addAllPointGraphics();
   }
 
   public void clearScene() {
@@ -1401,10 +1415,6 @@ public class GloriaRomanusController{
       ArmyActiveProvince.remove(selectedProvince);
       ArmyDisbandButton.setDisable(true);
 
-      if (ArmyActiveProvince.size() == 0) {
-        endTurnButton.setDisable(false);
-        saveButton.setDisable(false);
-      }
     }
   }
 
@@ -1432,11 +1442,6 @@ public class GloriaRomanusController{
       }
       armyLabel.setText("Army Status: active");
       ArmyDisbandButton.setDisable(false);
-      
-      if (ArmyActiveProvince.size() == 0) {
-        endTurnButton.setDisable(true);
-        saveButton.setDisable(true);
-      }
       
       if (!ArmyActiveProvince.contains(selectedProvince)) {
         ArmyActiveProvince.add(selectedProvince);
@@ -1582,16 +1587,22 @@ public class GloriaRomanusController{
 
   public void checkWinGame(Faction faction) {
     
+    String winner = "";
     boolean winnerExist = false;
     for (Faction f: gameSystem.getFactions()) {
       if (f.isIs_win() == true) {
         winnerExist = true;
+        winner = f.getName();
+        if (f.getName().equals(faction.getName())) {
+          printMessageToTerminal("You have already won this game!");               
+        }
+        break;
       }
     }
 
     if (winnerExist == false) {
       if (gameSystem.VictoryCheck(gameSystem.getVictoryCondition(), faction.getProvinces().size(), faction.getBalance(), faction.getTotalWealth()) == true) {
-        printMessageToTerminal(faction.getName() + " has win this game!");
+        printMessageToTerminal(faction.getName() + " has won this game!");
   
         for(Faction f: gameSystem.getFactions()) {
             if (f.getName().equals(faction.getName())) {
@@ -1600,8 +1611,13 @@ public class GloriaRomanusController{
             }
         }
   
-      gameSystem.saveCurrentGame();
+      this.save();
       printMessageToTerminal("Game has saved. Please continue playing!");      
+      }
+
+    } else {
+      if (gameSystem.VictoryCheck(gameSystem.getVictoryCondition(), faction.getProvinces().size(), faction.getBalance(), faction.getTotalWealth()) == true && !faction.getName().equals(winner)) {
+        printMessageToTerminal("Although you reach the victory condition, but someone was earlier than you!");     
       }
 
     }
@@ -1620,4 +1636,42 @@ public class GloriaRomanusController{
     }
   }
 
+  @FXML
+  public void cheatingTreasury() {
+    currFaction.setBalance(currFaction.getBalance() + 50000);
+
+    provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+    
+    if (gameSystem.conditionToString().contains("WEALTH")) {
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
+    } else {
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()));
+    }
+
+    if (gameSystem.conditionToString().contains("TREASURY")) {
+      treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+    } else {
+      treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+    }
+    checkWinGame(currFaction);
+  }
+
+  @FXML
+  public void cheatingWealth() {
+    currFaction.setTotalWealth(currFaction.getTotalWealth() + 200000);
+    provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
+    
+    if (gameSystem.conditionToString().contains("WEALTH")) {
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()) + " / 400,000");
+    } else {
+      wealthLabel.setText("Wealth: " + String.valueOf(currFaction.getTotalWealth()));
+    }
+
+    if (gameSystem.conditionToString().contains("TREASURY")) {
+      treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+    } else {
+      treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+    }
+    checkWinGame(currFaction);
+  }
 }
