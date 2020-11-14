@@ -118,6 +118,9 @@ public class MainMenuController {
             try {
                 // set up the controller for loader
                 gameSceneController = new GloriaRomanusController("NEWGAME", null);
+                gameSceneController.setStage(this.getStage());
+                gameSceneController.setMainMenuScene(this.getScene());
+                
                 loader.setController(gameSceneController);
                 Parent root = loader.load();
 
@@ -125,8 +128,7 @@ public class MainMenuController {
                 stage.setScene(gameScene);
                 this.setGameScene(gameScene);
                 this.setGameSceneController(gameSceneController);
-                gameSceneController.setStage(this.getStage());
-                gameSceneController.setMainMenuScene(this.getScene());
+                
 
             } catch (Exception exception) {
                 // exception.printStackTrace();
@@ -188,6 +190,9 @@ public class MainMenuController {
             try {
                 // setup the controller for loader
                 gameSceneController = new GloriaRomanusController("LOADGAME", fileToLoad);
+                gameSceneController.setStage(this.getStage());
+                gameSceneController.setMainMenuScene(this.getScene());
+                
                 loader.setController(gameSceneController);
                 Parent root = loader.load();
                 
@@ -198,8 +203,7 @@ public class MainMenuController {
                 this.setGameSceneController(gameSceneController);
 
                 
-                gameSceneController.setStage(this.getStage());
-                gameSceneController.setMainMenuScene(this.getScene());
+               
                 
                 newStage.close();
             } catch (IOException exception) {
