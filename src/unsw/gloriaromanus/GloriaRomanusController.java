@@ -98,9 +98,9 @@ public class GloriaRomanusController{
   @FXML
   private Label factionLabel;
   @FXML
-  private Label victoryConditonLabel;
+  private Label victoryConditionLabel;
   @FXML
-  private Label victoryConditon;
+  private Label victoryCondition;
   @FXML
   private Label treasuryLabel;
   @FXML
@@ -505,7 +505,7 @@ public class GloriaRomanusController{
     factionLabel.setText("Faction: " + currFaction.getName());
     yearLabel.setText(String.valueOf(gameSystem.getYear()));
     turnLabel.setText(String.valueOf(turnTracker.getCurrTurn()));
-    victoryConditon.setText(gameSystem.conditionToString());
+    victoryCondition.setText(gameSystem.conditionToString());
     provincesLabel.setText("Provinces Conquered: " + String.valueOf(currFaction.getProvinces().size()) +  " / "+ gameSystem.getProvinces().size());
 
     if (gameSystem.conditionToString().contains("WEALTH")) {
@@ -1344,7 +1344,7 @@ public class GloriaRomanusController{
       this.factionLabel.setText(json.getString("currFaction"));
       this.yearLabel.setText(json.getString("currYear"));
       this.turnLabel.setText(json.getString("currTurn"));
-      this.victoryConditonLabel.setText(json.getString("victoryCondition"));
+      this.victoryCondition.setText(json.getString("victoryCondition"));
       this.output_terminal.setText(json.getString("outputs"));
       this.FirstPlayerFaction = json.getString("firstPlayerFaction");
       this.turnPlayerCount = json.getInt("turnPlayerCount");
@@ -1387,7 +1387,7 @@ public class GloriaRomanusController{
     data.put("currFaction", factionLabel.getText());
     data.put("currYear", yearLabel.getText());
     data.put("currTurn", turnLabel.getText());
-    data.put("victoryCondition", victoryConditonLabel.getText());
+    data.put("victoryCondition", victoryCondition.getText());
     data.put("outputs", output_terminal.getText());
     data.put("firstPlayerFaction", FirstPlayerFaction);
     data.put("turnPlayerCount", turnPlayerCount);
