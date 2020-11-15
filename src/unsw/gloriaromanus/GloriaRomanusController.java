@@ -147,6 +147,8 @@ public class GloriaRomanusController{
   private Button moneyLendingButton;
   @FXML
   private Button victoryButton;
+  @FXML
+  private Button raidsButton;
 
   private List<String> ArmyActiveProvince = new ArrayList<String>();
 
@@ -265,6 +267,7 @@ public class GloriaRomanusController{
       unitListButton.setDisable(true);
       moneyLendingButton.setDisable(true);
       victoryButton.setDisable(true);
+      raidsButton.setDisable(true);
 
       playerNumButton.setOnAction(e -> {
         showStage();
@@ -283,6 +286,7 @@ public class GloriaRomanusController{
         destinationButton.setDisable(false);
         moneyLendingButton.setDisable(false);
         victoryButton.setDisable(false);
+        raidsButton.setDisable(false);
       });
     } else if (gameType.equals(LOADGAME)) {
       provinceToOwningFactionMap = getProvinceToOwningFactionMap();
@@ -1217,12 +1221,13 @@ public class GloriaRomanusController{
 
     if (p.getFactionName().equals("null")) {
       invadeButton.setText("Occupy");
-
+      raidsButton.setDisable(true);
     } else if (p.getFactionName().equals(currFaction.getName())) {
       invadeButton.setText("Move");
-    
+      raidsButton.setDisable(true);   
     } else {
-      invadeButton.setText("Invade");      
+      invadeButton.setText("Invade");
+      raidsButton.setDisable(false);      
     }
 
     opponent_province.setText(province);
@@ -1830,6 +1835,87 @@ public class GloriaRomanusController{
     newStage.setScene(stageScene);
     newStage.show();
   }
+
+  @FXML
+  public void clickedRadisButton(ActionEvent e) throws IOException {
+    if (currentlySelectedHumanProvince != null && currentlySelectedDestination != null){
+      String humanProvince = (String)currentlySelectedHumanProvince.getAttributes().get("name");
+      String enemyProvince = (String)currentlySelectedDestination.getAttributes().get("name");
+      Province myProvince = gameSystem.checkStringinProvince(humanProvince);
+      Province destProvince = gameSystem.checkStringinProvince(enemyProvince);
+
+
+      if (gameSystem.getProvincesTracker().getProvince(humanProvince).getArmy().getUnits().size() == 0) {
+        printMessageToTerminal("You don't have any units to use to invade");
+        return;
+      }
+
+      myProvince.getArmy().setMovementPoint();
+
+      if (myProvince.getArmy().isReachable(destProvince) == true) {
+
+        int currentMovePts = myProvince.getArmy().getMovementPoints();
+        int movementCons = myProvince.getArmy().movementConsumption(destProvince);
+
+        int invadeResult = myProvince.getArmy().invade(destProvince);
+          
+        switch (invadeResult) {
+            
+          case -1:
+
+            myProvince.setArmy(new Army(myProvince));
+            armyLabel.setText("Army Status: Inactive");
+            ArmyActiveProvince.remove(humanProvince);
+
+            occupiedProvinces.getSelectionModel().clearSelection();
+
+            provinceToNumberTroopsMap.put(humanProvince, myProvince.getNumOfSoldiers());
+            provinceToNumberTroopsMap.put(enemyProvince, destProvince.getNumOfSoldiers());
+
+            printMessageToTerminal(String.format("RADIS: %s: %s raids %s", currFaction.getName(), humanProvince, enemyProvince));
+            break;
+            
+          case 0:
+            occupiedProvinces.getSelectionModel().clearSelection();
+
+            provinceToNumberTroopsMap.put(humanProvince, myProvince.getNumOfSoldiers());
+            provinceToNumberTroopsMap.put(enemyProvince, destProvince.getNumOfSoldiers());
+            printMessageToTerminal(String.format("RADIS: %s: %s raids %s", currFaction.getName(), humanProvince, enemyProvince));
+            break;
+            
+          case 1:
+
+            if (currentMovePts == movementCons) {
+              destProvince.getArmy().setMovementPoints(-1);            
+            } else {
+              destProvince.getArmy().setMovementPoints(currentMovePts - movementCons);
+            }
+              
+            occupiedProvinces.getSelectionModel().clearSelection();
+
+            provinceToNumberTroopsMap.put(humanProvince, myProvince.getNumOfSoldiers());
+            provinceToNumberTroopsMap.put(enemyProvince, destProvince.getNumOfSoldiers());
+
+            printMessageToTerminal(String.format("RADIS: %s: %s raids %s", currFaction.getName(), humanProvince, enemyProvince));
+
+            break;
+          }
+        
+        } else {
+          printMessageToTerminal("You cannot reach this destination because of insufficient movement pts or the destination is not adjecent to you.");
+          
+          if (myProvince.getArmy().getMovementPoints() == 0) {
+            myProvince.getArmy().setMovementPoints(-1);
+          }
+        }
+
+        raidsButton.setDisable(true);
+        resetSelections();  // reset selections in UI
+        addAllPointGraphics(); // reset graphics
+
+    }
+  }
+  
   /*
   @FXML
   public void cheatingTreasury() {

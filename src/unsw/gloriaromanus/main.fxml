@@ -97,8 +97,9 @@
                 <Button fx:id="destinationButton" text="SetDestination" prefWidth="125" onAction="#handleDestinationButton"/>
             </VBox>
         </HBox>
-        <HBox spacing="85.0">
+        <HBox spacing="20.0">
         <Button fx:id="invadeButton" text="Invade" onAction="#clickedInvadeButton"/>
+        <Button fx:id="raidsButton" text="Radis" onAction="#clickedRadisButton"/>
         <Button fx:id="moneyLendingButton" text="Money Lending" onAction="#clickedLendingButton"/>        
         </HBox>
         <VBox>
