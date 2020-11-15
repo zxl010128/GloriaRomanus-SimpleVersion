@@ -16,6 +16,7 @@ public class Faction implements Subject{
     private GameSystem gamesys;
     private boolean is_win;
     private boolean is_defeat;
+    private JSONObject moneyLending;
 
     public Faction(String name, ProvincesTracker provincesTracker, FactionsTracker factionsTracker) {
         this.name = name;
@@ -28,6 +29,14 @@ public class Faction implements Subject{
         this.provincesTracker = provincesTracker;
         this.factionsTracker = factionsTracker;
         factionsTracker.addFaction(this);
+
+        JSONObject moneyLend = new JSONObject();
+
+        moneyLend.put("MoneyAvaliable", 500);
+        moneyLend.put("is_Lending", false);
+        moneyLend.put("Owning", 0);
+        moneyLend.put("RatePerYear", 0.10);
+        this.moneyLending = moneyLend;
     }
 
     public Faction(String name, ArrayList<Province> startingProvinces, ProvincesTracker provincesTracker, FactionsTracker factionsTracker) {
@@ -49,8 +58,15 @@ public class Faction implements Subject{
             p.getArmy().setFactionName(this.name);
             p.setFaction(this);
         }
-
         
+        JSONObject moneyLend = new JSONObject();
+
+        moneyLend.put("MoneyAvaliable", 500);
+        moneyLend.put("is_Lending", false);
+        moneyLend.put("Owning", 0);
+        moneyLend.put("RatePerYear", 0.10);
+        this.moneyLending = moneyLend;
+
         factionsTracker.addFaction(this);       
     }
 
@@ -64,6 +80,7 @@ public class Faction implements Subject{
         this.is_defeat = json.getBoolean("is_defeat");
         this.provincesTracker = null;
         this.factionsTracker = null;
+        this.moneyLending = json.getJSONObject("moneyLending");
         this.provinces = new ArrayList<Province>();
     }
 
@@ -160,6 +177,7 @@ public class Faction implements Subject{
         output.put("provinces", provincesJSON);
 
         output.put("provincesTracker", provincesTracker.toJSON());
+        output.put("moneyLending", moneyLending);
         return output;
     }
 
@@ -220,6 +238,14 @@ public class Faction implements Subject{
 
     public void setTotalWealth(int totalWealth) {
         this.totalWealth = totalWealth;
+    }
+
+    public JSONObject getMoneyLending() {
+        return moneyLending;
+    }
+
+    public void setMoneyLending(JSONObject moneyLending) {
+        this.moneyLending = moneyLending;
     }
 
     

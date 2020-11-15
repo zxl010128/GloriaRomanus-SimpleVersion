@@ -2,6 +2,7 @@ package unsw.gloriaromanus;
 
 import java.io.IOException;
 import java.io.File;
+import java.util.Arrays;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -166,6 +167,7 @@ public class MainMenuController {
         // listview to store saved games
         ListView<String> savedGames = new ListView<String>();
         String[] savedFiles = new File("SavedData/").list();
+        Arrays.sort(savedFiles);
         int savedGamesNum = savedFiles.length;
         
         for (int i = 0; i < savedGamesNum; i++) {

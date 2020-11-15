@@ -28,6 +28,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import unsw.gloriaromanus.backend.GameSystem;
 import unsw.gloriaromanus.backend.Province;
@@ -142,6 +143,8 @@ public class GloriaRomanusController{
   private Button unitListButton;
   @FXML
   private ChoiceBox<String> availableUnits;
+  @FXML
+  private Button moneyLendingButton;
 
   private List<String> ArmyActiveProvince = new ArrayList<String>();
 
@@ -258,6 +261,7 @@ public class GloriaRomanusController{
       myProvinceButton.setDisable(true);
       destinationButton.setDisable(true);
       unitListButton.setDisable(true);
+      moneyLendingButton.setDisable(true);
 
       playerNumButton.setOnAction(e -> {
         showStage();
@@ -274,6 +278,7 @@ public class GloriaRomanusController{
         availableUnits.setDisable(false);
         myProvinceButton.setDisable(false);
         destinationButton.setDisable(false);
+        moneyLendingButton.setDisable(false);
       });
     } else if (gameType.equals(LOADGAME)) {
       provinceToOwningFactionMap = getProvinceToOwningFactionMap();
@@ -1309,6 +1314,7 @@ public class GloriaRomanusController{
       humanFaction = currFaction.getName();
       factionLabel.setText("Faction: " + humanFaction);
 
+
       if (humanFaction.equals(FirstPlayerFaction)) {
         gameSystem.NextTurn();
         yearLabel.setText(String.valueOf(gameSystem.getYear()));
@@ -1320,7 +1326,30 @@ public class GloriaRomanusController{
         endTurnButton.fire();
 
       } else {
+        
+        JSONObject situation = currFaction.getMoneyLending();
 
+        boolean is_lending= situation.getBoolean("is_Lending");
+        int owning_money = situation.getInt("Owning");
+        double rate = situation.getDouble("RatePerYear");
+
+        if (is_lending == true) {
+          if ((int)(owning_money * rate + owning_money) > 1000) {
+
+            for (Province p : currFaction.getProvinces()) {
+              p.setUnits(new ArrayList<Unit>());
+            }
+
+            situation.put("Owning", 0);
+            situation.put("is_Lending", false);
+            situation.put("RatePerYear", rate + 0.05); 
+            
+            printMessageToTerminal("You have bankrupted. All the units are removed");     
+          } else {
+            situation.put("Owning", (int)(owning_money * rate + owning_money));
+          }
+        }
+        
         for (Province p : currFaction.getProvinces()) {
           occupiedProvinces.getItems().add(p.getName());
           provinceToNumberTroopsMap.put(p.getName(), p.getNumOfSoldiers());
@@ -1589,6 +1618,142 @@ public class GloriaRomanusController{
     }
   }
 
+  @FXML
+  public void clickedLendingButton(ActionEvent e) throws IOException {
+    
+    JSONObject situation = currFaction.getMoneyLending();
+
+    boolean is_lending= situation.getBoolean("is_Lending");
+    int owning_money = situation.getInt("Owning");
+    double rate = situation.getDouble("RatePerYear");
+
+    Stage newStage = new Stage();
+    
+    VBox box = new VBox();
+
+    Label title = new Label();
+    title.setText("Money Lending System Intro\n");
+    title.setTextAlignment(TextAlignment.CENTER);
+    title.setFont(new Font(20));
+    title.setStyle("-fx-text-fill: white");
+    
+    Label intro = new Label();
+    intro.setText("    We provide usury services and can provide 500 gold coins for you at one time. But our interest rate is higher. And if you want to borrow again after bankruptcy, interest rates will rise as well. When your debt exceeds 1,000 gold, we will take away all the units in all of your provinces and treat it as a bankruptcy! Please consider before lending!");
+    intro.setWrapText(true);
+    intro.setTextAlignment(TextAlignment.LEFT);
+    intro.setStyle("-fx-text-fill: white");
+
+    Label status = new Label();
+    if (is_lending == true) {
+      status.setText("You haven't paid off the gold you owed last time. Please enter the amount to pay off below. Currently your gold owning is " + String.valueOf(owning_money) + " with interest rate " + String.format("%.2f", rate) + " per year.");      
+    } else {
+      status.setText("Congrats! You can lend gold here! We will provide you 500 gold with interest rate " + String.format("%.2f", rate) + " per year.");     
+    }
+    status.setWrapText(true);
+    status.setTextAlignment(TextAlignment.LEFT);
+    status.setStyle("-fx-text-fill: white");
+
+    HBox box2 = new HBox();
+
+    TextField text = new TextField();
+
+    Button ok = new Button();
+    ok.setText("confirmPayingOwning");
+    ok.setOnAction(event -> {
+      if (text.getText().isEmpty()) {
+        printMessageToTerminal("Please enter the gold you wanna pay off.");        
+      
+      } else if (text.getText().matches("[0-9]*")) {
+        if (Integer.parseInt(text.getText()) > owning_money) {
+          printMessageToTerminal("Please retry and enter a suitable gold.");
+
+        } else if (Integer.parseInt(text.getText()) == owning_money) {
+          printMessageToTerminal("You have paid off all the gold you lend before.");
+          currFaction.getMoneyLending().put("Owning", 0);
+          currFaction.getMoneyLending().put("is_Lending", false);        
+          currFaction.setBalance(currFaction.getBalance() - Integer.parseInt(text.getText()));
+
+          if (gameSystem.conditionToString().contains("TREASURY")) {
+            treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+          } else {
+            treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+          }
+
+        } else if (Integer.parseInt(text.getText()) < owning_money) {
+          printMessageToTerminal("You have paid off some money you lend before.");
+          currFaction.getMoneyLending().put("Owning", owning_money - Integer.parseInt(text.getText()));
+          currFaction.setBalance(currFaction.getBalance() - Integer.parseInt(text.getText()));
+
+          if (gameSystem.conditionToString().contains("TREASURY")) {
+            treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+          } else {
+            treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+          }
+      
+        }
+      } else {
+        printMessageToTerminal("Please enter a integer");     
+      }
+      newStage.close();
+    });
+
+    Button ok2 = new Button();
+    ok2.setText("confirmLending");
+    ok2.setOnAction(event -> {
+      printMessageToTerminal("You successfully lend 500 gold!");
+
+      currFaction.getMoneyLending().put("Owning", 500);
+      currFaction.getMoneyLending().put("is_Lending", true);
+      
+      currFaction.setBalance(currFaction.getBalance() + 500);
+      if (gameSystem.conditionToString().contains("TREASURY")) {
+        treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()) + " / 100,000");
+      } else {
+        treasuryLabel.setText("Gold: " + String.valueOf(currFaction.getBalance()));
+      }
+
+      checkWinGame(currFaction);
+      newStage.close();
+      }
+    );
+
+    if (is_lending == false) {
+      text.setDisable(true);
+      ok.setDisable(true);
+    } else {
+      ok2.setDisable(true);
+    }
+
+    Button ok3 = new Button();
+    ok3.setText("EXIT");
+    ok3.setOnAction(event -> {
+      newStage.close();
+      }
+    );
+
+    if (is_lending == false) {
+      text.setDisable(true);
+      ok.setDisable(true);
+    } else {
+      ok2.setDisable(true);
+    }
+    box2.getChildren().addAll(text, ok, ok2, ok3);
+    box2.setSpacing(25.0);
+    box2.setPadding(new Insets(10,10,10,10));
+    box.getChildren().addAll(title, intro, status, box2);
+    box.setAlignment(Pos.CENTER);
+    box.setSpacing(25.0);
+    box.setPadding(new Insets(10,10,10,10));
+    box.setStyle("-fx-background-color: transparent");
+
+    Scene stageScene = new Scene(box, 600, 400);
+    stageScene.setFill(Color.BLACK);
+    newStage.initStyle(StageStyle.TRANSPARENT);
+    newStage.setOpacity(0.90);
+    newStage.setScene(stageScene);
+    newStage.show();
+
+  }
   /*
   @FXML
   public void cheatingTreasury() {
