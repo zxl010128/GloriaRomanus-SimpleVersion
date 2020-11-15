@@ -62,15 +62,9 @@ public class Faction implements Subject{
         this.gamesys = null;
         this.is_win = json.getBoolean("is_win");
         this.is_defeat = json.getBoolean("is_defeat");
-        JSONArray provincesJSON = json.getJSONArray("provinces");
-        for (int i = 0; i < provincesJSON.length(); i++) {
-            this.provinces.add(new Province(provincesJSON.getJSONObject(i)));
-        }
-
-        this.provincesTracker = new ProvincesTracker(json.getJSONObject("provincesTracker"));
-        for (Province p : this.provinces) {
-            p.setProvincesTracker(this.provincesTracker);
-        }
+        this.provincesTracker = null;
+        this.factionsTracker = null;
+        this.provinces = new ArrayList<Province>();
     }
 
     public ProvincesTracker getProvincesTracker() {

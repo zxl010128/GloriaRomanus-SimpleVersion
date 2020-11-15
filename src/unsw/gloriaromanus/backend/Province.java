@@ -63,7 +63,7 @@ public class Province{
             unitsInTraining.add(new TrainingRecord(unitsInTrainingJSON.getJSONObject(i)));
         }
         
-        this.turnTracker = new TurnTracker(json.getJSONObject("turnTracker"));
+        this.turnTracker = null;
         this.factionsTracker = null;
         this.provincesTracker = null;
         this.army = new Army(this);
@@ -311,5 +311,10 @@ public class Province{
     public Faction getFaction(String f) {
         Faction faction = factionsTracker.getFaction(f);
         return faction;
+    }
+
+
+    public void setTurnTracker(TurnTracker turnTracker) {
+        this.turnTracker = turnTracker;
     }
 }
