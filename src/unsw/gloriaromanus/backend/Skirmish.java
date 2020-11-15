@@ -21,9 +21,9 @@ public class Skirmish {
         // During a skirmish, both units engage in a sequence of engagements against each other until a unit successfully routes 
         // (runs away from the battle permanently) or is defeated.
         while (attackUnit.getHealth() > 0 && defendUnit.getHealth() > 0) {
-            if (engagements.size() > 200) {
-                break;
-            }
+            // if (engagements.size() > 200) {
+            //     break;
+            // }
             Engagement e = new Engagement(attackUnit, defendUnit);
             engagements.add(e);
         }
