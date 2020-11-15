@@ -145,6 +145,8 @@ public class GloriaRomanusController{
   private ChoiceBox<String> availableUnits;
   @FXML
   private Button moneyLendingButton;
+  @FXML
+  private Button victoryButton;
 
   private List<String> ArmyActiveProvince = new ArrayList<String>();
 
@@ -262,6 +264,7 @@ public class GloriaRomanusController{
       destinationButton.setDisable(true);
       unitListButton.setDisable(true);
       moneyLendingButton.setDisable(true);
+      victoryButton.setDisable(true);
 
       playerNumButton.setOnAction(e -> {
         showStage();
@@ -279,6 +282,7 @@ public class GloriaRomanusController{
         myProvinceButton.setDisable(false);
         destinationButton.setDisable(false);
         moneyLendingButton.setDisable(false);
+        victoryButton.setDisable(false);
       });
     } else if (gameType.equals(LOADGAME)) {
       provinceToOwningFactionMap = getProvinceToOwningFactionMap();
@@ -1632,7 +1636,7 @@ public class GloriaRomanusController{
     VBox box = new VBox();
 
     Label title = new Label();
-    title.setText("Money Lending System Intro\n");
+    title.setText("Money Lending System Introduction\n");
     title.setTextAlignment(TextAlignment.CENTER);
     title.setFont(new Font(20));
     title.setStyle("-fx-text-fill: white");
@@ -1753,6 +1757,78 @@ public class GloriaRomanusController{
     newStage.setScene(stageScene);
     newStage.show();
 
+  }
+
+  @FXML
+  public void handleVictoryButton(ActionEvent e) throws IOException {
+    
+    Stage newStage = new Stage();
+    
+    VBox box = new VBox();
+
+    Label title = new Label();
+    title.setText("Set Victory Condition\n");
+    title.setTextAlignment(TextAlignment.CENTER);
+    title.setFont(new Font(20));
+    title.setStyle("-fx-text-fill: white");
+    
+    Label intro = new Label();
+    intro.setText("    please enter the JSON expression below to set a new Victory Condition! We will assume your input is correct. You only have one chance to reset!");
+    intro.setWrapText(true);
+    intro.setTextAlignment(TextAlignment.LEFT);
+    intro.setStyle("-fx-text-fill: white");
+
+    Label status = new Label();
+    status.setText("You could not enter the victory condition with more than 3 conditions!");      
+    status.setWrapText(true);
+    status.setTextAlignment(TextAlignment.LEFT);
+    status.setStyle("-fx-text-fill: white");
+
+    HBox box2 = new HBox();
+
+    TextArea text = new TextArea();
+    text.setWrapText(true);
+
+    Button ok = new Button();
+    ok.setText("confirmSetting");
+    ok.setOnAction(event -> {
+      if (text.getText().isEmpty()) {
+        printMessageToTerminal("Please enter a new condition");        
+      } else {
+        JSONObject vicCon = new JSONObject(text.getText());
+        gameSystem.setVictoryCondtionByJson(vicCon);
+        victoryCondition.setText(gameSystem.conditionToString());
+        victoryButton.setDisable(true);
+        printMessageToTerminal("Your new victory condition is " + gameSystem.conditionToString());
+        checkWinGame(currFaction);  
+      }
+
+      newStage.close();
+    });
+
+    Button ok2 = new Button();
+    ok2.setText("EXIT");
+    ok2.setOnAction(event -> {
+      newStage.close();
+      }
+    );
+
+    box2.getChildren().addAll(ok, ok2);
+    box2.setSpacing(25.0);
+    box2.setPadding(new Insets(10,10,10,10));
+    box2.setAlignment(Pos.CENTER);
+    box.getChildren().addAll(title, intro, status, text, box2);
+    box.setAlignment(Pos.CENTER);
+    box.setSpacing(15.0);
+    box.setPadding(new Insets(10,10,10,10));
+    box.setStyle("-fx-background-color: transparent");
+
+    Scene stageScene = new Scene(box, 600, 400);
+    stageScene.setFill(Color.BLACK);
+    newStage.initStyle(StageStyle.TRANSPARENT);
+    newStage.setOpacity(0.90);
+    newStage.setScene(stageScene);
+    newStage.show();
   }
   /*
   @FXML
