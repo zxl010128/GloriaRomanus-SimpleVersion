@@ -364,4 +364,8 @@ public class Unit {
         this.factionName = factionName;
     }
 
+    public String getSpecialAbility() {
+        return specialAbility;
+    }
+
 }
