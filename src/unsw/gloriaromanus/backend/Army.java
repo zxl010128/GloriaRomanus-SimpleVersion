@@ -89,9 +89,33 @@ public class Army {
         // after arrivingm, start battle
         // Don't forget to update oldProvince after moving!
         Army defenseArmy = new Army(destination);
-        Battle battleResolver = new Battle(this, defenseArmy);
+        
+        List<Unit> units = new ArrayList<Unit>();
+        if (destination.getUnits().size() != 0) {
+            for (Unit u: destination.getUnits()) {
+                units.add(u);
+            }
+        }
+
+        defenseArmy.setUnits(units);
+
+        Army attackArmy = new Army(this.getProvince());
+        
+        List<Unit> myUnits = new ArrayList<Unit>();
+        if (this.getUnits().size() != 0) {
+            for (Unit u: this.getUnits()) {
+                myUnits.add(u);
+            }
+        }
+
+        attackArmy.setUnits(myUnits);
+        
+
+        Battle battleResolver = new Battle(attackArmy, defenseArmy);
         Army winner;
         if (destination.getFactionName().equals("null")) {
+            winner = this;
+        } else if (defenseArmy.getUnits().size() == 0) { 
             winner = this;
         } else {
             winner = battleResolver.getWinner();
@@ -412,7 +436,9 @@ public class Army {
         // moveTo(getProvince());
     }
 
-
+    public void removeUnit(Unit u) {
+        this.units.remove(u);
+    }
     
     /** 
      * @param destination

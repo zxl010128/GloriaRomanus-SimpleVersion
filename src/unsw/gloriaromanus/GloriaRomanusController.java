@@ -740,7 +740,7 @@ public class GloriaRomanusController{
 
           myProvince.setArmy(new Army(myProvince));
           armyLabel.setText("Army Status: Inactive");
-          ArmyActiveProvince.remove(myFaction.getName());
+          ArmyActiveProvince.remove(myProvince.getName());
           
           ArmyActiveProvince.add(enemyProvince);
 
