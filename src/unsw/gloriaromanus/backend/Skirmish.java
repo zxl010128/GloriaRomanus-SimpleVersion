@@ -40,4 +40,8 @@ public class Skirmish {
         return engagements.size();
     }
 
+    public Unit getWinner() {
+        return winner;
+    }
+
 }

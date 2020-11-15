@@ -350,16 +350,27 @@ public class GameSystem implements Observer {
         this.turnTracker = new TurnTracker(json.getJSONObject("turnTracker"));
         this.provincesTracker = new ProvincesTracker(json.getJSONObject("provincesTracker"));
         this.factionsTracker = new FactionsTracker(json.getJSONObject("factionsTracker"));
-        this.provinces = provincesTracker.getProvinces();
+        this.provinces = new ArrayList<Province>();
+
+        for (Province p: provincesTracker.getProvinces()) {
+            provinces.add(p);
+        }
         for (Province p : provinces) {
             p.setProvincesTracker(provincesTracker);
             p.setFactionsTracker(factionsTracker);
+            p.setTurnTracker(turnTracker);
             p.getArmy().setProvincesTracker(provincesTracker);
             p.getArmy().setFactionsTracker(factionsTracker);
             p.getArmy().setFactionName(p.getFactionName());
             p.getArmy().setProvinceName(p.getName());
         }
-     
+        for (Province p : provinces) {
+            if (p.getUnits().size() != 0) {
+                for (Unit u: p.getUnits()) {
+                    u.setFactionName(p.getFactionName());
+                }
+            }
+        }
         try {
             String allprovinces = Files.readString(Paths.get("src/unsw/gloriaromanus/backend/provinces_list.json"));
             JSONArray proList = new JSONArray(allprovinces);
@@ -385,7 +396,12 @@ public class GameSystem implements Observer {
         for (Faction f : factions) {
             f.setProvincesTracker(provincesTracker);
             f.setFactionsTracker(factionsTracker);
-            f.setGamesys(this);
+            f.setGamesys(this); 
+            for (Province p: this.provincesTracker.getProvinces()) {
+                if (p.getFactionName().equals(f.getName())) {
+                    f.addProvince(p);
+                }
+            }
         }
     }
 
