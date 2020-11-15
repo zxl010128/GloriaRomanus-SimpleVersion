@@ -93,7 +93,7 @@ public class Engagement {
                     // implement cavalry/chariots/elephants charge later!
                     // implement berserker later!
                     int meleeAttackDamage = attacker.getAttackDamage(); 
-                    damage = (int) Math.rint((enemySize * 0.1) * (meleeAttackDamage / (enemyArmor + enemyShield) * (N + 1)));
+                    damage = (int) Math.rint((enemySize * 0.1) * ((double)meleeAttackDamage / (enemyArmor + enemyShield) * (N + 1)));
                 
                 }
             }
@@ -102,21 +102,36 @@ public class Engagement {
                     // missile engagement
                     int missileAttackDamage = attacker.getAttackDamage();
                     
-                    damage = (int) Math.rint((enemySize * 0.1) * (missileAttackDamage / (enemyArmor + enemyShield)) * (N + 1));    
+                    damage = (int) Math.rint((enemySize * 0.1) * ((double)missileAttackDamage / (enemyArmor + enemyShield)) * (N + 1));    
                 } else {
                     // melee engagement
                     int meleeAttackDamage = attacker.getAttackDamage(); 
-                    damage = (int) Math.rint((enemySize * 0.1) * (meleeAttackDamage / (enemyArmor + enemyShield) * (N + 1)));
+                    damage = (int) Math.rint((enemySize * 0.1) * ((double)meleeAttackDamage / (enemyArmor + enemyShield) * (N + 1)));
 
                 }
                 
             }
         }
 
-        return damage;
+        return damage * 5;
     }
 
     // public String getWinnerFaction() {
     //     return winner.getFactionName();
+    // }
+
+    // public static void main(String[] args) {
+    //     int enemySize = 10;
+    //     int meleeAttackDamage = 10;
+    //     int enemyArmor = 10;
+    //     int enemyShield = 10;
+        
+    //     for (int i = 0; i < 20; i++) {
+    //         double N = new Random().nextGaussian() + 1;
+    //         System.out.println("N is " + N);
+    //         double damage = (enemySize * 0.1) * ((double) meleeAttackDamage / (enemyArmor + enemyShield) * (N + 1));
+
+    //         System.out.println("Damage is " + damage + "\n");
+    //     }
     // }
 }
