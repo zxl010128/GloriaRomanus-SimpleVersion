@@ -211,7 +211,8 @@ public class MainMenuController {
         });
 
         box.getChildren().addAll(title, savedGames, loadGameButton);
-        box.setSpacing(25.0);
+        box.setSpacing(20.0);
+        box.setAlignment(Pos.CENTER);
         box.setPadding(new Insets(10,10,10,10));
         box.setStyle("-fx-background-color: transparent");
 

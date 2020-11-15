@@ -245,6 +245,9 @@ public class GameSystem implements Observer {
         this.victoryCondition = v.getVictoryGoal();
     }
 
+    public void setVictoryCondtionByJson(JSONObject js) {
+        this.victoryCondition = js;
+    }
     /**
      * @return JSONObject
      */
