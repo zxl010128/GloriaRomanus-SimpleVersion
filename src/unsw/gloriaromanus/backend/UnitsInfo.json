@@ -115,7 +115,7 @@
         "name": "elephant",
         "type": "melee",
         "movementPoints": 10,
-        "health": 150,
+        "health": 100,
         "trainingCost": 40,
         "trainingTurns": 3,
         "specialAbility":"Elephants running amok",
