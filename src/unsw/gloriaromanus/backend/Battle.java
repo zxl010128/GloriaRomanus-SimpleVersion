@@ -16,9 +16,6 @@ public class Battle {
         this.skirmishes = new ArrayList<Skirmish>();
 
         startBattle(attackerArmy, defenderArmy);
-        
-        // remove dead units after the battle
-        updateAfterBattle(attackerArmy, defenderArmy);
     }
 
     public Army getWinner() {
@@ -36,6 +33,15 @@ public class Battle {
 
             Skirmish s = new Skirmish(attackerUnit, defenderUnit);
             skirmishes.add(s);
+
+            Unit unitWinner = s.getWinner();
+
+            if (unitWinner.getProvinceName().equals(attackerUnit.getProvinceName())) {
+                defenderArmy.removeUnit(defenderUnit);
+            } else {
+                attackerArmy.removeUnit(attackerUnit);
+            }
+            
             engCounter += s.getNumOfEngagements();
 
             if (engCounter >= 200) {
