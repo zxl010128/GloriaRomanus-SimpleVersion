@@ -762,7 +762,7 @@ public class GloriaRomanusController{
           printMessageToTerminal(String.format("You successfully move troops from %s to %s and occupy this province.", myFaction.getName(), enemyProvince));
           
         } else {
-          printMessageToTerminal("You cannot reach this destination because of insufficient movement pts.");
+          printMessageToTerminal("You cannot reach this destination because of insufficient movement pts or the destination is not adjecent to you.");
 
           if (myProvince.getArmy().getMovementPoints() == 0) {
             myProvince.getArmy().setMovementPoints(-1);
@@ -855,7 +855,7 @@ public class GloriaRomanusController{
           }      
         
         } else {
-          printMessageToTerminal("You cannot reach this destination because of insufficient movement pts.");
+          printMessageToTerminal("You cannot reach this destination because of insufficient movement pts or the destination is not adjecent to you.");
           
           if (myProvince.getArmy().getMovementPoints() == 0) {
             myProvince.getArmy().setMovementPoints(-1);
