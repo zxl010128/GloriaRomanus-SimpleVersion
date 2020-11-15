@@ -38,8 +38,11 @@ public class Battle {
 
             if (unitWinner.getProvinceName().equals(attackerUnit.getProvinceName())) {
                 defenderArmy.removeUnit(defenderUnit);
+                defenderArmy.getProvince().removeUnit(defenderUnit);
             } else {
                 attackerArmy.removeUnit(attackerUnit);
+                attackerArmy.getProvince().removeUnit(attackerUnit);
+                attackerArmy.getProvince().getArmy().removeUnit(attackerUnit);
             }
             
             engCounter += s.getNumOfEngagements();
