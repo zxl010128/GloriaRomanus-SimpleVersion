@@ -1,5 +1,18 @@
 # Project - Gloria Romanus
 
+## Brief Intro
+
+I and my partner Pai Qu did this game project in COMP2511(Object-Oriented Design). This game is called Gloria Romanus which is a simple version of the game Civilization. We achieved all of the requirements which are in [*SPEC_v2.md*](SPEC_v2.md). We also added several interesting extensions:
+
+* Multiplayers offline campaign - allowing up to 16 players.
+* Star Wars Version - replacing countries' flags with Star Wars characters.
+* Background Image and Background Music.
+* "Raids" - allowing the player to attack without trying to conquer the settlement, to possibly damage enemy troops.
+* Banking System - allowing lending money from the bank and paying back the principal and interest rate. The continuous failure of paying back will result in bankruptcy which all of the troops will be killed.
+* Customize victory objective - starting a campaign game by inputting a logical expression representing the campaign objective.
+
+Please note that any copying behaviors and inappropriate paraphrasing might cause misconduct or undermine academic integrity by your institution. All rights reserved by Xinlei Zhang and Pai Qu.
+
 ## Aims
 
 * Appreciate issues in user interface design
@@ -676,26 +689,6 @@ Please do not push the *build* directory to your Gitlab repository. The gitignor
 For this milestone you are to design and implement the user interface component of the application. A very basic UI can be built with minimal changes to the starter code, so that is where you should start. Fancier UI features can be added once you have something that is at least usable. You should apply the ideas from user-centric design and consider the usability heuristics covered in the lectures.
 
 Additionally, for this milestone, you also have the chance to extend the project with your own ideas. Note that, to get high marks for these extensions, you will need to consider how they impact the user. **Extensions that are technically complex, but do not provide the user with any real benefit are not considered good extensions**. You can, and should, create additional user stories to model the requirements of these extensions. Note that the number of marks which can be received for extensions is capped at 3 marks (even if the sum of all mark indicators below is above 3 marks).
-
-Possible extensions include but are not limited to:
-
-* Multiplayer campaigns (either on the same computer (0.5 marks), or online (1.5 marks))
-* Allowing the player to destroy infrastructure after being built to recoup costs or engage in a "scorched earth" policy (0.5 marks)
-* Allowing the player to cancel infrastructure or orders of troops to recoup funds (at a discount, particularly if several turns into production) (0.5 marks)
-* Implementing "raids" - allowing the player or AI to attack without trying to conquer the settlement, to possibly damage enemy infrastructure, reduce town-wealth, and kill enemy troops (without needing to assult enemy walls) (1 mark)
-* Add turn-by-turn unit upkeep for all units, and implement a bankruptcy mechanic (results in a portion of troops disbanding every turn whilst bankrupt and a loss to morale for all troops). Mercenaries should have higher upkeep (1 mark)
-* Define better Campaign AI or Battle Resolvers (0.5-1.5 marks for this category depending on the level of improvement)
-* Implement a diplomacy system - alliances, trade between neutral or allied factions, payment/tribute between factions, protectorates, trade embargos, swapping of territory, diplomatic relations based on the actions of each faction, etc. (1.5 marks)
-* Public order system - including town halls/inns to increase public order, whilst provinces with low public order have a random chance of a rebellion every turn, and potentially losing the province to the enemy/rebels (1 marks)
-* Generals - characters with traits/retinues which build up over time based on their administrative actions or victories/losses in battles (0.5 to 1.5 marks depending on how extensive)
-* Agents - to attempt to spy on otherwise hidden enemy forces, or to sabotage enemy walls, towers or infrastructure. Agents engaging in missions should have a chance of failure and execution. Agents should be able to develop traits upon succeeding at missions, increasing their likelihood of success (0.5 to 1.5 marks depending on how extensive).
-* Add a "bank" building which allows secure storage of more gold (and with this extension, the maximum treasury size is either limited or has a chance of being stolen by default, with banks reducing the chance of gold being lost and increasing the ability to store gold) (1 mark)
-* Add money-lending functionality - where a faction can go into debt to fund wars or develop infrastructure. The interest rate paid on debt should be a monotonically increasing, continuous function of the ratio of *debt/total province wealth* (reflecting that over-leveraged entities must pay higher interest rates due to higher risk borne by the counterparty). Factions should be able to lend to other factions in the same fashion. Note that this will require implementing a bankruptcy mechanic, which should result in a portion of troops disbanding every turn whilst bankrupt and a loss to morale for all troops (1.5 marks)
-* Implement terrain for different regions, which have bonuses/penalties to different types of soldiers (e.g. desert regions could provide buffers to desert soldiers and penalties to soldiers from colder climates). Additionally, implement a random chance of rain, snow or fog in battles with different effects (rain should remove the fire-arrow ability of archers, snow should reduce the speed of units by 40%, and fog should reduce the missile attack damage of archers/horse archers/artillery by 50% (to a minimum of 1))  (0.5 to 1.5 marks for this category depending on how extensive)
-* Implement the ability for players to customize their victory objective when starting a campaign game by inputting a logical expression representing the campaign objective (a basic goal, or expression composed of logical conjunctions/disjunctions of basic goals and other logical conjunctions/disjunctions) (0.5 marks)
-* Add immersive music for all events (0.5 - 1 marks depending on how well this is done)
-* Implement visual battles (replacing the TextArea output representation of engagements). This feature should include units with fighting animations such as sword-swings, drawing and firing arrows, etc. (1-2.5 marks depending on how extensive).
-* Implement UI double-arrowhead widget dynamically indicating the valid sea crossings between provinces in the game (for example, Britannia connects to Lugdunensis, so the ability to cross the English channel should be visually apparent to the user). This should be produced programmatically, so that if more sea connections are added later, it will update automatically (1-1.5 marks depending on quality)
 
 This final milestone will be a culmination of all the work done in the previous milestones. You have the opportunity to improve on your design based on feedback from your tutor. Marking of the design will be harsher for the final milestone as you have already had the opportunity to receive feedback.
 
