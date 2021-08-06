@@ -23,7 +23,10 @@ Please note that any copying behaviors and inappropriate paraphrasing might caus
 
 * Learn the application of design patterns
 
+## Screenshots
 
+![Img1](/ScreenShots/ScreenShot1.png)
+![Img2](/ScreenShots/ScreenShot2.png)
 ---
 
 ## Simplified Project Spec
